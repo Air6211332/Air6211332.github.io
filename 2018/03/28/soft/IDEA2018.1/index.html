@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.6" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.6">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.6">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.6">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.6" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.0.6',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="IDEA 2018.1 更新内容 更新时间2018.1 Mar 27">
+<meta name="keywords" content="IDE,IDEA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IDEA 2018.1 更新内容">
+<meta property="og:url" content="http://localhost/2018/03/28/soft/IDEA2018.1/index.html">
+<meta property="og:site_name" content="小米的HEXO">
+<meta property="og:description" content="IDEA 2018.1 更新内容 更新时间2018.1 Mar 27">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaCodeCompletion.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaDataFlow1.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaDataFlow3.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaDataFlow2.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaImmutableCollections.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Java9ServiceLoader.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Java9CreateMissingClass.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaIdempotentBodyDetection.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaLoopTransformation.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaRedundantClose.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaInfiniteStream.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaCopyConstructor.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaSortContent.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaPostfixCompletion.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaFixPartially.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaTestPrefix.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaJUnit5.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/DebuggerRaiseException.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/DebuggerLogConsole.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/DebuggerCopyStack.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/DebuggerAnnotations1.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/DebuggerAnnotations2.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/DebuggerAnnotations3.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaCompiler.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/EditorHighlightsFoldedCode.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/EditorHighlightsSearch.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/EditorExternalAnnotation.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/EditorInferredAnnotation.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/ProjectConfiguration.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/ProjectConfigurationRename.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/StructuralSearch1.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/StructuralSearch2.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Replace.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Kotlin1.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Kotlin2.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/GroovyConvert-1.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/GroovyAliasInspection.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/ScalaInlineHints.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/ScalaStructureView.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Scala3-1.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Android1.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Android4.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/AndroidInstantApp1.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/AndroidInstantApp.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/SpringBootREST.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/SpringBootBeans.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VCSPartialCommit1.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VCSPartialCommits2.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VCSGroupBy.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VCSLogTab.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VCSHistoryForRevision.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VCSCloneRepository.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VCSShortCut-1.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VCSGitBranches.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/DocumentationUI.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/typescript-surround-with-the-type-alias.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VueCrop.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/PrettierReformat.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Hunspell.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Docker1.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/DockerCompose.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesLiveTemplate.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesCompletion.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesSmartCompletion.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesLiveTemplate.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesNavigation.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesInspection1.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesInspection2.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesQuickFix1.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesQuickFix2.gif">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesJSONCodeCompletion.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesQuickDocumentation.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesJSONInspection1.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesJSONInspection2.png">
+<meta property="og:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesJSONInspection3.png">
+<meta property="og:updated_time" content="2018-03-28T14:23:32.839Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IDEA 2018.1 更新内容">
+<meta name="twitter:description" content="IDEA 2018.1 更新内容 更新时间2018.1 Mar 27">
+<meta name="twitter:image" content="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaCodeCompletion.gif">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="小米的HEXO" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://localhost/2018/03/28/soft/IDEA2018.1/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>IDEA 2018.1 更新内容 | 小米的HEXO</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> 
+
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小米的HEXO</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+          
+  <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+</li>
+
+      
+        
+        
+          
+  <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+</li>
+
+      
+        
+        
+          
+  <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+</li>
+
+      
+        
+        
+          
+  <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+</li>
+
+      
+        
+        
+          
+  <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+</li>
+
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://localhost/2018/03/28/soft/IDEA2018.1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小米">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小米的HEXO">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">IDEA 2018.1 更新内容</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-28T20:09:47+08:00">2018-03-28</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/软件/" itemprop="url" rel="index"><span itemprop="name">软件</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+              <div class="post-description">IDEA 2018.1 更新内容 更新时间2018.1 Mar 27</div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h1><h2 id="Enhancements-in-code-completion"><a href="#Enhancements-in-code-completion" class="headerlink" title="Enhancements in code completion"></a>Enhancements in code completion</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaCodeCompletion.gif" alt=""><br>Completion in the Stream API chains is now aware of type casting. Code completion can not only suggest a completion item according to the existing call filter (String.class::isInstance), but also for an automatically typecast completion item.</p>
+<h2 id="Data-flow-analysis"><a href="#Data-flow-analysis" class="headerlink" title="Data flow analysis"></a>Data flow analysis</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaDataFlow1.png" alt=""><br><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaDataFlow3.png" alt=""><br><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaDataFlow2.png" alt=""><br><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaImmutableCollections.png" alt=""><br>We’ve improved our <strong>data flow analysis</strong> so it can now track the relationships between variables like “greater than” and “less than.” The IDE detects when a condition is always true (or false) in all the possible code paths when the variables are compared.</p>
+<p>The IDE will now warn you when you try to assign a variable to the same value it already contains. This may help you detect and then remove some redundant code.</p>
+<p>The <strong>data flow analysis</strong> now works for non-terminated stream API chains.</p>
+<p>The IDE will also warn you about modifications to immutable collections.</p>
+<p><a href="https://blog.jetbrains.com/idea/2018/01/fumigating-the-idea-ultimate-code-using-dataflow-analysis/" target="_blank" rel="noopener">learn more</a></p>
+<h2 id="Missing-ServiceLoader-declaration"><a href="#Missing-ServiceLoader-declaration" class="headerlink" title="Missing ServiceLoader declaration"></a>Missing ServiceLoader declaration</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Java9ServiceLoader.gif" alt=""><br>IntelliJ IDEA 2018.1 has new <strong>Java 9</strong> inspections and quick-fixes. The IDE now checks that a service loaded by <strong>ServiceLoader</strong> is declared in the module-info.java file, and will offer a quick-fix to add a missing statement to the <strong>module-info.java</strong> file.</p>
+<p><a href="https://blog.jetbrains.com/idea/2018/03/advanced-support-for-java-9-modules-in-intellij-idea-2018-1/" target="_blank" rel="noopener">learn more</a></p>
+<h2 id="Creating-missing-class"><a href="#Creating-missing-class" class="headerlink" title="Creating missing class"></a>Creating missing class</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Java9CreateMissingClass.gif" alt=""><br>For an unresolved class mentioned in <strong>module-info.java</strong>, the IDE will suggest creating the missing class, and create missing exported packages as well. Note the IDE creates the package with the class in the required directory, as you can’t export an empty package in <strong>Java 9</strong>.</p>
+<h2 id="Idempotent-body-detection"><a href="#Idempotent-body-detection" class="headerlink" title="Idempotent body detection"></a>Idempotent body detection</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaIdempotentBodyDetection.png" alt=""><br>The IDE will detect and warn you about the while-loops with an idempotent body, as in most cases this indicates a programming error and can lead to a program hang.</p>
+<h2 id="Move-break-condition-of-infinite-loop-to-loop-condition"><a href="#Move-break-condition-of-infinite-loop-to-loop-condition" class="headerlink" title="Move break-condition of infinite loop to loop condition"></a>Move break-condition of infinite loop to loop condition</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaLoopTransformation.gif" alt=""><br>For while-loops, now you get a notification about a conditional break at the end or beginning of an infinite loop. The IDE will suggest moving a break condition to a loop condition and offer a quick-fix to modify your loop. Usually replacing a conditional break with a loop condition makes the code clearer.</p>
+<h2 id="Explicitly-redundant-close-call"><a href="#Explicitly-redundant-close-call" class="headerlink" title="Explicitly redundant close() call"></a>Explicitly redundant close() call</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaRedundantClose.gif" alt=""><br>IntelliJ IDEA now detects an explicitly redundant close() call of the resource at the end of a try-with-resources block.</p>
+<h2 id="Infinite-Stream-detection"><a href="#Infinite-Stream-detection" class="headerlink" title="Infinite Stream detection"></a>Infinite Stream detection</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaInfiniteStream.png" alt=""><br>IntelliJ IDEA will warn you about any infinite streams that weren’t short-circuited, as such operations can be completed only by throwing an exception. Such code may result in an infinite loop or a running out of memory issue.</p>
+<h2 id="Copy-constructor-with-missing-fields-detection"><a href="#Copy-constructor-with-missing-fields-detection" class="headerlink" title="Copy constructor with missing fields detection"></a>Copy constructor with missing fields detection</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaCopyConstructor.png" alt=""><br>In IntelliJ IDEA 2018.1 you’ll get a notification if there is a copy constructor that doesn’t copy all the fields in a class. The IDE considers fields with a transient modifier unnecessary to copy.</p>
+<h2 id="Sort-array-content"><a href="#Sort-array-content" class="headerlink" title="Sort array content"></a>Sort array content</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaSortContent.gif" alt=""><br>A new Sort content action is available in array initializers and varargs. This new action sorts content alphabetically.</p>
+<h2 id="User-Postfix-Completion-template"><a href="#User-Postfix-Completion-template" class="headerlink" title="User Postfix Completion template"></a>User Postfix Completion template</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaPostfixCompletion.gif" alt=""><br>The <strong>postfix code completion</strong> has been improved. The IDE now lets you create your own Java templates or edit and rename some of the predefined Java templates through <strong>Preferences | Editor | General | Postfix Completion</strong>.</p>
+<h2 id="Fix-partially-in-Inspection-Results"><a href="#Fix-partially-in-Inspection-Results" class="headerlink" title="Fix partially in Inspection Results"></a>Fix partially in Inspection Results</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaFixPartially.png" alt=""><br>A new <strong>Fix partially</strong> button has been added to the right-hand pane of the <strong>Inspection Results Tool</strong> Window. It appears when you have several options for fixing possible problems in the chosen scope. All the suggested quick-fixes are grouped by the quick-fix type under the <strong>Fix partially</strong> button. This new feature allows you to apply the required quick-fix to the chosen scope, and fix all affected cases in one go.</p>
+<h2 id="Test-prefix-in-Code-Generation"><a href="#Test-prefix-in-Code-Generation" class="headerlink" title="Test prefix in Code Generation"></a>Test prefix in Code Generation</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaTestPrefix.png" alt=""><br>In IntelliJ IDEA you can generate a test class using the intention action. With IntelliJ IDEA 2018.1, you can customize a test class template and create a test class with <strong>Test</strong> as a prefix. Go to <strong>Preferences | Editor | Code Style | Java | Code Generation</strong>, and choose how the test class name should be generated. By default, the IDE creates a test class with the <strong>Test</strong> as a suffix.</p>
+<h2 id="JUnit-5-Tag-annotation-support"><a href="#JUnit-5-Tag-annotation-support" class="headerlink" title="JUnit 5 @Tag annotation support"></a>JUnit 5 @Tag annotation support</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaJUnit5.png" alt=""><br>IntelliJ IDEA 2018.1 now supports the <strong>JUnit5 @Tag</strong> annotation so now you can include tagged classes and tagged methods, in the testing scope. Select the Tags (JUnit 5) option in the test kind field in the Run/Debug Configuration dialog. Use the <strong>Uniqueld</strong> field to filter tests according to their id.</p>
+<h1 id="JVM-Debugger"><a href="#JVM-Debugger" class="headerlink" title="JVM Debugger"></a>JVM Debugger</h1><h2 id="Throw-Exception"><a href="#Throw-Exception" class="headerlink" title="Throw Exception"></a>Throw Exception</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/DebuggerRaiseException.gif" alt=""><br>IntelliJ IDEA 2018.1 has a new <strong>Throw Exception</strong> action that allows you to throw an exception from a certain location in your program without changing the code. It is available from the <strong>Run | Throw Exception</strong> menu, or from the frame context menu during a debugging session.</p>
+<h2 id="Logging-stacktrace-to-console"><a href="#Logging-stacktrace-to-console" class="headerlink" title="Logging stacktrace to console"></a>Logging stacktrace to console</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/DebuggerLogConsole.gif" alt=""><br>The IDE now allows you to print breakpoints stack traces to the console. You can enable the stack trace option in the <strong>Breakpoints</strong> dialog box. In IntelliJ IDEA, you can now observe multiple breakpoints stack traces at the same time in the <strong>Console</strong> log.</p>
+<h2 id="Copy-current-thread-stacktrace"><a href="#Copy-current-thread-stacktrace" class="headerlink" title="Copy current thread stacktrace"></a>Copy current thread stacktrace</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/DebuggerCopyStack.png" alt=""><br>You can now copy the current thread stack trace via a new <strong>Copy Stack</strong> action which is available from the frame context menu.</p>
+<h2 id="Annotations-for-Async-stack-traces"><a href="#Annotations-for-Async-stack-traces" class="headerlink" title="Annotations for Async stack traces"></a>Annotations for Async stack traces</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/DebuggerAnnotations1.png" alt=""><br><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/DebuggerAnnotations2.png" alt=""><br><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/DebuggerAnnotations3.png" alt=""><br>With IntelliJ IDEA 2018.1 we’ve extended the Async stack traces feature so that you can now use the <a href="mailto:**@Async.Schedule" target="_blank" rel="noopener">**@Async.Schedule</a><strong> and </strong>@Async.Execute** annotations to set up capture points that are not included in the default configuration. You just need to add <a href="https://mvnrepository.com/artifact/org.jetbrains/annotations/16.0.1" target="_blank" rel="noopener">Maven artifact</a>  as a dependency.</p>
+<h1 id="Java-Compiler"><a href="#Java-Compiler" class="headerlink" title="Java Compiler"></a>Java Compiler</h1><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/JavaCompiler.png" alt=""><br>There is a new <strong>Use –release option for cross-compilation (Java 9 and later)</strong> checkbox on the <strong>Java Compiler</strong> page at <strong>Preferences | Build, Execution, Deployment | Compiler | Java Compiler</strong> that is enabled by default. When you need to use the <strong>–source</strong> and <strong>–target</strong> options with Java 9 and link against Java 9 classes at the same time, you can disable this checkbox.</p>
+<p>You can also use a specific version of the <strong>ECJ compiler</strong>. Select Eclipse from the <strong>Use Compiler</strong> drop-down menu, and specify the path to jar with the chosen compiler.</p>
+<h1 id="Editor"><a href="#Editor" class="headerlink" title="Editor"></a>Editor</h1><h2 id="Folded-code-highlighting"><a href="#Folded-code-highlighting" class="headerlink" title="Folded code highlighting"></a>Folded code highlighting</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/EditorHighlightsFoldedCode.gif" alt=""><br>If any issues have been detected in your code, now you can find them quicker than before. The IDE now highlights the folded code regions that contain errors or warnings, and colors such blocks according to their validation status.</p>
+<h2 id="Highlights-the-folded-code-regions-with-the-search-results"><a href="#Highlights-the-folded-code-regions-with-the-search-results" class="headerlink" title="Highlights the folded code regions with the search results"></a>Highlights the folded code regions with the search results</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/EditorHighlightsSearch.gif" alt=""><br>The IDE also highlights folded code regions if they contain any matches when you search through the current file.</p>
+<h2 id="Inline-external-annotations"><a href="#Inline-external-annotations" class="headerlink" title="Inline external annotations"></a>Inline external annotations</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/EditorExternalAnnotation.png" alt=""><br>In IntelliJ IDEA you can annotate your code with external annotations even when direct annotation of the source code is not possible (library classes). You can configure your annotations in the <strong>annotations.xml</strong> files, which are stored outside of your source code. Previously the IDE only showed the @ icon in the gutter near the externally annotated code; now the IDE shows these external annotations inline in your code.</p>
+<h2 id="Inferred-Annotation-Hints"><a href="#Inferred-Annotation-Hints" class="headerlink" title="Inferred Annotation Hints"></a>Inferred Annotation Hints</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/EditorInferredAnnotation.png" alt=""><br>IntelliJ IDEA now lets you view the automatic inferences of <strong>@NotNull</strong> or <strong>@Nullable</strong> annotations right in your source code (not only in the gutter icon near the inferred annotation, as it was before). You can enable the <strong>Show inferred annotations inline</strong> checkbox in the <strong>Preferences | Editor | General | Appearance</strong>.</p>
+<h1 id="Project-Configuration"><a href="#Project-Configuration" class="headerlink" title="Project Configuration"></a>Project Configuration</h1><h2 id="Add-“provided”-dependencies-to-classpath"><a href="#Add-“provided”-dependencies-to-classpath" class="headerlink" title="Add “provided” dependencies to classpath"></a>Add “provided” dependencies to classpath</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/ProjectConfiguration.png" alt=""><br>A new <strong>Include dependencies with “Provided” scope</strong> checkbox has been added in the <strong>Run/Debug Configurations</strong> for the <strong>Application</strong> and <strong>Spring Boot</strong> configurations. This new option will be useful if you have the <strong>provided</strong> dependencies for the scope in your project, but you run your application both inside a container (where <strong>provided</strong> dependencies are supplied by the container) and outside a container (where <strong>provided</strong> dependencies are not automatically supplied).</p>
+<p>For the <strong>Spring Boot</strong> applications, the <strong>Include dependencies with “Provided” scope</strong> option is enabled by default.</p>
+<h2 id="New-Change-Module-Names…-action"><a href="#New-Change-Module-Names…-action" class="headerlink" title="New Change Module Names… action"></a>New Change Module Names… action</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/ProjectConfigurationRename.png" alt=""><br>With IntelliJ IDEA, you can now change qualified names for multiple modules all at once. This is done via the new <strong>Change Module Names…</strong> action, from the context menu of the <strong>Project Structure</strong> dialog.</p>
+<h1 id="Search-and-Replace"><a href="#Search-and-Replace" class="headerlink" title="Search and Replace"></a>Search and Replace</h1><h2 id="Structural-Search-enhancement"><a href="#Structural-Search-enhancement" class="headerlink" title="Structural Search enhancement"></a>Structural Search enhancement</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/StructuralSearch1.png" alt=""><br><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/StructuralSearch2.png" alt=""><br>With IntelliJ IDEA 2018.1, you can find method calls to annotated methods using <strong>Structural Search</strong>. You can select them from the existing search templates or create your own.</p>
+<h2 id="Replace-in-Path-improvements"><a href="#Replace-in-Path-improvements" class="headerlink" title="Replace in Path improvements"></a>Replace in Path improvements</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Replace.png" alt=""><br>IntelliJ IDEA 2018.1 has the ability to preview a regex replacement in the <strong>Replace in Path</strong> dialog.</p>
+<h1 id="Kotlin"><a href="#Kotlin" class="headerlink" title="Kotlin"></a>Kotlin</h1><p>The Kotlin plugin bundled with the IDE has been updated to <a href="https://blog.jetbrains.com/kotlin/2018/03/kotlin-1-2-30-is-out/" target="_blank" rel="noopener">Kotlin 1.2.30</a></p>
+<h2 id="Pasting-Kotlin-code-into-a-package"><a href="#Pasting-Kotlin-code-into-a-package" class="headerlink" title="Pasting Kotlin code into a package"></a>Pasting Kotlin code into a package</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Kotlin1.gif" alt=""><br>Now, in the <strong>Project Tool Window</strong>, you can paste a code fragment directly into a package, and the IDE will create a new Kotlin file with the pasted code.</p>
+<h2 id="Intentions-for-converting-the-scoping-function-calls"><a href="#Intentions-for-converting-the-scoping-function-calls" class="headerlink" title="Intentions for converting the scoping function calls"></a>Intentions for converting the scoping function calls</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Kotlin2.gif" alt=""><br>The Kotlin Plugin now offers new intentions that convert the scoping function calls <strong>let</strong> and <strong>run</strong> into each other, as well as <strong>also</strong> into <strong>apply</strong> and vice versa.</p>
+<h1 id="Groovy"><a href="#Groovy" class="headerlink" title="Groovy"></a>Groovy</h1><h2 id="New-Convert-to-CompileStatic-refactoring-action"><a href="#New-Convert-to-CompileStatic-refactoring-action" class="headerlink" title="New Convert to @CompileStatic refactoring action"></a>New Convert to @CompileStatic refactoring action</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/GroovyConvert-1.gif" alt=""><br>Now you have a new action that’s very useful when you want to keep your code in Groovy and at the same time benefit from static compilation. To save you a lot of time migrating from existing Groovy code, this new refactoring annotates every groovy class in the scope with the <strong>@CompileStatic</strong> annotation.</p>
+<p>This new refactoring action is available from the context menu <strong>Refactor | Convert to @CompileStatic</strong>.</p>
+<p><a href="https://blog.jetbrains.com/idea/2018/03/whats-groovy-about-intellij-idea-2018-1/" target="_blank" rel="noopener">learn more</a></p>
+<h2 id="Unnecessary-import-alias"><a href="#Unnecessary-import-alias" class="headerlink" title="Unnecessary import alias"></a>Unnecessary import alias</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/GroovyAliasInspection.gif" alt=""><br>IntelliJ IDEA 2018.1 reports unnecessary import alias for Groovy files. This new warning also works on static imports.</p>
+<h1 id="Scala"><a href="#Scala" class="headerlink" title="Scala"></a>Scala</h1><h2 id="Inline-hints"><a href="#Inline-hints" class="headerlink" title="Inline hints"></a>Inline hints</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/ScalaInlineHints.png" alt=""><br>The editor can now show <strong>inline hints</strong> for parameter names, method result types, and variable types. You can also easily use the settings to customize when such a hint should be shown.</p>
+<h2 id="Structure-View-improvement"><a href="#Structure-View-improvement" class="headerlink" title="Structure View improvement"></a>Structure View improvement</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/ScalaStructureView.png" alt=""><br>The <strong>Structure View</strong> now shows much more information about code. It displays final, abstract and access modifiers, nested definitions, primary constructor types, case class parameters as members, etc. The <strong>Structure View</strong> also provides you with an option to show all inherited members with their original class.</p>
+<h2 id="Refactoring-Inline-function-parameters"><a href="#Refactoring-Inline-function-parameters" class="headerlink" title="Refactoring: Inline function parameters"></a>Refactoring: Inline function parameters</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Scala3-1.gif" alt=""><br>The refactoring is now capable of inlining functions with parameters. It correctly substitutes them with actual values.</p>
+<h1 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h1><p>IntelliJ IDEA 2018.1 merges the changes from <a href="https://developer.android.com/studio/releases/index.html" target="_blank" rel="noopener">Android Studio 3.0</a> and includes dozens of new features, with the following major new ones</p>
+<h2 id="Layout-Editor-improvements"><a href="#Layout-Editor-improvements" class="headerlink" title="Layout Editor improvements"></a>Layout Editor improvements</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Android1.png" alt=""><br>The <strong>Layout Editor</strong> has been improved: there is a new toolbar layout and icons, updated layouts in the component tree, a new error panel, and more.</p>
+<p>For methods with <strong>@GetMapping</strong> annotations, you have a choice to open the mapped URLs in a browser, or open a request in the <strong>HTTP Request Editor</strong>.</p>
+<h2 id="Brand-new-profiling-tools"><a href="#Brand-new-profiling-tools" class="headerlink" title="Brand new profiling tools"></a>Brand new profiling tools</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Android4.gif" alt=""><br>IntelliJ IDEA 2018.1 now includes Android Profiler, a brand new suite of profiling tools that provide real-time data for your app’s CPU, memory, and network activity.</p>
+<h2 id="Device-File-Explorer-Tool-Window"><a href="#Device-File-Explorer-Tool-Window" class="headerlink" title="Device File Explorer Tool Window"></a>Device File Explorer Tool Window</h2><p>The new <strong>Device File Explorer Tool Window</strong> displays the file and directory structure of your Android device or emulator. Use this tool window to view, copy, and delete files on an Android device. You can access it through <strong>View | Tool Windows | Device File Explorer</strong>.</p>
+<h2 id="Build-Instant-Apps"><a href="#Build-Instant-Apps" class="headerlink" title="Build Instant Apps"></a>Build Instant Apps</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/AndroidInstantApp1.png" alt=""><br><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/AndroidInstantApp.png" alt=""><br>The IDE now supports the ability to build <strong>Instant Apps</strong> – lightweight Android apps that can be run without installation. To start building <strong>Instant Apps</strong>, make sure that the <strong>Instant Apps Development SDK</strong> is installed. You can check which <strong>SDK</strong> tools are installed in <strong>Preferences | Appearance &amp; Behavior | System Settings | Android SDK</strong> in the <strong>SDK</strong> tab.</p>
+<h1 id="Spring-Boot"><a href="#Spring-Boot" class="headerlink" title="Spring Boot"></a>Spring Boot</h1><h2 id="Access-HTTP-request-mappings-from-the-editor-via-the-new-REST-client"><a href="#Access-HTTP-request-mappings-from-the-editor-via-the-new-REST-client" class="headerlink" title="Access HTTP request mappings from the editor via the new REST client"></a>Access HTTP request mappings from the editor via the new REST client</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/SpringBootREST.gif" alt=""><br>Now, after you run a <strong>Spring Boot web application</strong>, a new icon is shown in the gutter for methods with <strong>@RequestMapping</strong> annotations that handle incoming <strong>HTTP requests</strong>. Click this gutter icon to open all the mappings in a scratch file with an .http extension and perform an <strong>HTTP request</strong> in the editor via the new <strong>REST client</strong>.</p>
+<p>For methods with <strong>@GetMapping</strong> annotations, you have the choice to open the mapped URLs in a browser, or open a request in the <strong>HTTP Request Editor</strong>.</p>
+<p>Note, that you need to add the dependency for the <strong>spring-boot-starter-actuator</strong> to your <strong>pom.xml</strong> or <strong>build.gradle</strong> file.</p>
+<h2 id="New-gutter-icons-for-beans-registered-in-the-application-context"><a href="#New-gutter-icons-for-beans-registered-in-the-application-context" class="headerlink" title="New gutter icons for beans registered in the application context"></a>New gutter icons for beans registered in the application context</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/SpringBootBeans.png" alt=""><br>IntelliJ IDEA shows all the beans that are registered in the application context in the <strong>Beans</strong> tab in the <strong>Run Dashboard</strong> (or in the <strong>Run Tool Window</strong>). We’ve extended this functionality, and now this information is also available in the editor. The new gutter icons are shown next to the beans that are used at runtime.</p>
+<p>Click these new gutter icons to navigate to the dependent beans.</p>
+<h1 id="Version-Control"><a href="#Version-Control" class="headerlink" title="Version Control"></a>Version Control</h1><h2 id="Partial-Git-commits"><a href="#Partial-Git-commits" class="headerlink" title="Partial Git commits"></a>Partial Git commits</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VCSPartialCommit1.png" alt=""><br><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VCSPartialCommits2.png" alt=""><br>IntelliJ IDEA 2018.1 supports <strong>partial Git commits</strong> (git add -p). The IDE lets you associate the code chunks with a changelist. Create a changelist, put all the needed code chunks there, and then commit it. The IDE will now only commit the selected changes from the file and will skip all other changes. To add the code chunks to a commit, use the checkboxes in the gutter in the <strong>Diff</strong> pane of the <strong>Commit Changes</strong> dialog.</p>
+<p>To move the code chunks between changelists, use the <strong>Move to Another Changelist…</strong> action from the context menu of the <strong>Diff</strong> pane in the <strong>Commit Changes</strong> dialog.</p>
+<p>Alternatively, add code chunks to a changelist from the editor by clicking on a change marker in the gutter.</p>
+<h2 id="Toggle-grouping-of-local-changes-by-directory-module-or-repository"><a href="#Toggle-grouping-of-local-changes-by-directory-module-or-repository" class="headerlink" title="Toggle grouping of local changes by directory, module, or repository"></a>Toggle grouping of local changes by directory, module, or repository</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VCSGroupBy.png" alt=""><br>With IntelliJ IDEA 2018.1, you can choose how to display your local changes by grouping them according to their directory, module, or repository. Use the new <strong>Group by</strong> icon available in the <strong>Local Changes</strong> tab in the <strong>Version Control Tool Window</strong>. Note that now you can select one of the grouping options or all three at once if needed.</p>
+<h2 id="Navigate-by-clicking-on-the-commit-hash"><a href="#Navigate-by-clicking-on-the-commit-hash" class="headerlink" title="Navigate by clicking on the commit hash"></a>Navigate by clicking on the commit hash</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VCSLogTab.gif" alt=""><br>In the <strong>Log</strong> tab inside the commit detail panes, the IDE now highlights hashes of the commits you are referring to. By simply clicking commit hashes you can jump to that commit in the <strong>Log</strong> tab. This works for <strong>Git</strong> and <strong>Mercurial</strong>. Also, the <strong>Commit Details</strong> pane of the <strong>Log</strong> tab has been redesigned</p>
+<h2 id="History-for-revision-tab-enhancement"><a href="#History-for-revision-tab-enhancement" class="headerlink" title="History for revision tab enhancement"></a>History for revision tab enhancement</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VCSHistoryForRevision.gif" alt=""><br>IntelliJ IDEA lets you view detailed information about file changes by invoking the <strong>Show History for a Revision</strong> action on a file in the <strong>Log</strong> tab (available for <strong>Git</strong> integration). In 2018.1, we’ve updated the <strong>History for revision</strong> tab so that now it works much faster. In addition to better performance, this tab has a refreshed UI resembling the <strong>Log</strong> tab.</p>
+<h2 id="Clone-Repository"><a href="#Clone-Repository" class="headerlink" title="Clone Repository"></a>Clone Repository</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VCSCloneRepository.png" alt=""><br>Moreover, the <strong>Clone Repository</strong> dialogs for <strong>Git</strong> and <strong>GitHub</strong> have been merged into one.</p>
+<p>Autocompletion for <strong>GitHub</strong> repositories also works in the new <strong>Clone Repository</strong> dialog. You just need to log in to your <strong>GitHub</strong> account by clicking <strong>Log in to GitHub</strong>.</p>
+<h2 id="New-shortcut-for-the-Commit-and-Push…-action"><a href="#New-shortcut-for-the-Commit-and-Push…-action" class="headerlink" title="New shortcut for the Commit and Push… action"></a>New shortcut for the Commit and Push… action</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VCSShortCut-1.png" alt=""><br>The IDE has a new default shortcut to perform the <strong>Commit and Push…</strong> action from the <strong>Commit Changes</strong> dialog. Please use <strong>Alt + Cmd + K (on macOS)</strong> or <strong>Alt + Ctrl + K (on Windows and Linux)</strong>.</p>
+<h2 id="Git-Branches-pop-up"><a href="#Git-Branches-pop-up" class="headerlink" title="Git Branches pop-up"></a>Git Branches pop-up</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VCSGitBranches.png" alt=""><br>The <strong>Abort Rebase</strong>, <strong>Continue Rebase</strong>, and <strong>Skip Commit</strong> actions are now available from the <strong>Git Branches</strong> pop-up if there is an ongoing rebase process.</p>
+<h1 id="User-Interface"><a href="#User-Interface" class="headerlink" title="User Interface"></a>User Interface</h1><h2 id="New-documentation-UI"><a href="#New-documentation-UI" class="headerlink" title="New documentation UI"></a>New documentation UI</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/DocumentationUI.png" alt=""><br>We’ve updated the Quick Documentation pop-up and made it clearer and more compact. Information about the method’s parameters, type, and return type is now available for Java, JavaScript, and TypeScript in the updated Quick Documentation pop-up</p>
+<h1 id="Better-HiDPI-support"><a href="#Better-HiDPI-support" class="headerlink" title="Better HiDPI support"></a>Better HiDPI support</h1><p>When you run the IntelliJ IDEA 2018.1 on Windows 8.1 (or higher), the IDE starts in per-monitor DPI-aware mode, with implemented support for the fractional scale factors of the monitor. Previously only integral scale factors were supported in the IDE. To switch back to the default mode, you need to set-up the VM option <strong>-Dsun.java2d.uiScale.enabled = false</strong></p>
+<h1 id="JavaScript-amp-TypeScript"><a href="#JavaScript-amp-TypeScript" class="headerlink" title="JavaScript &amp; TypeScript"></a>JavaScript &amp; TypeScript</h1><h2 id="TypeScript-improvements"><a href="#TypeScript-improvements" class="headerlink" title="TypeScript improvements"></a>TypeScript improvements</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/typescript-surround-with-the-type-alias.png" alt=""><br>IntelliJ IDEA now supports the latest <strong>TypeScript 2.7</strong> features, improves the <strong>Implement Members</strong> action, and adds the new <strong>Surround with type guard</strong> quick-fix for unresolved properties.</p>
+<h2 id="Create-a-new-Vue-project"><a href="#Create-a-new-Vue-project" class="headerlink" title="Create a new Vue project"></a>Create a new Vue project</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/VueCrop.png" alt=""><br>With the <a href="https://plugins.jetbrains.com/plugin/9442-vue-js" target="_blank" rel="noopener">Vue.js</a> plugin installed in IntelliJ IDEA, you can use Vue CLI, an official tool for scaffolding Vue apps, to create new Vue projects. To install Vue CLI, run <strong>npm install –g vue-cli</strong> in the terminal.</p>
+<h2 id="Reformat-with-Prettier"><a href="#Reformat-with-Prettier" class="headerlink" title="Reformat with Prettier"></a>Reformat with Prettier</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/PrettierReformat.png" alt=""><br>IntelliJ IDEA supports <a href="https://prettier.io/" target="_blank" rel="noopener">Prettier</a>, an opinionated code formatter via <a href="https://plugins.jetbrains.com/plugin/10456-prettier" target="_blank" rel="noopener">Prettier</a> plugin. After you have the prettier package installed, the new <strong>Reformat with Prettier</strong> action will become available in IntelliJ IDEA. You can format the selected code, a file, or a whole directory using Prettier.</p>
+<h1 id="Hunspell"><a href="#Hunspell" class="headerlink" title="Hunspell"></a>Hunspell</h1><h2 id="Hunspell-dictionary-support"><a href="#Hunspell-dictionary-support" class="headerlink" title="Hunspell dictionary support"></a>Hunspell dictionary support</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Hunspell.png" alt=""><br>The Hunspell plugin that provides Hunspell dictionary support is now compatible with IntelliJ IDEA. Compared to a plain list of words, Hunspell provides significantly faster and much more accurate misprint detection, with far fewer false positives.</p>
+<p><a href="https://blog.jetbrains.com/phpstorm/2018/01/hunspell-dictionaries-support/" target="_blank" rel="noopener">learn more</a></p>
+<h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><h2 id="Enhancement-in-Docker-compose"><a href="#Enhancement-in-Docker-compose" class="headerlink" title="Enhancement in Docker compose"></a>Enhancement in Docker compose</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/Docker1.png" alt=""><br>The <strong>Docker</strong> plugin now supports <strong>Multiple Docker Compose</strong> files and respects not only a <strong>docker-compose.yml</strong> but also an optional <strong>docker-compose.override.yml</strong> file. You can add <strong>docker-compose.override.yml</strong> as you would any other override file, right after the base configuration file.</p>
+<h2 id="Docker-compose-services"><a href="#Docker-compose-services" class="headerlink" title="Docker compose services"></a>Docker compose services</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/DockerCompose.png" alt=""><br>The <strong>Docker</strong> plugin allows you to choose the services to run just after choosing the configuration files in the <strong>Docker-compose</strong> run configuration.</p>
+<p>The plugin shows all the existing <strong>Compose projects</strong>, not only the ones deployed via the <strong>Docker-Compose</strong> run configuration.</p>
+<h1 id="Kubernetes"><a href="#Kubernetes" class="headerlink" title="Kubernetes"></a>Kubernetes</h1><h2 id="Support-for-YAML-Kubernetes-resource-files"><a href="#Support-for-YAML-Kubernetes-resource-files" class="headerlink" title="Support for YAML Kubernetes resource files"></a>Support for YAML Kubernetes resource files</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesLiveTemplate.gif" alt=""><br>The brand new <strong>Kubernetes</strong> plugin supports the <strong>Kubernetes resource</strong> files from v1.5 up to the recently released v1.9. The new plugin will look for the presence of <strong>apiVersion</strong> and other fields of this kind in the files, and if these are present, it will consider such files as <strong>Kubernetes resource</strong> files.</p>
+<p><a href="https://blog.jetbrains.com/idea/2018/03/intellij-idea-2018-1-kubernetes-support/" target="_blank" rel="noopener">learn more</a></p>
+<h2 id="Completion-in-YAML-Kubernetes-resource-files"><a href="#Completion-in-YAML-Kubernetes-resource-files" class="headerlink" title="Completion in YAML Kubernetes resource files"></a>Completion in YAML Kubernetes resource files</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesCompletion.gif" alt=""><br><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesSmartCompletion.gif" alt=""><br>To help you really quickly create the required <strong>YAML</strong> definition file for <strong>Kubernetes</strong>, start typing the required key and invoke <strong>Smart Completion</strong>. The new plugin will auto-complete all the required keys from all the levels below.</p>
+<p>Code completion now works for <strong>YAML Kubernetes resource</strong> files. The <strong>Kubernetes</strong> plugin offers the correct values you can use within the resources.</p>
+<h2 id="Kubernetes-Live-Template"><a href="#Kubernetes-Live-Template" class="headerlink" title="Kubernetes Live Template"></a>Kubernetes Live Template</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesLiveTemplate.gif" alt=""><br>The <strong>Kubernetes</strong> plugin has a built-in <strong>Live Template</strong> that allows you to quickly create the type of <strong>YAML Kubernetes resource</strong> file that you need. The new plugin now contains several predefined <strong>Kubernetes</strong> templates, and you can invoke the necessary <strong>Live Template</strong> by typing its abbreviation.</p>
+<h2 id="Navigation-in-YAML-Kubernetes-files"><a href="#Navigation-in-YAML-Kubernetes-files" class="headerlink" title="Navigation in YAML Kubernetes files"></a>Navigation in YAML Kubernetes files</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesNavigation.gif" alt=""><br>Use gutter icons to quickly navigate between a label definition and a label selector.</p>
+<p>Jump from a label selector to a label definition inside the editor if there is a direct match for a label, both for the key and for the value.</p>
+<h2 id="Inspections-for-YAML-Kubernetes-files"><a href="#Inspections-for-YAML-Kubernetes-files" class="headerlink" title="Inspections for YAML Kubernetes files"></a>Inspections for YAML Kubernetes files</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesInspection1.png" alt=""><br><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesInspection2.png" alt=""><br>The Kubernetes plugin will alert you whenever you select deprecated Kubernetes properties.</p>
+<p>Also, you’ll get a warning for YAML files if you try to use properties that are not applicable for the specified elements with the applied apiVersion and kind of field.</p>
+<h2 id="Quick-fixes-for-YAML-Kubernetes-files"><a href="#Quick-fixes-for-YAML-Kubernetes-files" class="headerlink" title="Quick-fixes for YAML Kubernetes files"></a>Quick-fixes for YAML Kubernetes files</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesQuickFix1.gif" alt=""><br><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesQuickFix2.gif" alt=""><br>The plugin highlights elements with missing keys in YAML Kubernetes resource definition files and provides a quick-fix to add the required keys.</p>
+<p>Also, you’ll get a warning about redundant keys. Use the provided quick-fix to remove redundant keys in YAML Kubernetes resource files.</p>
+<p>The new plugin also detects non-editable keys in YAML Kubernetes resource files and highlights them in the editor. Note that there’s an easy way to remove all such read-only keys from the current YAML file – with a handy quick-fix.</p>
+<h2 id="Support-for-JSON-Kubernetes-resource-files"><a href="#Support-for-JSON-Kubernetes-resource-files" class="headerlink" title="Support for JSON Kubernetes resource files"></a>Support for JSON Kubernetes resource files</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesJSONCodeCompletion.png" alt=""><br><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesQuickDocumentation.png" alt=""><br>The new plugin provides some support for JSON Kubernetes resource files based on the JSON schema functionality.</p>
+<p>Code completion and the Quick Documentation Popup are also available for JSON Kubernetes resource files.</p>
+<h2 id="Inspections-for-JSON-Kubernetes-resource-files"><a href="#Inspections-for-JSON-Kubernetes-resource-files" class="headerlink" title="Inspections for JSON Kubernetes resource files"></a>Inspections for JSON Kubernetes resource files</h2><p><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesJSONInspection1.png" alt=""><br><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesJSONInspection2.png" alt=""><br><img src="https://www.jetbrains.com/idea/whatsnew/img/2018.1/KubernetesJSONInspection3.png" alt=""><br>The new Kubernetes plugin validates the current keys according to the JSON schema and alerts you when incorrect properties or values are used.</p>
+<p>Also, the plugin highlights elements with any missing required properties and then advises you about the appropriate properties that should be added.</p>
+<p>Duplicated properties are also detected in JSON Kubernetes files.</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/IDE/" rel="tag"># IDE</a>
+          
+            <a href="/tags/IDEA/" rel="tag"># IDEA</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/28/学习清单/" rel="next" title="学习清单">
+                <i class="fa fa-chevron-left"></i> 学习清单
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/28/soft/MobaXterm/" rel="prev" title="全能型开源远程终端：MobaXterm">
+                全能型开源远程终端：MobaXterm <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">小米</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:744471805@qq.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://t.me/csc6211332" target="_blank" title="Telegram"><i class="fa fa-fw fa-telegram"></i>Telegram</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://airfoxlovebear.tumblr.com/" target="_blank" title="Tumblr"><i class="fa fa-fw fa-tumblr"></i>Tumblr</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/p/1005053263844392" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java"><span class="nav-number">1.</span> <span class="nav-text">Java</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Enhancements-in-code-completion"><span class="nav-number">1.1.</span> <span class="nav-text">Enhancements in code completion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Data-flow-analysis"><span class="nav-number">1.2.</span> <span class="nav-text">Data flow analysis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Missing-ServiceLoader-declaration"><span class="nav-number">1.3.</span> <span class="nav-text">Missing ServiceLoader declaration</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Creating-missing-class"><span class="nav-number">1.4.</span> <span class="nav-text">Creating missing class</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Idempotent-body-detection"><span class="nav-number">1.5.</span> <span class="nav-text">Idempotent body detection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Move-break-condition-of-infinite-loop-to-loop-condition"><span class="nav-number">1.6.</span> <span class="nav-text">Move break-condition of infinite loop to loop condition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Explicitly-redundant-close-call"><span class="nav-number">1.7.</span> <span class="nav-text">Explicitly redundant close() call</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Infinite-Stream-detection"><span class="nav-number">1.8.</span> <span class="nav-text">Infinite Stream detection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Copy-constructor-with-missing-fields-detection"><span class="nav-number">1.9.</span> <span class="nav-text">Copy constructor with missing fields detection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sort-array-content"><span class="nav-number">1.10.</span> <span class="nav-text">Sort array content</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#User-Postfix-Completion-template"><span class="nav-number">1.11.</span> <span class="nav-text">User Postfix Completion template</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fix-partially-in-Inspection-Results"><span class="nav-number">1.12.</span> <span class="nav-text">Fix partially in Inspection Results</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Test-prefix-in-Code-Generation"><span class="nav-number">1.13.</span> <span class="nav-text">Test prefix in Code Generation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JUnit-5-Tag-annotation-support"><span class="nav-number">1.14.</span> <span class="nav-text">JUnit 5 @Tag annotation support</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM-Debugger"><span class="nav-number">2.</span> <span class="nav-text">JVM Debugger</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Throw-Exception"><span class="nav-number">2.1.</span> <span class="nav-text">Throw Exception</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Logging-stacktrace-to-console"><span class="nav-number">2.2.</span> <span class="nav-text">Logging stacktrace to console</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Copy-current-thread-stacktrace"><span class="nav-number">2.3.</span> <span class="nav-text">Copy current thread stacktrace</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Annotations-for-Async-stack-traces"><span class="nav-number">2.4.</span> <span class="nav-text">Annotations for Async stack traces</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-Compiler"><span class="nav-number">3.</span> <span class="nav-text">Java Compiler</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Editor"><span class="nav-number">4.</span> <span class="nav-text">Editor</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Folded-code-highlighting"><span class="nav-number">4.1.</span> <span class="nav-text">Folded code highlighting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Highlights-the-folded-code-regions-with-the-search-results"><span class="nav-number">4.2.</span> <span class="nav-text">Highlights the folded code regions with the search results</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Inline-external-annotations"><span class="nav-number">4.3.</span> <span class="nav-text">Inline external annotations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Inferred-Annotation-Hints"><span class="nav-number">4.4.</span> <span class="nav-text">Inferred Annotation Hints</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Project-Configuration"><span class="nav-number">5.</span> <span class="nav-text">Project Configuration</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Add-“provided”-dependencies-to-classpath"><span class="nav-number">5.1.</span> <span class="nav-text">Add “provided” dependencies to classpath</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#New-Change-Module-Names…-action"><span class="nav-number">5.2.</span> <span class="nav-text">New Change Module Names… action</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Search-and-Replace"><span class="nav-number">6.</span> <span class="nav-text">Search and Replace</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Structural-Search-enhancement"><span class="nav-number">6.1.</span> <span class="nav-text">Structural Search enhancement</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Replace-in-Path-improvements"><span class="nav-number">6.2.</span> <span class="nav-text">Replace in Path improvements</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kotlin"><span class="nav-number">7.</span> <span class="nav-text">Kotlin</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Pasting-Kotlin-code-into-a-package"><span class="nav-number">7.1.</span> <span class="nav-text">Pasting Kotlin code into a package</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Intentions-for-converting-the-scoping-function-calls"><span class="nav-number">7.2.</span> <span class="nav-text">Intentions for converting the scoping function calls</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Groovy"><span class="nav-number">8.</span> <span class="nav-text">Groovy</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#New-Convert-to-CompileStatic-refactoring-action"><span class="nav-number">8.1.</span> <span class="nav-text">New Convert to @CompileStatic refactoring action</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unnecessary-import-alias"><span class="nav-number">8.2.</span> <span class="nav-text">Unnecessary import alias</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scala"><span class="nav-number">9.</span> <span class="nav-text">Scala</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Inline-hints"><span class="nav-number">9.1.</span> <span class="nav-text">Inline hints</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Structure-View-improvement"><span class="nav-number">9.2.</span> <span class="nav-text">Structure View improvement</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Refactoring-Inline-function-parameters"><span class="nav-number">9.3.</span> <span class="nav-text">Refactoring: Inline function parameters</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android"><span class="nav-number">10.</span> <span class="nav-text">Android</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Layout-Editor-improvements"><span class="nav-number">10.1.</span> <span class="nav-text">Layout Editor improvements</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Brand-new-profiling-tools"><span class="nav-number">10.2.</span> <span class="nav-text">Brand new profiling tools</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Device-File-Explorer-Tool-Window"><span class="nav-number">10.3.</span> <span class="nav-text">Device File Explorer Tool Window</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Build-Instant-Apps"><span class="nav-number">10.4.</span> <span class="nav-text">Build Instant Apps</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot"><span class="nav-number">11.</span> <span class="nav-text">Spring Boot</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Access-HTTP-request-mappings-from-the-editor-via-the-new-REST-client"><span class="nav-number">11.1.</span> <span class="nav-text">Access HTTP request mappings from the editor via the new REST client</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#New-gutter-icons-for-beans-registered-in-the-application-context"><span class="nav-number">11.2.</span> <span class="nav-text">New gutter icons for beans registered in the application context</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Version-Control"><span class="nav-number">12.</span> <span class="nav-text">Version Control</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Partial-Git-commits"><span class="nav-number">12.1.</span> <span class="nav-text">Partial Git commits</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Toggle-grouping-of-local-changes-by-directory-module-or-repository"><span class="nav-number">12.2.</span> <span class="nav-text">Toggle grouping of local changes by directory, module, or repository</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Navigate-by-clicking-on-the-commit-hash"><span class="nav-number">12.3.</span> <span class="nav-text">Navigate by clicking on the commit hash</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History-for-revision-tab-enhancement"><span class="nav-number">12.4.</span> <span class="nav-text">History for revision tab enhancement</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Clone-Repository"><span class="nav-number">12.5.</span> <span class="nav-text">Clone Repository</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#New-shortcut-for-the-Commit-and-Push…-action"><span class="nav-number">12.6.</span> <span class="nav-text">New shortcut for the Commit and Push… action</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-Branches-pop-up"><span class="nav-number">12.7.</span> <span class="nav-text">Git Branches pop-up</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#User-Interface"><span class="nav-number">13.</span> <span class="nav-text">User Interface</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#New-documentation-UI"><span class="nav-number">13.1.</span> <span class="nav-text">New documentation UI</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Better-HiDPI-support"><span class="nav-number">14.</span> <span class="nav-text">Better HiDPI support</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JavaScript-amp-TypeScript"><span class="nav-number">15.</span> <span class="nav-text">JavaScript &amp; TypeScript</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TypeScript-improvements"><span class="nav-number">15.1.</span> <span class="nav-text">TypeScript improvements</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Create-a-new-Vue-project"><span class="nav-number">15.2.</span> <span class="nav-text">Create a new Vue project</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reformat-with-Prettier"><span class="nav-number">15.3.</span> <span class="nav-text">Reformat with Prettier</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hunspell"><span class="nav-number">16.</span> <span class="nav-text">Hunspell</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hunspell-dictionary-support"><span class="nav-number">16.1.</span> <span class="nav-text">Hunspell dictionary support</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker"><span class="nav-number">17.</span> <span class="nav-text">Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Enhancement-in-Docker-compose"><span class="nav-number">17.1.</span> <span class="nav-text">Enhancement in Docker compose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-compose-services"><span class="nav-number">17.2.</span> <span class="nav-text">Docker compose services</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes"><span class="nav-number">18.</span> <span class="nav-text">Kubernetes</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Support-for-YAML-Kubernetes-resource-files"><span class="nav-number">18.1.</span> <span class="nav-text">Support for YAML Kubernetes resource files</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Completion-in-YAML-Kubernetes-resource-files"><span class="nav-number">18.2.</span> <span class="nav-text">Completion in YAML Kubernetes resource files</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kubernetes-Live-Template"><span class="nav-number">18.3.</span> <span class="nav-text">Kubernetes Live Template</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Navigation-in-YAML-Kubernetes-files"><span class="nav-number">18.4.</span> <span class="nav-text">Navigation in YAML Kubernetes files</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Inspections-for-YAML-Kubernetes-files"><span class="nav-number">18.5.</span> <span class="nav-text">Inspections for YAML Kubernetes files</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-fixes-for-YAML-Kubernetes-files"><span class="nav-number">18.6.</span> <span class="nav-text">Quick-fixes for YAML Kubernetes files</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Support-for-JSON-Kubernetes-resource-files"><span class="nav-number">18.7.</span> <span class="nav-text">Support for JSON Kubernetes resource files</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Inspections-for-JSON-Kubernetes-resource-files"><span class="nav-number">18.8.</span> <span class="nav-text">Inspections for JSON Kubernetes resource files</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate"> 
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小米</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.6"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.6"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.0.6"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.0.6"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.6"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.6"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.6"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
