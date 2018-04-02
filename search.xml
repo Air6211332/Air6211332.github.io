@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Linux 文件权限管理剖析]]></title>
+    <url>%2F2018%2F04%2F02%2FLinux%2F%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86%E5%89%96%E6%9E%90%2F</url>
+    <content type="text"><![CDATA[在 Linux 系统中，为了保证文件的安全，对文件所有者、同组用户、其他用户的访问权限进行了分别管理。其中，文件所有者，即建立文件或目录的用户。同组用户，是所属组群中的所有用户。其他用户，指的是既不是文件所有者，也不是同组用户的其他用户。此外，每个文件和目录都具有读取权限、写入权限和执行权限，这三个权限之间相互独立。！ 功能模式在Linux 系统中，每个文件的访问权限可以用 9 个字母表示，每 3 个字母表示一类用户权限，分别代表文件创建者、同组用户、其他用户。其中，r 表示读取权限，w 表示写入权限，x 表示执行权限。 通过功能模式修改文件权限，有三个部分组成，包括对象、操作和权限。 假设需要增加同组用户写入权限，下面来看一个例子。1chmod g+w /root/install.log 数字模式每一类用户的访问也可以通过数字的方式进行表示。 那么，通过数字模式就可以对常见的 Linux 文件权限操作进行归纳。 假设需要设置创建者可读可写可执行、同组用户可读、其他用户可读，下面来看一个例子。 1chmod 755 /root/install.log 注意的是，只有文件创建者和超级用户才可以修改文件权限。s]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Spring Data Jpa 最大分页 size --原创 彭应智]]></title>
     <url>%2F2018%2F03%2F31%2FJava%2Fspring%2FSpring%20Data%20Jpa%E6%9C%80%E5%A4%A7%E5%88%86%E9%A1%B5size%2F</url>
     <content type="text"><![CDATA[我们需要重写PageableHandlerMethodArgumentResolver这个Bean，调用其中的setMaxPageSize()来配置最大分页的size。默认值为2000. 如下代码配置最大分页的size为Integer的最大值2147483647：1234567891011121314@Configuration@EnableConfigurationPropertiespublic class PaginationConfiguration extends SpringDataWebConfiguration &#123; @Bean public PageableHandlerMethodArgumentResolver pageableResolver() &#123; PageableHandlerMethodArgumentResolver pageableHandlerMethodArgumentResolver = new PageableHandlerMethodArgumentResolver(sortResolver()); pageableHandlerMethodArgumentResolver.setMaxPageSize(Integer.MAX_VALUE); return pageableHandlerMethodArgumentResolver; &#125;&#125;]]></content>
@@ -11,8 +24,8 @@
       <tags>
         <tag>Java</tag>
         <tag>Spring</tag>
-        <tag>原创</tag>
         <tag>Spring Data Jpa</tag>
+        <tag>原创</tag>
       </tags>
   </entry>
   <entry>
@@ -121,7 +134,6 @@
       </categories>
       <tags>
         <tag>Java</tag>
-        <tag>Base64</tag>
       </tags>
   </entry>
   <entry>
@@ -133,7 +145,6 @@
       </categories>
       <tags>
         <tag>Java</tag>
-        <tag>Base64</tag>
       </tags>
   </entry>
   <entry>
@@ -149,9 +160,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[图片验证码]]></title>
-    <url>%2F2018%2F03%2F27%2FJava%2F%E5%9B%BE%E7%89%87%E9%AA%8C%E8%AF%81%E7%A0%81%2F</url>
-    <content type="text"><![CDATA[导包如下12345import java.awt.Color;import java.awt.Font;import java.awt.Graphics2D;import java.awt.image.BufferedImage;import java.util.Random; 代码如下12345678910111213141516171819202122232425262728293031323334353637383940// 随机验证图片发生器private BufferedImage drawVerifyCodeImage(int width, int height, String code) &#123; // 创建存放在内存中的图像并获取图像工具 BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); Graphics2D g = (Graphics2D) image.getGraphics(); // 设置图像边框，但是我这里不想要边框，所以就不设置了 // g.setColor(Color.RED); // g.drawRect(0, 0, width, height); // 设置图像填充背景色，灰色Gray g.setColor(Color.GRAY); g.fillRect(0, 0, width, height); // 设置图片填充文字，但是需要一个一个写，并且让每个字随机旋转 g.setColor(Color.WHITE); g.setFont(new Font("Arial", Font.PLAIN, height - 5)); for (int i = 0; i &lt; code.length(); i++) &#123; // 设置旋转弧度 double theta = (new Random()).nextInt() % 30 * Math.PI / 180; g.rotate(theta, height * i + 5, height - 5); g.drawString(code.substring(i, i + 1), height * i + 5, height - 5); g.rotate(-theta, height * i + 5, height - 5); &#125; // 设置干扰线，条数可以自己设定，这里设置8条 g.setColor(Color.yellow); for (int i = 0; i &lt; 8; i++) &#123; int x1 = new Random().nextInt(width); int y1 = new Random().nextInt(height); int x2 = new Random().nextInt(width); int y2 = new Random().nextInt(height); g.drawLine(x1, y1, x2, y2); &#125; // 返回存放在内存中的图片对象 return image; &#125; BASE64转换1234567891011121314151617import java.io.ByteArrayOutputStream;import java.io.IOException;import javax.imageio.ImageIO;import sun.misc.BASE64Encoder;private String VerifyCodeBase64(int width, int height, String code) throws IOException &#123; // 创建编码对象 BASE64Encoder encoder = new BASE64Encoder(); // 创建字符流 ByteArrayOutputStream bs = new ByteArrayOutputStream(); // 写入字符流 ImageIO.write(drawVerifyCodeImage(width, height, code), "jpg", bs); // 转码成字符串 String imgsrc = encoder.encode(bs.toByteArray()); return "data:image/jpg;base64," + imgsrc; &#125;]]></content>
+    <title><![CDATA[图片上传BASE64转换]]></title>
+    <url>%2F2018%2F03%2F27%2FJava%2F%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0BASE64%E8%BD%AC%E6%8D%A2%2F</url>
+    <content type="text"><![CDATA[1234567891011121314151617181920212223242526272829public void index()&#123; File imgFile = requse.getFile(); Long size = imgFile.length(); String contentType=img.getContentType(); System.out.println("size:"+size); System.out.println("contentType:"+contentType); //将图片文件转化为字节数组字符串，并对其进行Base64编码处理 // String imgFileUrl = img.getUploadPath()+"/"+img.getOriginalFileName();//待处理的图片 InputStream in = null; byte[] data = null; //读取图片字节数组 try &#123; in = new FileInputStream(imgFile); data = new byte[in.available()]; in.read(data); in.close(); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; img.getFile().delete(); //对字节数组Base64编码 BASE64Encoder encoder = new BASE64Encoder(); //返回Base64编码过的字节数组字符串 String relt = encoder.encode(data); renderText(relt); &#125;]]></content>
       <categories>
         <category>Java</category>
       </categories>
@@ -161,9 +172,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[图片上传BASE64转换]]></title>
-    <url>%2F2018%2F03%2F27%2FJava%2F%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0BASE64%E8%BD%AC%E6%8D%A2%2F</url>
-    <content type="text"><![CDATA[1234567891011121314151617181920212223242526272829public void index()&#123; File imgFile = requse.getFile(); Long size = imgFile.length(); String contentType=img.getContentType(); System.out.println("size:"+size); System.out.println("contentType:"+contentType); //将图片文件转化为字节数组字符串，并对其进行Base64编码处理 // String imgFileUrl = img.getUploadPath()+"/"+img.getOriginalFileName();//待处理的图片 InputStream in = null; byte[] data = null; //读取图片字节数组 try &#123; in = new FileInputStream(imgFile); data = new byte[in.available()]; in.read(data); in.close(); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; img.getFile().delete(); //对字节数组Base64编码 BASE64Encoder encoder = new BASE64Encoder(); //返回Base64编码过的字节数组字符串 String relt = encoder.encode(data); renderText(relt); &#125;]]></content>
+    <title><![CDATA[图片验证码]]></title>
+    <url>%2F2018%2F03%2F27%2FJava%2F%E5%9B%BE%E7%89%87%E9%AA%8C%E8%AF%81%E7%A0%81%2F</url>
+    <content type="text"><![CDATA[导包如下12345import java.awt.Color;import java.awt.Font;import java.awt.Graphics2D;import java.awt.image.BufferedImage;import java.util.Random; 代码如下12345678910111213141516171819202122232425262728293031323334353637383940// 随机验证图片发生器private BufferedImage drawVerifyCodeImage(int width, int height, String code) &#123; // 创建存放在内存中的图像并获取图像工具 BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); Graphics2D g = (Graphics2D) image.getGraphics(); // 设置图像边框，但是我这里不想要边框，所以就不设置了 // g.setColor(Color.RED); // g.drawRect(0, 0, width, height); // 设置图像填充背景色，灰色Gray g.setColor(Color.GRAY); g.fillRect(0, 0, width, height); // 设置图片填充文字，但是需要一个一个写，并且让每个字随机旋转 g.setColor(Color.WHITE); g.setFont(new Font("Arial", Font.PLAIN, height - 5)); for (int i = 0; i &lt; code.length(); i++) &#123; // 设置旋转弧度 double theta = (new Random()).nextInt() % 30 * Math.PI / 180; g.rotate(theta, height * i + 5, height - 5); g.drawString(code.substring(i, i + 1), height * i + 5, height - 5); g.rotate(-theta, height * i + 5, height - 5); &#125; // 设置干扰线，条数可以自己设定，这里设置8条 g.setColor(Color.yellow); for (int i = 0; i &lt; 8; i++) &#123; int x1 = new Random().nextInt(width); int y1 = new Random().nextInt(height); int x2 = new Random().nextInt(width); int y2 = new Random().nextInt(height); g.drawLine(x1, y1, x2, y2); &#125; // 返回存放在内存中的图片对象 return image; &#125; BASE64转换1234567891011121314151617import java.io.ByteArrayOutputStream;import java.io.IOException;import javax.imageio.ImageIO;import sun.misc.BASE64Encoder;private String VerifyCodeBase64(int width, int height, String code) throws IOException &#123; // 创建编码对象 BASE64Encoder encoder = new BASE64Encoder(); // 创建字符流 ByteArrayOutputStream bs = new ByteArrayOutputStream(); // 写入字符流 ImageIO.write(drawVerifyCodeImage(width, height, code), "jpg", bs); // 转码成字符串 String imgsrc = encoder.encode(bs.toByteArray()); return "data:image/jpg;base64," + imgsrc; &#125;]]></content>
       <categories>
         <category>Java</category>
       </categories>
@@ -183,8 +194,8 @@
       <tags>
         <tag>Java</tag>
         <tag>Spring</tag>
-        <tag>Spring Boot</tag>
         <tag>原创</tag>
+        <tag>Spring Boot</tag>
       </tags>
   </entry>
   <entry>
