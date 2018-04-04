@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.6" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.6">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.6">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.6">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.6" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.0.6',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="虽然感觉 JDK9 发布才仅仅几周的时间，然而，随着新的 OpenJDK 的发布节奏，JDK10 已经到达发布候选里程碑阶段。">
+<meta name="keywords" content="Java,JDK10">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JDK 10 的 109 项新特性">
+<meta property="og:url" content="http://localhost/2018/04/03/Java/jdk10/JDK 10 的 109 项新特性/index.html">
+<meta property="og:site_name" content="小米的HEXO">
+<meta property="og:description" content="虽然感觉 JDK9 发布才仅仅几周的时间，然而，随着新的 OpenJDK 的发布节奏，JDK10 已经到达发布候选里程碑阶段。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-03T05:09:59.917Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JDK 10 的 109 项新特性">
+<meta name="twitter:description" content="虽然感觉 JDK9 发布才仅仅几周的时间，然而，随着新的 OpenJDK 的发布节奏，JDK10 已经到达发布候选里程碑阶段。">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="小米的HEXO" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://localhost/2018/04/03/Java/jdk10/JDK 10 的 109 项新特性/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>JDK 10 的 109 项新特性 | 小米的HEXO</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> 
+
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小米的HEXO</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+          
+  <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+</li>
+
+      
+        
+        
+          
+  <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+</li>
+
+      
+        
+        
+          
+  <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+</li>
+
+      
+        
+        
+          
+  <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+</li>
+
+      
+        
+        
+          
+  <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+</li>
+
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://localhost/2018/04/03/Java/jdk10/JDK 10 的 109 项新特性/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小米">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小米的HEXO">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JDK 10 的 109 项新特性</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-03T13:03:28+08:00">2018-04-03</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/JDK10/" itemprop="url" rel="index"><span itemprop="name">JDK10</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+              <div class="post-description">虽然感觉 JDK9 发布才仅仅几周的时间，然而，随着新的 OpenJDK 的发布节奏，JDK10 已经到达发布候选里程碑阶段。</div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>来源：开源中国，</p>
+<p><a href="http://www.oschina.net/translate/109-new-features-in-jdk-10" target="_blank" rel="noopener">www.oschina.net/translate/109-new-features-in-jdk-10</a></p>
+</blockquote>
+<p>虽然感觉 JDK9 发布才仅仅几周的时间，然而，随着新的 OpenJDK 的发布节奏，JDK10 已经到达发布候选里程碑阶段。</p>
+<p>我看过各种关于 JDK10 新特性的博客，但是它们都倾向于关注通过 JEPS 定义的大方面。这篇博文，我将看看是否可以罗列出 JDK10 中已经发生变化的方方面面（包括新增的和剔除的）。</p>
+<p>有时候，我会做一些关于 Java SE 的报告会。之前我在“ JDK9 的 55 个新特性”的报告会上曾开玩笑说：下次我将做的恐怕是“ JDK10 的 5 个新特性”。然而事实证明，即使仅有六个多月的开发时间，JDK10 依然超乎想象。</p>
+<p>即便我不再为 Oracle 工作，我也在此先做一个“安全港声明”，以便消除误会。这个列表是由下面这些公开可用的信息整理编辑的：JDK Enhancement Proposals (JEPs)、the OpenJDK bug database 和 Java SE 10 public review specification (JSR 383) 。当然，尽管我已尽可能的研究以保证信息准确，但在 JDK 10 最终发布之前仍可能会发生变化。</p>
+<h1 id="大事记"><a href="#大事记" class="headerlink" title="大事记"></a>大事记</h1><p>JDK10 包含 12 个JEP (改善提议）：</p>
+<p><strong>[286]局部变量类型推断</strong> ：对于开发者来说，这是 JDK10 唯一的真正特性。它向 Java 中引入在其他语言中很常见的  var   ，比如 JavaScript 。只要编译器可以推断此种类型，你不再需要专门声明一个局部变量的类型。一个简单的例子是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var x = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br></pre></td></tr></table></figure>
+<p>这就消除了我们之前必须执行的 ArrayList<string> 类型定义的重复。我鼓励你们去读 JEP ，因为上面有一些关于这个句法是否能用的规则。</string></p>
+<p>有趣的是，需要注意 var 不能成为一个关键字，而是一个保留字。这意味着你仍然可以使用 var 作为一个变量，方法或包名，但是现在（尽管我确定你绝不会）你不能再有一个类被调用。</p>
+<p><strong>[310]应用类数据共享(CDS)</strong> ：CDS 在 JDK5 时被引进以改善 JVM 启动的表现，同时减少当多个虚拟机在同一个物理或虚拟的机器上运行时的资源占用。JDK10 将扩展 CDS 到允许内部系统的类加载器、内部平台的类加载器和自定义类加载器来加载获得的类。之前，CDS 的使用仅仅限制在了 bootstrap 的类加载器。</p>
+<p><strong>[314]额外的 Unicode 语言标签扩展</strong>：这将改善 java.util.Locale 类和相关的 API 以实现额外 BCP 47 语言标签的 Unicode 扩展。尤其是，货币类型，一周的第一天，区域覆盖和时区等标签现在将被支持。</p>
+<p><strong>[322]基于时间的版本控制</strong>：正如我在之前的博客中所讨论的，我们的 JDK 版本字符串格式几乎与 JDK 版本一样多。有幸的是，这是最后需要使用到的，我们可以坚持用它。这种格式使用起来很像 JDK9 中介绍的提供一个更加语义的形式。有一件困扰我的事是包含了一个 INTERIM 元素，正如 JEP 提议中所说，“永远是0”。好吧，如果永远是0，那它有什么意义呢？他们说这是为未来使用做保留，但我仍不是很赞同。我认为，这有些冗余繁杂。这也消除了在 JDK9 中有过的相当奇怪的情形。第一次更新是 JDK 9.0.1 , 非常符合逻辑。第二次更新是 JDK 9.0.4 ，不合逻辑。原因是，在 JDK9 的版本计数模式下，需要留下空白以便应急或不在预期安排的更新使用。但既然没有更新是必须的，为什么不简单称之为 JDK 9.0.2 呢？</p>
+<p><strong>[319]根证书</strong>：在 JDK 中将提供一套默认的 CA 根证书。关键的安全部件，如 TLS ，在 OpenJDK 构建中将默认有效。这是 Oracle 正在努力确保 OpenJDK 二进制和 Oracle JDK 二进制功能上一样的工作的一部分，是一项有用的补充内容。</p>
+<p><strong>[307] 并行全垃圾回收器 G1</strong> : G1 是设计来作为一种低延时的垃圾回收器（但是如果它跟不上旧的堆碎片产生的提升速率的话，将仍然采用完整压缩集合）。在 JDK9 之前，默认的收集器是并行，吞吐，收集器。为了减少在使用默认的收集器的应用性能配置文件的差异，G1 现在有一个并行完整收集机制。</p>
+<p><strong>[313]移除 Native-Header 自动生成工具</strong>：Java9 开始了一些对 JDK 的家务管理，这项特性是对它的延续。当编译 JNI 代码时，已不再需要单独的工具来生成头文件，因为这可以通过 javac 完成。在未来的某一时刻，JNI 将会被 Panama 项目的结果取代，但是何时发生还不清楚。</p>
+<p><strong>[304]垃圾回收器接口</strong>: 这不是让开发者用来控制垃圾回收的接口；而是一个在 JVM 源代码中的允许另外的垃圾回收器快速方便的集成的接口。</p>
+<p><strong>[312]线程-局部变量管控</strong>：这是在 JVM 内部相当低级别的更改，现在将允许在不运行全局虚拟机安全点的情况下实现线程回调。这将使得停止单个线程变得可能和便宜，而不是只能启用或停止所有线程。</p>
+<p><strong>[316]在备用存储装置上的堆分配</strong>：硬件技术在持续进化，现在可以使用与传统 DRAM 具有相同接口和类似性能特点的非易失性 RAM 。这项 JEP 将使得 JVM 能够使用适用于不同类型的存储机制的堆。</p>
+<p><strong>[317] 试验性的基于 Java 的 JIT 编译器</strong>：最近宣布的 Metropolis 项目，提议用 Java 重写大部分 JVM 。乍一想，觉得很奇怪。如果 JVM 是用 Java 编写的，那么是否需要一个 JVM 来运行 JVM ？ 相应的，这导致了一个很好的镜像类比。 现实情况是，使用 Java 编写 JVM 并不意味着必须将其编译为字节码，你可以使用 AOT 编译，然后在运行时编译代码以提高性能。这项 JEP 将 Graal 编译器研究项目引入到 JDK 中。并给将 Metropolis 项目成为现实，使 JVM 性能与当前 C++ 所写版本匹敌（或有幸超越）提供基础。</p>
+<p><strong>[296]: 合并 JDK 多个代码仓库到一个单独的储存库中</strong>：在 JDK9 中，有 8 个仓库： root、corba、hotspot、jaxp、jaxws、jdk、langtools 和 nashorn 。在 JDK10 中这些将被合并为一个，使得跨相互依赖的变更集的存储库运行 atomic commit （原子提交）成为可能。</p>
+<h1 id="新-API"><a href="#新-API" class="headerlink" title="新 API"></a>新 API</h1><p>有 73 项新增内容添加到了标准类库中。</p>
+<p>java.awt.Toolkit</p>
+<p>int getMenuShortcutKeyMaskEx(): 确定哪个扩展修饰符键是菜单快捷键的适当加速键。</p>
+<p>java.awt.geom.Path2D:</p>
+<p>void trimToSize(): 将此 Path2D 实例的容量计算到它当前的大小。应用可使用此操作将路径的存储空间最小化。这个方法也被添加到 Path2D.Double 和 Path2D.Float 类。</p>
+<p>java.io.ByteArrayOutputStream:</p>
+<p>String toString(Charset): 重载 toString()，通过使用指定的字符集解码字节，将缓冲区的内容转换为字符串。</p>
+<p>java.io.PrintStream:</p>
+<p>lang.io.PrintWriter:</p>
+<p>这两个类都有三个新的构造函数，它们需要额外的 Charset 参数。</p>
+<p>java.io.Reader:</p>
+<p>long transferTo(Writer): 从这个 Reader 中读取所有字符，并按照所读的顺序将字符写入给定的 Writer 。</p>
+<p>java.lang.Runtime.Version:</p>
+<p>有四种新方法返回新（JEP 322）版本字符串字段的整数值: feature()、interim()、patch() 和 update() 。</p>
+<p>java.lang.StackWalker.StackFrame:</p>
+<p>String getDescriptor(): 按照 JVM 标准返回此堆栈帧所代表的方法的描述符。</p>
+<p>String getMethodType():返回此堆栈帧所代表的方法类型，描述参数类型和返回值类型。</p>
+<p>java.lang.invoke.MethodType:</p>
+<p>Class&lt;?&gt; lastParameterType():返回这个方法类型的最后一个参数类型。如果这个方法类型没有参数，则返回空类型作为岗哨值（Sentinel Value）。</p>
+<p>java.lang.management.RuntimeMXBean:</p>
+<p>long getPid(): R 返回正在运行的 JVM 的进程 ID 。</p>
+<p>java.lang.management.ThreadMXBean:</p>
+<ul>
+<li>ThreadInfo[] dumpAllThreads(boolean, boolean, int): 返回所有活动线程的线程信息，其中有指定的最大元素数量和同步信息的堆栈跟踪。</li>
+<li>ThreadInfo[] getThreadInfo(long[], boolean, boolean, int): 返回每个线程的线程信息，这些线程的标识位于输入数组中，其中有指定的最大元素数量和同步信息的堆栈跟踪。</li>
+</ul>
+<p>java.lang.reflect.MalformedParameterizedTypeException: 添加了一个新的构造函数，它以字符串的形式作为参数来获取详细信息。</p>
+<p>java.net.URLDecoder:</p>
+<p>java.net.URLEncoder:</p>
+<p>这两个类都有新的重载的解码和编码方法，将 charset 作为附加参数。</p>
+<p>java.nio.channels.Channels:</p>
+<p>两个新的静态重载方法，允许使用 Charset 的 newReader（ReadByteChannel，Charset）和newWriter（WriteByteChannel，Charset）。</p>
+<p>java.nio.file.FileStore:</p>
+<p>long getBlockSize(): 在这个文件存储中返回每个块的字节数。</p>
+<p>java.time.chrono: 这个包里有三个类，HijrahEra、MiinguoEra 和 ThaiBuddhistEra ，都有同样的方法。</p>
+<p>String getDisplayName(TextStyle, Locale): 这将返回用于识别 era 的文本名称，适合于向用户展示。</p>
+<p>java.time.format.DateTimeFormatter:</p>
+<p>localizedBy(Locale): 返回指定格式器的一个副本，其中包含地区、日历、区域、小数和/或时区的本地化值，这将取代该格式器中的值。</p>
+<p>java.util: DoubleSummaryStatistics、IntSummaryStatistics 和 LongSummaryStatistics 都有一个新的构造函数，它包含 4 个数值。它使用指定的计数、最小值、最大值和总和构造一个非空实例。</p>
+<p>java.util.List:</p>
+<p>java.util.Map:</p>
+<p>java.util.Set: 这些接口中的每一个都增加了一个新的静态方法，copyOf(Collection）。这些函数按照其迭代顺序返回一个不可修改的列表、映射或包含给定集合的元素的集合。</p>
+<p>java.util.Optional:</p>
+<p>java.util.OptionalDouble:</p>
+<p>java.util.OptionalInt:</p>
+<p>java.util.OptionalLong: 每一个类都有一个新的方法，orElseThrow() ，它本质上和 get() 一样，也就是说，如果 Optional 有值则返回。否则，将抛出 NoSuchElementException 。</p>
+<p>java.util.Formatter:</p>
+<p>java.util.Scanner:</p>
+<p>这两个类都有三个新的构造函数，除了其他参数之外，它们都带有一个 charset 参数。</p>
+<h1 id="其它翻译版本-1"><a href="#其它翻译版本-1" class="headerlink" title="其它翻译版本(1)"></a>其它翻译版本(1)</h1><p>java.util.Properties: 这有一个新的构造函数，它接受一个 int 参数。这将创建一个没有默认值的空属性列表，并且指定初始大小以容纳指定的元素数量，而无需动态调整大小。还有一个新的重载的 replace 方法，接受三个 Object 参数并返回一个布尔值。只有在当前映射到指定值时，才会替换指定键的条目。</p>
+<p>java.SplittableRandom:</p>
+<p>void nextBytes(byte[]): 用生成的伪随机字节填充一个用户提供的字节数组。</p>
+<p>java.util.concurrent.FutureTask: 添加了 toString() 方法，该方法返回一个标识 FutureTask 的字符串，以及它的完成状态。在括号中，状态包含如下字符串中的一个，“Completed Normally” 、“Completed Exceptionally”、 “Cancelled” 或者 “Not completed”。</p>
+<p>java.util.concurrent.locks.StampedLock:</p>
+<ul>
+<li><p>boolean isLockStamp(long): 返回一个标记戳表示是否持有一个锁。</p>
+</li>
+<li><p>boolean isOptimisticReadStamp(long): 返回一个标记戳代表是否成功的进行了乐观读（optimistic read）。</p>
+</li>
+<li><p>boolean isReadLockStamp(long): 返回一个标记戳表示是否持有一个非独占锁（即 read lock ）。</p>
+</li>
+<li><p>boolean isWriteLockStamp(long): 返回一个标记戳表示是否持有一个独占锁（即 write lock ）。</p>
+</li>
+</ul>
+<p>java.jar.JarEntry:</p>
+<p>String getRealName(): 返回这个 JarEntry 的真实名称。如果这个 JarEntry 是一个多版本 jar 文件的入口，它被配置为这样处理，这个方法返回的名字是 JarEntry 所代表的版本条目的入口，而不是 ZipEntry.getName（） 返回的基本条目的路径名。如果 JarEntry 不代表一个多版本 jar 文件的版本化条目或者 jar 文件没有被配置为作为一个多版本 jar 文件进行处理，这个方法将返回与 ZipEntry.getName（） 返回的相同名称。</p>
+<p>java.util.jar.JarFile:</p>
+<p>Stream<jarentry> versionedStream(): 返回 jar 文件中指定版本的入口对应 Stream 。与 JarEntry 的 getRealName 方法类似，这与多版本 jar 文件有关。</jarentry></p>
+<p>java.util.spi.LocaleNameProvider:</p>
+<p>getDisplayUnicodeExtensionKey(String, Locale): 为给定的 Unicode 扩展键返回一个本地化名称。</p>
+<p>getDisplayUnicodeExtensionType(String, String, Locale): 为给定的 Unicode 扩展键返回一个本地化名称。</p>
+<p>java.util.stream.Collectors:</p>
+<p>toUnmodifiableList():</p>
+<p>toUnmodifiableSet():</p>
+<p>toUnmodifiableMap(Function, Function):</p>
+<p>toUnmodifiableMap(Function, Function, BinaryOperator): 这四个新方法都返回 Collectors ，将输入元素聚集到适当的不可修改的集合中。</p>
+<p>java.lang.model.SourceVersion: 现在有了一个字段，它代表了 JDK 10 的版本。</p>
+<p>java.lang.model.util.TypeKindVisitor6:</p>
+<p>javax.lang.model.util.TypeKindVisitor9:</p>
+<p>（我必须承认，我从来没听说过这些类）</p>
+<p>R visitNoTypeAsModule(NoType, P): 访问一个 MODULE 的 pseudo-type 。我不确定为什么只有这两个类得到这个方法，因为还有 Visitor7 和 Visitor8 变量。</p>
+<p>javax.remote.management.rmi.RMIConnectorServer:</p>
+<p>这个类已经添加了两个字段： CREDENTIALS_FILTER_PATTERN 和 SERIAL_FILTER_PATTERN 。</p>
+<p>javax.ButtonModel：看，Swing 还在更新！</p>
+<p>ButtonGroup getGroup(): 返回按钮所属的组。通常用于单选按钮，它们在组中是互斥的。</p>
+<p>javax.plaf.basic.BasicMenuUI:</p>
+<p>Dimension getMinimumSize(JComponent): 返回指定组件适合观感的最小大小。</p>
+<h1 id="JVM-规范改动"><a href="#JVM-规范改动" class="headerlink" title="JVM 规范改动"></a>JVM 规范改动</h1><p>这些改动相当小：</p>
+<ul>
+<li><p>4.6节：类文件格式（第99页）。在方法访问标志方面有小的改动。</p>
+</li>
+<li><p>4.7节：模块属性（第169页）。如果模块不是 java.base ，则 JDK 10 不再允许设置 ACC_TRANSITIVE 或 ACC_STATIC_PHASE 。</p>
+</li>
+<li><p>4.10节：类文件的校验（第252页）。dup2 指令已改变了 typesafe form 1 的定义，颠倒了 canSafleyPushList 一节中类型的顺序（你需要仔细查看才能发现它）。</p>
+</li>
+<li><p>5.2节：Java 虚拟机启动（第350页）。该描述添加了在创建初始类或接口时可使用用户定义的类加载器（ bootstrap 类加载器除外）。</p>
+</li>
+</ul>
+<h1 id="对-Java-语言规范的更改"><a href="#对-Java-语言规范的更改" class="headerlink" title="对 Java 语言规范的更改"></a>对 Java 语言规范的更改</h1><p>这里还有一些更改，但主要是为了支持局部变量类型推断。</p>
+<ul>
+<li><p>第3.8节：标识符（第23页）。在忽略了可忽略的字符之后，标识符的等价性现在被考虑了。这似乎是合乎逻辑的。</p>
+</li>
+<li><p>（第24页）一个新的 Token，TypeIdentifier，它支持对局部变量类型推断的新用法，而 var 的使用不是关键字，而是一个具有特殊含义的标识符，作为局部变量声明的类型。</p>
+</li>
+<li><p>第4.10.5节：类型预测（第76页）。这是一个相当复杂的部分，它涉及到捕获变量、嵌套类以及如何使用局部变量类型推断。我建议你阅读规范中的这一部分，而不是试图解释它。</p>
+</li>
+<li><p>第6.1节：声明（第134页）。一个反映使用 TypeIdentifier 来支持局部变量类型的推断的小改动。</p>
+</li>
+<li><p>第6.5节：确定名字的含义（第153页，第158页和第159页）。根据类型标识符的使用而更改类类型。</p>
+</li>
+<li><p>第6.5.4.1:简单的 PackageOrTypeNames（第160页）</p>
+</li>
+<li><p>第6.5.4.2节：合规的 PackageOrTypeNames（第160页）。这两种方式都与使用 TypeIdentifier 有细微的变化。</p>
+</li>
+<li><p>第7.5.3:单静态导入声明（第191页）。这改变了导入具有相同名称的静态类型的规则。除非类型是相同的，否则这将成为一个错误，在这种情况下，重复被忽略。</p>
+</li>
+<li><p>第7.7.1:依赖（第198页）。如果你明确声明一个模块需要 java.base ，那在必要的关键字之后，你就不能再使用修饰符（例如静态）了。</p>
+</li>
+<li><p>第8部分：正式参数（第244页）。接收者参数可能只出现在一个实例方法的 formalparameters 列表，或者是一个内部类的构造函数中，其中内部类没有在静态上下文中声明。</p>
+</li>
+<li><p>第9.7.4节：注释可能出现的地方（第335页）。有一个与局部变量类型推断相关的变更。</p>
+</li>
+<li><p>第14.4部分：局部变量声明语句（第433页）。实现局部变量类型推断所需的大量更改。</p>
+</li>
+<li><p>第14节：增强的 for 语句（第455页）。这个结构已经更新，包括对局部变量类型推断的支持。</p>
+</li>
+<li><p>第14.20.3节:try-with-resources（474页）。这个结构已经更新，包括对局部变量类型推断的支持。</p>
+</li>
+</ul>
+<p>最后，第 19 章有多处语法更新，反映了应更多使用 TypeIdentifier 类型标识符，而不仅仅是 Identifier 标识符，以支持局部变量类型推断。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+          
+            <a href="/tags/JDK10/" rel="tag"><i class="fa fa-tag"></i> JDK10</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/03/Linux/mysql57/" rel="next" title="MySQL5.7解压包安装教程">
+                <i class="fa fa-chevron-left"></i> MySQL5.7解压包安装教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/03/Java/jdk8/在 Java 8 中避免 Null 检查/" rel="prev" title="在 Java 8 中避免 Null 检查">
+                在 Java 8 中避免 Null 检查 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">小米</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:744471805@qq.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://t.me/csc6211332" target="_blank" title="Telegram"><i class="fa fa-fw fa-telegram"></i>Telegram</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://airfoxlovebear.tumblr.com/" target="_blank" title="Tumblr"><i class="fa fa-fw fa-tumblr"></i>Tumblr</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/p/1005053263844392" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#大事记"><span class="nav-number">1.</span> <span class="nav-text">大事记</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#新-API"><span class="nav-number">2.</span> <span class="nav-text">新 API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其它翻译版本-1"><span class="nav-number">3.</span> <span class="nav-text">其它翻译版本(1)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM-规范改动"><span class="nav-number">4.</span> <span class="nav-text">JVM 规范改动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对-Java-语言规范的更改"><span class="nav-number">5.</span> <span class="nav-text">对 Java 语言规范的更改</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate"> 
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小米</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.6"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.6"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.0.6"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.0.6"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.6"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.6"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.6"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+ 
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+</body>
+</html>
