@@ -356,6 +356,62 @@
 
       <h2 class="post-title">
         
+            <a class="post-title-link" href="/2018/04/05/收集/Hexo Lean/" itemprop="url">
+              
+                <span itemprop="name">Markdown画图指南 -- 小米规整</span>
+              
+            </a>
+        
+      </h2>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2018-04-05T13:24:20+08:00"
+              content="2018-04-05" >
+          04-05
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+      
+        
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
+            <a class="post-title-link" href="/2018/04/05/收集/Chrome插件推荐--小米推荐/" itemprop="url">
+              
+                <span itemprop="name">Chrome 插件推荐 -- 小米推荐</span>
+              
+            </a>
+        
+      </h2>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2018-04-05T12:01:41+08:00"
+              content="2018-04-05" >
+          04-05
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+      
+        
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
             <a class="post-title-link" href="/2018/04/05/收集/图文并茂，深入浅出Nginx/" itemprop="url">
               
                 <span itemprop="name">图文并茂，深入浅出 Nginx</span>
@@ -509,7 +565,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-count">27</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -607,7 +663,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">24</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1192,6 +1256,13 @@
 
  
   <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
-  
+  <% if (theme.mermaid.enable) { %>
+    <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+    <script>
+      if (window.mermaid) {
+        mermaid.initialize({theme: 'forest'});
+      }
+    </script>
+  <% } %>
 </body>
 </html>
