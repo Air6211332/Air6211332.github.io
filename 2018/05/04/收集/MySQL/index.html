@@ -99,18 +99,18 @@
 
 
 
-  <meta name="description" content="Markdown的一些高级使用">
+  <meta name="description" content="MySql 参数说明-- 小米规整">
 <meta name="keywords" content="MySQL,随笔">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySql 参数说明-- 小米规整">
 <meta property="og:url" content="http://localhost/2018/05/04/收集/MySQL/index.html">
 <meta property="og:site_name" content="小米的HEXO">
-<meta property="og:description" content="Markdown的一些高级使用">
+<meta property="og:description" content="MySql 参数说明-- 小米规整">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-04T09:54:01.569Z">
+<meta property="og:updated_time" content="2018-05-22T01:01:55.289Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySql 参数说明-- 小米规整">
-<meta name="twitter:description" content="Markdown的一些高级使用">
+<meta name="twitter:description" content="MySql 参数说明-- 小米规整">
 
 
 
@@ -414,7 +414,7 @@
           
 
           
-              <div class="post-description">Markdown的一些高级使用</div>
+              <div class="post-description">MySql 参数说明-- 小米规整</div>
           
 
         </div>
@@ -430,7 +430,96 @@
       
 
       
-        
+        <h1 id="my-ini"><a href="#my-ini" class="headerlink" title="my.ini"></a>my.ini</h1><blockquote>
+<p>my.ini是MySQL数据库中使用的配置文件，修改这个文件可以达到更新配置的目的。</p>
+</blockquote>
+<blockquote>
+<p>注意：每次修改参数后，必须重新启动MySQL服务才会有效。</p>
+</blockquote>
+<h2 id="客户端参数"><a href="#客户端参数" class="headerlink" title="客户端参数"></a>客户端参数</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="section">[client]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># MySQL数据库的端口，默认的端口是3306</span></span><br><span class="line"><span class="attr">port</span>=<span class="number">3306</span></span><br><span class="line"></span><br><span class="line"><span class="section">[mysql]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 客户端默认的字符集，如果你希望它支持中文，可以设置成gbk或者utf8。</span></span><br><span class="line"><span class="attr">default-character-set</span>=gb2312</span><br></pre></td></tr></table></figure>
+<h2 id="服务端参数"><a href="#服务端参数" class="headerlink" title="服务端参数"></a>服务端参数</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># MySQL数据库的端口，默认的端口是3306</span></span><br><span class="line"><span class="attr">port</span>=<span class="number">3306</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#MySQL的安装路径</span></span><br><span class="line"><span class="attr">basedir</span>=<span class="string">"E:/Java/Mysql/"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#MySQL数据文件的存储位置，也是数据库表的存放位置。</span></span><br><span class="line"><span class="attr">datadir</span>=<span class="string">"C:/ProgramData/MySQL/MySQL Server 5.5/Data/"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认的字符集，这个字符集是服务器端的。</span></span><br><span class="line"><span class="attr">character-set-server</span>=gb2312</span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认的存储引擎。</span></span><br><span class="line"><span class="attr">default-storage-engine</span>=INNODB</span><br><span class="line"></span><br><span class="line"><span class="comment"># SQL模式的参数，通过这个参数可以设置检验SQL语句的严格程度。</span></span><br><span class="line"><span class="attr">sql-mode</span>=<span class="string">"STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 允许同时访问MySQL服务器的最大连接数，其中一个连接是保留的，留给管理员专用的。</span></span><br><span class="line"><span class="attr">max_connections</span>=<span class="number">100</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查询时的缓存大小，缓存中可以存储以前通过select语句查询过的信息，再次查询时就可以直接从缓存中拿出信息。</span></span><br><span class="line"><span class="attr">query_cache_size</span>=<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 所有进程打开表的总数。</span></span><br><span class="line"><span class="attr">table_cache</span>=<span class="number">256</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 表示内存中临时表的总数。</span></span><br><span class="line"><span class="attr">tmp_table_size</span>=<span class="number">35</span>M</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 表示保留客户端线程的缓存。</span></span><br><span class="line"><span class="attr">thread_cache_size</span>=<span class="number">8</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># MySQL重建索引时所允许的最大临时文件的大小。</span></span><br><span class="line"><span class="attr">myisam_max_sort_file_size</span>=<span class="number">100</span>G</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重建索引时的缓存大小。</span></span><br><span class="line"><span class="attr">myisam_sort_buffer_size</span>=<span class="number">69</span>M</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关键词的缓存大小。</span></span><br><span class="line"><span class="attr">key_buffer_size</span>=<span class="number">55</span>M</span><br><span class="line"></span><br><span class="line"><span class="comment"># MyISAM表全表扫描的缓存大小。</span></span><br><span class="line"><span class="attr">read_buffer_size</span>=<span class="number">64</span>K</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将排序好的数据存入该缓存中。</span></span><br><span class="line"><span class="attr">read_rnd_buffer_size</span>=<span class="number">256</span>K</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用于排序的缓存大小</span></span><br><span class="line"><span class="attr">sort_buffer_size</span>=<span class="number">256</span>K</span><br></pre></td></tr></table></figure>
+<h2 id="InnoDB存储引擎使用的参数"><a href="#InnoDB存储引擎使用的参数" class="headerlink" title="InnoDB存储引擎使用的参数"></a>InnoDB存储引擎使用的参数</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 附加的内存池，用来存储InnoDB表的内容。</span></span><br><span class="line"><span class="attr">innodb_additional_mem_pool_size</span>=<span class="number">3</span>M</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置提交日志的时机，若设置为1，InnoDB会在每次提交后将事务日志写到磁盘上。</span></span><br><span class="line"><span class="attr">innodb_flush_log_at_trx_commit</span>=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 用来存储日志数据的缓存区的大小。</span></span><br><span class="line"><span class="attr">innodb_log_buffer_size</span>=<span class="number">2</span>M</span><br><span class="line"></span><br><span class="line"><span class="comment"># 缓存的大小，InnoDB使用一个缓冲池类保存索引和原始数据。</span></span><br><span class="line"><span class="attr">innodb_buffer_pool_size</span>=<span class="number">107</span>M</span><br><span class="line"></span><br><span class="line"><span class="comment"># 日志文件的大小。</span></span><br><span class="line"><span class="attr">innodb_log_file_size</span>=<span class="number">54</span>M</span><br><span class="line"></span><br><span class="line"><span class="comment"># InnoDB存储引擎允许的线程最大数。</span></span><br><span class="line"><span class="attr">innodb_thread_concurrency</span>=<span class="number">18</span></span><br></pre></td></tr></table></figure>
+<h1 id="jdbc-Url"><a href="#jdbc-Url" class="headerlink" title="jdbc Url"></a>jdbc Url</h1><p>mysql JDBC URL格式如下： </p>
+<p>jdbc:mysql://[host:port],[host:port]…/[database][?参数名1][=参数值1][&amp;参数名2][=参数值2]… </p>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>参数说明</th>
+<th>缺省值</th>
+<th>最低版本要求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user</td>
+<td>数据库用户名（用于连接数据库）</td>
+<td></td>
+<td>所有版本</td>
+</tr>
+<tr>
+<td>passWord</td>
+<td>用户密码（用于连接数据库）</td>
+<td></td>
+<td>所有版本</td>
+</tr>
+<tr>
+<td>useUnicode</td>
+<td>是否使用Unicode字符集，如果参数characterEncoding设置为gb2312或gbk，本参数值必须设置为true</td>
+<td>false</td>
+<td>1.1g</td>
+</tr>
+<tr>
+<td>characterEncoding</td>
+<td>当useUnicode设置为true时，指定字符编码。比如可设置为gb2312或gbk</td>
+<td>false</td>
+<td>1.1g</td>
+</tr>
+<tr>
+<td>autoReconnect</td>
+<td>当数据库连接异常中断时，是否自动重新连接？</td>
+<td>false</td>
+<td>1.1</td>
+</tr>
+<tr>
+<td>autoReconnectForPools</td>
+<td>是否使用针对数据库连接池的重连策略</td>
+<td>false</td>
+<td>3.1.3</td>
+</tr>
+<tr>
+<td>failOverReadOnly</td>
+<td>自动重连成功后，连接是否设置为只读？</td>
+<td>true</td>
+<td>3.0.12</td>
+</tr>
+<tr>
+<td>maxReconnects</td>
+<td>autoReconnect设置为true时，重试连接的次数</td>
+<td>3</td>
+<td>1.1</td>
+</tr>
+<tr>
+<td>initialTimeout</td>
+<td>autoReconnect设置为true时，两次重连之间的时间间隔，单位：秒</td>
+<td>2</td>
+<td>1.1</td>
+</tr>
+<tr>
+<td>connectTimeout</td>
+<td>和数据库服务器建立socket连接时的超时，单位：毫秒。 0表示永不超时，适用于JDK 1.4及更高版本</td>
+<td>0</td>
+<td>3.0.1</td>
+</tr>
+<tr>
+<td>socketTimeout</td>
+<td>socket操作（读写）超时，单位：毫秒。 0表示永不超时</td>
+<td>0</td>
+<td>3.0.1</td>
+</tr>
+</tbody>
+</table>
+
       
     </div>
 
@@ -522,8 +611,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -705,6 +803,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#my-ini"><span class="nav-number">1.</span> <span class="nav-text">my.ini</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端参数"><span class="nav-number">1.1.</span> <span class="nav-text">客户端参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端参数"><span class="nav-number">1.2.</span> <span class="nav-text">服务端参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB存储引擎使用的参数"><span class="nav-number">1.3.</span> <span class="nav-text">InnoDB存储引擎使用的参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jdbc-Url"><span class="nav-number">2.</span> <span class="nav-text">jdbc Url</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
