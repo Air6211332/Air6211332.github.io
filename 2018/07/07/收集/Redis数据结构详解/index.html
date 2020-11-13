@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"air6211332.github.io","root":"/","scheme":"Pisces","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="Redis 数据类型分为：字符串类型、散列类型、列表类型、集合类型、有序集合类型。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis数据结构详解">
+<meta property="og:url" content="https://air6211332.github.io/2018/07/07/%E6%94%B6%E9%9B%86/Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="米薏小天地">
+<meta property="og:description" content="Redis 数据类型分为：字符串类型、散列类型、列表类型、集合类型、有序集合类型。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-07-07T04:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-20T09:05:35.000Z">
+<meta property="article:author" content="米薏">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://air6211332.github.io/2018/07/07/%E6%94%B6%E9%9B%86/Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Redis数据结构详解 | 米薏小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="米薏小天地" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">米薏小天地</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、前言"><span class="nav-number">1.</span> <span class="nav-text">一、前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、Redis数据类型-Redis数据命令"><span class="nav-number">2.</span> <span class="nav-text">二、Redis数据类型 Redis数据命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、Redis数据类型一字符串类型："><span class="nav-number">2.1.</span> <span class="nav-text">1、Redis数据类型一字符串类型：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、Redis数据命令一字符串类型："><span class="nav-number">2.2.</span> <span class="nav-text">2、Redis数据命令一字符串类型：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、Redis数据类型二散列类型："><span class="nav-number">2.3.</span> <span class="nav-text">3、Redis数据类型二散列类型：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4、Redis-数据命令二散列类型："><span class="nav-number">2.4.</span> <span class="nav-text">4、Redis 数据命令二散列类型：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5、Redis-数据类型三列表类型"><span class="nav-number">2.5.</span> <span class="nav-text">5、Redis 数据类型三列表类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6、Redis-数据命令三列表类型："><span class="nav-number">2.6.</span> <span class="nav-text">6、Redis 数据命令三列表类型：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7、Redis-数据类型四集合类型："><span class="nav-number">2.7.</span> <span class="nav-text">7、Redis 数据类型四集合类型：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8、Redis-数据命令四集合类型："><span class="nav-number">2.8.</span> <span class="nav-text">8、Redis 数据命令四集合类型：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9、Redis-数据类型五有序集合类型："><span class="nav-number">2.9.</span> <span class="nav-text">9、Redis 数据类型五有序集合类型：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10、Redis数据命令五有序集合类型"><span class="nav-number">2.10.</span> <span class="nav-text">10、Redis数据命令五有序集合类型</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">米薏</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/air6211332" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;air6211332" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:744471805" title="E-Mail → mailto:744471805" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://iamli.net/" title="https:&#x2F;&#x2F;iamli.net&#x2F;" rel="noopener" target="_blank">木子</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mmpmmmp.github.io/" title="https:&#x2F;&#x2F;mmpmmmp.github.io&#x2F;" rel="noopener" target="_blank">啧啧</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.hoofungson.cn/index.html" title="https:&#x2F;&#x2F;blog.hoofungson.cn&#x2F;index.html" rel="noopener" target="_blank">凤松轩</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xu-shuai.github.io/" title="https:&#x2F;&#x2F;xu-shuai.github.io&#x2F;" rel="noopener" target="_blank">水星很热</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.didispace.com/" title="http:&#x2F;&#x2F;blog.didispace.com&#x2F;" rel="noopener" target="_blank">程序猿DD</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://vincentxin-scott.github.io/" title="https:&#x2F;&#x2F;vincentxin-scott.github.io&#x2F;" rel="noopener" target="_blank">Vincent Xin</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://air6211332.github.io/2018/07/07/%E6%94%B6%E9%9B%86/Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="米薏">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米薏小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Redis数据结构详解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-07-07 12:00:00" itemprop="dateCreated datePublished" datetime="2018-07-07T12:00:00+08:00">2018-07-07</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-10-20 17:05:35" itemprop="dateModified" datetime="2020-10-20T17:05:35+08:00">2020-10-20</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">编程技术</span></a>
+        </span>
+    </span>
+
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">Redis 数据类型分为：字符串类型、散列类型、列表类型、集合类型、有序集合类型。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Redis 数据类型分为：字符串类型、散列类型、列表类型、集合类型、有序集合类型。</p>
+<p>Redis 这么火，它运行有多块？一台普通的笔记本电脑，可以在1秒钟内完成十万次的读写操作。</p>
+<p>原子操作：最小的操作单位，不能继续拆分。即最小的执行单位，不会被其他命令插入。高并发下不存在竞态条件。</p>
+<p>KEY 的命名：一个良好的建议是 article:1:title 来存储 ID 为 1 的文章的标题。</p>
+<h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><ol>
+<li>获取key的列表：KEYS pattern 通配符有 ？*[] 和转义 \。</li>
+<li>key 是否存在： EXISTS key 存在返回 1，不存在返回 0。</li>
+<li>建立 key 和删除 key：SET key 和 DEL key。</li>
+<li>根据 key 获取该键所存储的 redis 数据类型：TYPE key。返回是 string、list、hash、set、zset。下面会对这5种返回的 redis 数据类型逐一讲解。</li>
+<li>rename oldkey newkey：对 key 重命名，如果 newkey 存在则覆盖。</li>
+<li>renamenx oldkey newkey：对 key 重命名，如果 newkey 存在则不覆盖。</li>
+<li>randomkey：随即返回一个 key</li>
+<li>move key db-index：将 key 移动到指定的数据库中，如果 key 不存在或者已经在该数据库中，则返回 0。成功则返回 1。</li>
+</ol>
+<h1 id="二、Redis数据类型-Redis数据命令"><a href="#二、Redis数据类型-Redis数据命令" class="headerlink" title="二、Redis数据类型 Redis数据命令"></a>二、Redis数据类型 Redis数据命令</h1><h2 id="1、Redis数据类型一字符串类型："><a href="#1、Redis数据类型一字符串类型：" class="headerlink" title="1、Redis数据类型一字符串类型："></a>1、Redis数据类型一字符串类型：</h2><p>  这个很好理解，一个key存储一个字符串。如果你要存数据呢？转换成Json或者其他的字符串序列化。</p>
+<h2 id="2、Redis数据命令一字符串类型："><a href="#2、Redis数据命令一字符串类型：" class="headerlink" title="2、Redis数据命令一字符串类型："></a>2、Redis数据命令一字符串类型：</h2><ol>
+<li>赋值：SET key value。如 set hello world</li>
+<li>取值：GET key。如 get hello。返回是 world</li>
+<li>自增：INCR key。就是 Mysql的AUTO_INCREMENT。每次执行 INCR key时，该key的值都会+1.若key不存在，则先建立一个0，然后+1，返回 1。如果值不是整数则报错。该操作是原子操作。</li>
+<li>自减：DECR key。将指定 key 的值减少 1。 如 DECR num，就是 num-1</li>
+<li>自增 N：INCRBY key increment 用来给指定 key 的值加 increment。如 INCRBY num 5 就是 num+5</li>
+<li>自减 N：DECRBY key increment 用来给指定 key 的值减 increment。如 DECRBY num 5 就是 num-5</li>
+<li>增加浮点数：INCRBYFLOAT key increment。</li>
+<li>向尾部追加：APPEND key value。如set test:key 123、append test:key 456、get test:key 就是 123456</li>
+<li>获取长度：STRLEN key。</li>
+<li>同时给多个 key 赋值：MSET title 这是标题 description 这是描述 content 这是内容。</li>
+<li>同时获取多个 key 的值：MGET title description content</li>
+<li>位操作之获取：GETBIT key offset。如字符 a 在 redis 中的存储为 01100001（ASCII为98），那么 GETBIT key 2 就是 1，GET key 0 就是 0。</li>
+<li>位操作之设置：SETBIT key offset value。如字符 a 在 redis 中的存储为 01100001（ASCII为98），那么 SETBIT key 6 0，SETBIT key 5 1 那么 get key 得到的是 b。因为取出的二进制为 01100010。</li>
+<li>位操作之统计：BITCOUNT key [start] [end]：BITCOUNT key 用来获取 key 的值中二进制是 1 的个数。而 BITCOUNT key start end 则是用来统计key的值中在第 start 和 end 之间的子字符串的二进制是 1 的个数（好绕啊）。</li>
+<li>位操作之位运算：BITOP operation resultKey key1 key2。operation 是位运算的操作，有 AND，OR，XOR，NOT。resultKey 是把运算结构存储在这个 key 中，key1 和 key2 是参与运算的 key，参与运算的 key 可以指定多个。</li>
+</ol>
+<h2 id="3、Redis数据类型二散列类型："><a href="#3、Redis数据类型二散列类型：" class="headerlink" title="3、Redis数据类型二散列类型："></a>3、Redis数据类型二散列类型：</h2><p>Redis 是以字典（关联数组）的形式存储的，一个 key 对应一个 value。在字符串类型中，value 只能是一个字符串。那么在散列类型，也叫哈希类型中，value 对应的也是一个字典（关联数组）。那么就可以理解，Redis 的哈希类型/散列类型中，key 对应的 value 是一个二维数组。但是字段的值只可以是字符串。也就是说只能是二维数组，不能有更多的维度。</p>
+<h2 id="4、Redis-数据命令二散列类型："><a href="#4、Redis-数据命令二散列类型：" class="headerlink" title="4、Redis 数据命令二散列类型："></a>4、Redis 数据命令二散列类型：</h2><ol>
+<li>赋值：HSET key field value。如 hset user name lane。hset user age 23</li>
+<li>取值：HGET key field。如 hget user name，得到的是 lane。</li>
+<li>同一个key多个字段赋值：HMSET key field1 value1 field2 value2…</li>
+<li>同一个KEY多个字段取值：HMGET key field1 fields2…</li>
+<li>获取KEY的所有字段和所有值：HGETALL key。如 HGETALL user 得到的是 name lane age 23。每个返回都是独立的一行。</li>
+<li>字段是否存在：HEXISTS key field。存在返回 1，不存在返回 0</li>
+<li>当字段不存在时赋值：HSETNX key field value。如果 key 下面的字段 field 不存在，则建立 field 字段，且值为 value。如果 field 字段存在，则不执行任何操作。它的效果等于 HEXISTS + HSET。但是这个命令的优点是原子操作。再高的并发也不会怕怕。</li>
+<li>自增 N：HINCREBY key field increment。同字符串的自增类型，不再阐述。</li>
+<li>删除字段：DEL key field1 field2… 删除指定KEY的一个或多个字段。</li>
+<li>只获取字段名：HKEYS key。与 HGETALL 类似，但是只获取字段名，不获取字段值。</li>
+<li>只获取字段值：HVALS key。与 HGETALL 类似，但是只获取字段值，不获取字段名。</li>
+<li>获取字段数量：HLEN key。</li>
+</ol>
+<h2 id="5、Redis-数据类型三列表类型"><a href="#5、Redis-数据类型三列表类型" class="headerlink" title="5、Redis 数据类型三列表类型"></a>5、Redis 数据类型三列表类型</h2><p>列表类型存储了一个有序的字符串列表。常用的操作是向两端插入新的元素。时间复杂度为 O（1）。结构为一个链表。记录头和尾的地址。看到这里，Redis 数据类型的列表类型一个重大的作用呼之欲出，那就是队列。新来的请求插入到尾部，新处理过的从头部删除。另外，比如微博的新鲜事。比如日志。列表类型就是一个下标从 0 开始的数组。由于是链表存储，那么越靠近头和尾的元素操作越快，越靠近中间则越慢。</p>
+<h2 id="6、Redis-数据命令三列表类型："><a href="#6、Redis-数据命令三列表类型：" class="headerlink" title="6、Redis 数据命令三列表类型："></a>6、Redis 数据命令三列表类型：</h2><ol>
+<li>向头部插入：LPUSH key value1 value2…。返回增加后的列表长度。</li>
+<li>向尾部插入：RPUSH key value1 value2…。返回增加后的列表长度。</li>
+<li>从头部弹出：LPOP key。返回被弹出的元素值。该操作先删除key列表的第一个元素，再将它返回。</li>
+<li>从尾部弹出：RPOP key。返回被弹出的元素值。</li>
+<li>列表元素个数：LLEN key。key 不存在返回 0。</li>
+<li>获取列表的子列表：LRANGE start end。返回第 start 个到第 end 个元素的列表。包含 start 和 end。支持负数索引。-1 表示最后一个元素，-2 表示倒数第二个元素。</li>
+<li>删除列表中指定值：LREM key count value。删除 key 这个列表中，所有值为 value 的元素，只删除 count。如果有 count+1 个，那么就保留最后一个。count 不存在或者为 0，则删除所有的。如果 count 大于 0，则删除从头到尾的 count 个，如果 count 小于 0，则删除从尾到头的 count 个。</li>
+<li>获取指定索引值：LINDEX key index。如LINDEX key 0就是列表的第一个元素。index可以是负数。</li>
+<li>设置索引和值：LSET key index value。这个操作只是修改指定 key 且指定 index 的值。如果 index 不存在，则报错。</li>
+<li>保留片段，删除其它：LTRIM key start end。保留 start 到 end 之间的所有元素，含 start 和 end。其他全部删除。</li>
+<li>向列表插入元素：LINSERT key BEFORE/AFTER value1 value2。从列表头开始遍历，发现值为 value1 时停止，将 value2 插入，根据 BEFORE 或者 AFTER 插入到 value1 的前面还是后面。</li>
+<li>把一个列表的一个元素转到另一个列表：RPOPLPUSH list1 list2。将列表 list1 的右边元素删除，并把该与元素插入到列表 list2 的左边。原子操作。</li>
+</ol>
+<h2 id="7、Redis-数据类型四集合类型："><a href="#7、Redis-数据类型四集合类型：" class="headerlink" title="7、Redis 数据类型四集合类型："></a>7、Redis 数据类型四集合类型：</h2><p>集合类型是为了方便对多个集合进行操作和运算。集合中每个元素不同且没有顺序的概念，每个元素都是且只能是一个字符串。常用操作是对集合插入、删除、判断等操作。时间复杂度尾 O(1)。可以进行交集、并集、差集运算。例如文章 1 的有 3 个标签，是一个 Redis 数据类型集合类型存储。文章 2 有 3 个标签，有一个 Redis 数据类型集合类型存储。文章是 1 是 mysql，文章 2 是讲 redis。那么交集是不是就交出了一个数据库？（假设数据库这个tag在两篇文字都有）。集合类型在 redis 中的存储是一个值为空的散列表。</p>
+<h2 id="8、Redis-数据命令四集合类型："><a href="#8、Redis-数据命令四集合类型：" class="headerlink" title="8、Redis 数据命令四集合类型："></a>8、Redis 数据命令四集合类型：</h2><ol>
+<li>增加：SADD key value。</li>
+<li>删除：SREM key value。</li>
+<li>获取指定集合的所有元素：SMEMBERS key。</li>
+<li>判断某个元素是否存在：SISMEMBER key value。</li>
+<li>差集运算：SDIFF key1 key2…。对多个集合进行差集运算。</li>
+<li>交集运算：SINNER key1 key2…。对多个集合进行交集运算。</li>
+<li>并集运算：SUNION key1 key2…。对多个集合进行并集运算。</li>
+<li>获取集合中元素个数：SCARD key。返回集合中元素的总个数。</li>
+<li>对差集、交集、并集运算的结果存放在一个指定的 key 中：SDIFFSTORE storekey key1 key2。对 key1 和 key2 求差集，结果存放在 key 为 storekey 的集合中。SINNERSTORE 和 SUNIONSTORE 类似。</li>
+<li>获取集合中的随即元素：SRANDMEMBER key [count]。参数 count 可选，如果 count 不存在，则随即一个。count 大于 0，则是不重复的 count 个元素。count 小于 0，则是一共 |count|个 元素，可以重复。</li>
+<li>随即弹出一个元素：SPOP key。随即从集合中弹出一个元素并删除，将该元素的值返回。</li>
+</ol>
+<h2 id="9、Redis-数据类型五有序集合类型："><a href="#9、Redis-数据类型五有序集合类型：" class="headerlink" title="9、Redis 数据类型五有序集合类型："></a>9、Redis 数据类型五有序集合类型：</h2><p>集合类型是无序的，每个元素是唯一的。那么有序集合就是有序的，每个元素是唯一的。有序集合类型和集合类型的差别是，有序集合为每个元素配备了一个属性：分数。有序集合就是根据分数来排序的。有序集合是使用散列表和跳跃表实现的。所以和列表相比，操作中间元素的速度也很快。时间复杂度尾 O(log(N))。Redis 数据类型中的有序集合类型比 Redis 数据类型中的列表类型更加耗费资源。</p>
+<h2 id="10、Redis数据命令五有序集合类型"><a href="#10、Redis数据命令五有序集合类型" class="headerlink" title="10、Redis数据命令五有序集合类型"></a>10、Redis数据命令五有序集合类型</h2><ol>
+<li>增加：ZADD key sorce1 value1 sorce2 value2…。</li>
+<li>获取分数：ZSCORE key value。获取key的有序集合中值为 value 的元素的分数。</li>
+<li>获取排名在某个范围内的元素列表：ZRANFGE key start stop [WITHSCORE]。获取排名在 start 和 end 之间的元素列表，包含 start 和 end2 个元素。每个元素一行。如果有WITHSCORE参数，则一行元素值，一行分数。时间复杂度为O(LOGn+m)。如果分数相同，则 0&lt;0</li>
+<li>获取指定分数范围的元素：ZRANGEBYSCORE key min max [WITHSCORE] [LIMIT offset count]。获取分数在 min 和 max 之间的元素列表。含两头。每个元素一行。如果有 WITHSCORE 参数，则一行元素值，一行分数。如果 min 大于 max 则顺序反转。</li>
+<li>为某个元素增加分数：ZINCRBY key increment value。指定的有序集合的值为 value 的元素的分数 +increment。返回值后更改后的分数。</li>
+<li>获取集合中元素的数量：ZCARD key。</li>
+<li>获取指定分数范围内的元素个数：ZCOUNT key min max。</li>
+<li>删除一个或多个元素：ZREM key value1 value2…</li>
+<li>根据排名范围删除元素：ZREMRANGEBYRANK key start end。删除排名在 start 和 end 中的元素。</li>
+<li>按照分数范围删除元素：ZREMRANGEBYSCORE key min max。</li>
+<li>获得元素排名（正序）：ZRANK key value。获取 value 在该集合中的从小到大的排名。</li>
+<li>获得元素排名（倒序）：ZREVRANK key value。获取 value 在该集合中从大到小的排名。</li>
+<li>有序集合的交集：ZINTERSTORE storekey key1 key2…[WEIGHTS weight [weight..]] [AGGREGATE SUM|MIN|MAX]。用来计算多个集合的交集，结果存储在 storekey中。返回值是 storekey 的元素个数。AGGREGATE 为 SUM 则 storekey 集合的每个元素的分数是参与计算的集合分数和。MIN 是参与计算的分数最小值。MAX 是参与计算分数最大值。WEIGHTS 设置每个集合的权重，如 WEIGHTS 1 0.1。那么集合A的每个元素分数 * 1，集合B的每个元素分数 * 0.1</li>
+<li>有序集合的并集：ZUNIONSTORE storekey key1 kye2…[WEIGHTS weight [weight..]] [AGGREGATE SUM|MIN|MAX]</li>
+</ol>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Redis/" rel="tag"># Redis</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/06/10/%E6%94%B6%E9%9B%86/%E5%8F%B2%E4%B8%8A%E6%9C%80%E6%B1%A1%E6%8A%80%E6%9C%AF%E8%A7%A3%E8%AF%BB%EF%BC%8C60%20%E4%B8%AA%20IT%20%E6%9C%AF%E8%AF%AD%E6%88%91%E7%AB%9F%E7%84%B6%E7%A7%92%E6%87%82%E4%BA%86/" rel="prev" title="史上最污技术解读，60 个 IT 术语我竟然秒懂了......">
+                  <i class="fa fa-chevron-left"></i> 史上最污技术解读，60 个 IT 术语我竟然秒懂了......
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/07/10/%E6%9E%B6%E6%9E%84/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E7%9A%84%203%20%E4%B8%AA%E5%8E%9F%E5%88%99/" rel="next" title="架构设计的 3 个原则">
+                  架构设计的 3 个原则 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">米薏</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">244k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:42</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><script defer src="/lib/three.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.8.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'dark',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

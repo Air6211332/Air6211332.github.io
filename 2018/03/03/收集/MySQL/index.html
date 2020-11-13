@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"air6211332.github.io","root":"/","scheme":"Pisces","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="MySql 参数说明-- 小米规整">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySql 参数说明-- 小米规整">
+<meta property="og:url" content="https://air6211332.github.io/2018/03/03/%E6%94%B6%E9%9B%86/MySQL/index.html">
+<meta property="og:site_name" content="米薏小天地">
+<meta property="og:description" content="MySql 参数说明-- 小米规整">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-03-03T04:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-20T09:05:35.000Z">
+<meta property="article:author" content="米薏">
+<meta property="article:tag" content="随笔">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://air6211332.github.io/2018/03/03/%E6%94%B6%E9%9B%86/MySQL/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>MySql 参数说明-- 小米规整 | 米薏小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="米薏小天地" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">米薏小天地</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#my-ini"><span class="nav-number">1.</span> <span class="nav-text">my.ini</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端参数"><span class="nav-number">1.1.</span> <span class="nav-text">客户端参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端参数"><span class="nav-number">1.2.</span> <span class="nav-text">服务端参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB存储引擎使用的参数"><span class="nav-number">1.3.</span> <span class="nav-text">InnoDB存储引擎使用的参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jdbc-Url"><span class="nav-number">2.</span> <span class="nav-text">jdbc Url</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">米薏</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/air6211332" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;air6211332" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:744471805" title="E-Mail → mailto:744471805" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://iamli.net/" title="https:&#x2F;&#x2F;iamli.net&#x2F;" rel="noopener" target="_blank">木子</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mmpmmmp.github.io/" title="https:&#x2F;&#x2F;mmpmmmp.github.io&#x2F;" rel="noopener" target="_blank">啧啧</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.hoofungson.cn/index.html" title="https:&#x2F;&#x2F;blog.hoofungson.cn&#x2F;index.html" rel="noopener" target="_blank">凤松轩</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xu-shuai.github.io/" title="https:&#x2F;&#x2F;xu-shuai.github.io&#x2F;" rel="noopener" target="_blank">水星很热</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.didispace.com/" title="http:&#x2F;&#x2F;blog.didispace.com&#x2F;" rel="noopener" target="_blank">程序猿DD</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://vincentxin-scott.github.io/" title="https:&#x2F;&#x2F;vincentxin-scott.github.io&#x2F;" rel="noopener" target="_blank">Vincent Xin</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://air6211332.github.io/2018/03/03/%E6%94%B6%E9%9B%86/MySQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="米薏">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米薏小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MySql 参数说明-- 小米规整
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-03-03 12:00:00" itemprop="dateCreated datePublished" datetime="2018-03-03T12:00:00+08:00">2018-03-03</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-10-20 17:05:35" itemprop="dateModified" datetime="2020-10-20T17:05:35+08:00">2020-10-20</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9A%8F%E7%AC%94/" itemprop="url" rel="index"><span itemprop="name">随笔</span></a>
+        </span>
+    </span>
+
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">MySql 参数说明-- 小米规整</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="my-ini"><a href="#my-ini" class="headerlink" title="my.ini"></a>my.ini</h1><blockquote>
+<p>my.ini是MySQL数据库中使用的配置文件，修改这个文件可以达到更新配置的目的。</p>
+</blockquote>
+<blockquote>
+<p>注意：每次修改参数后，必须重新启动MySQL服务才会有效。</p>
+</blockquote>
+<h2 id="客户端参数"><a href="#客户端参数" class="headerlink" title="客户端参数"></a>客户端参数</h2><pre class=" language-ini"><code class="language-ini">
+<span class="token selector">[client]</span>
+
+# MySQL数据库的端口，默认的端口是3306
+<span class="token constant">port</span><span class="token attr-value"><span class="token punctuation">=</span>3306</span>
+
+<span class="token selector">[mysql]</span>
+
+# 客户端默认的字符集，如果你希望它支持中文，可以设置成gbk或者utf8。
+<span class="token constant">default-character-set</span><span class="token attr-value"><span class="token punctuation">=</span>gb2312</span></code></pre>
+<h2 id="服务端参数"><a href="#服务端参数" class="headerlink" title="服务端参数"></a>服务端参数</h2><pre class=" language-ini"><code class="language-ini"><span class="token selector">[mysqld]</span>
+
+# MySQL数据库的端口，默认的端口是3306
+<span class="token constant">port</span><span class="token attr-value"><span class="token punctuation">=</span>3306</span>
+
+
+#MySQL的安装路径
+<span class="token constant">basedir</span><span class="token attr-value"><span class="token punctuation">=</span>"E:/Java/Mysql/"</span>
+
+#MySQL数据文件的存储位置，也是数据库表的存放位置。
+<span class="token constant">datadir</span><span class="token attr-value"><span class="token punctuation">=</span>"C:/ProgramData/MySQL/MySQL Server 5.5/Data/"</span>
+
+# 默认的字符集，这个字符集是服务器端的。
+<span class="token constant">character-set-server</span><span class="token attr-value"><span class="token punctuation">=</span>gb2312</span>
+
+# 默认的存储引擎。
+<span class="token constant">default-storage-engine</span><span class="token attr-value"><span class="token punctuation">=</span>INNODB</span>
+
+# SQL模式的参数，通过这个参数可以设置检验SQL语句的严格程度。
+<span class="token constant">sql-mode</span><span class="token attr-value"><span class="token punctuation">=</span>"STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"</span>
+
+# 允许同时访问MySQL服务器的最大连接数，其中一个连接是保留的，留给管理员专用的。
+<span class="token constant">max_connections</span><span class="token attr-value"><span class="token punctuation">=</span>100</span>
+
+# 查询时的缓存大小，缓存中可以存储以前通过select语句查询过的信息，再次查询时就可以直接从缓存中拿出信息。
+<span class="token constant">query_cache_size</span><span class="token attr-value"><span class="token punctuation">=</span>0</span>
+
+# 所有进程打开表的总数。
+<span class="token constant">table_cache</span><span class="token attr-value"><span class="token punctuation">=</span>256</span>
+
+# 表示内存中临时表的总数。
+<span class="token constant">tmp_table_size</span><span class="token attr-value"><span class="token punctuation">=</span>35M</span>
+
+
+# 表示保留客户端线程的缓存。
+<span class="token constant">thread_cache_size</span><span class="token attr-value"><span class="token punctuation">=</span>8</span>
+
+
+# MySQL重建索引时所允许的最大临时文件的大小。
+<span class="token constant">myisam_max_sort_file_size</span><span class="token attr-value"><span class="token punctuation">=</span>100G</span>
+
+# 重建索引时的缓存大小。
+<span class="token constant">myisam_sort_buffer_size</span><span class="token attr-value"><span class="token punctuation">=</span>69M</span>
+
+# 关键词的缓存大小。
+<span class="token constant">key_buffer_size</span><span class="token attr-value"><span class="token punctuation">=</span>55M</span>
+
+# MyISAM表全表扫描的缓存大小。
+<span class="token constant">read_buffer_size</span><span class="token attr-value"><span class="token punctuation">=</span>64K</span>
+
+# 将排序好的数据存入该缓存中。
+<span class="token constant">read_rnd_buffer_size</span><span class="token attr-value"><span class="token punctuation">=</span>256K</span>
+
+# 用于排序的缓存大小
+<span class="token constant">sort_buffer_size</span><span class="token attr-value"><span class="token punctuation">=</span>256K</span></code></pre>
+<h2 id="InnoDB存储引擎使用的参数"><a href="#InnoDB存储引擎使用的参数" class="headerlink" title="InnoDB存储引擎使用的参数"></a>InnoDB存储引擎使用的参数</h2><pre class=" language-ini"><code class="language-ini">
+# 附加的内存池，用来存储InnoDB表的内容。
+<span class="token constant">innodb_additional_mem_pool_size</span><span class="token attr-value"><span class="token punctuation">=</span>3M</span>
+
+# 设置提交日志的时机，若设置为1，InnoDB会在每次提交后将事务日志写到磁盘上。
+<span class="token constant">innodb_flush_log_at_trx_commit</span><span class="token attr-value"><span class="token punctuation">=</span>1</span>
+
+# 用来存储日志数据的缓存区的大小。
+<span class="token constant">innodb_log_buffer_size</span><span class="token attr-value"><span class="token punctuation">=</span>2M</span>
+
+# 缓存的大小，InnoDB使用一个缓冲池类保存索引和原始数据。
+<span class="token constant">innodb_buffer_pool_size</span><span class="token attr-value"><span class="token punctuation">=</span>107M</span>
+
+# 日志文件的大小。
+<span class="token constant">innodb_log_file_size</span><span class="token attr-value"><span class="token punctuation">=</span>54M</span>
+
+# InnoDB存储引擎允许的线程最大数。
+<span class="token constant">innodb_thread_concurrency</span><span class="token attr-value"><span class="token punctuation">=</span>18</span></code></pre>
+<h1 id="jdbc-Url"><a href="#jdbc-Url" class="headerlink" title="jdbc Url"></a>jdbc Url</h1><p>mysql JDBC URL格式如下： </p>
+<p>jdbc:mysql://[host:port],[host:port]…/[database][?参数名1][=参数值1][&amp;参数名2][=参数值2]… </p>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>参数说明</th>
+<th>缺省值</th>
+<th>最低版本要求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user</td>
+<td>数据库用户名（用于连接数据库）</td>
+<td></td>
+<td>所有版本</td>
+</tr>
+<tr>
+<td>passWord</td>
+<td>用户密码（用于连接数据库）</td>
+<td></td>
+<td>所有版本</td>
+</tr>
+<tr>
+<td>useUnicode</td>
+<td>是否使用Unicode字符集，如果参数characterEncoding设置为gb2312或gbk，本参数值必须设置为true</td>
+<td>false</td>
+<td>1.1g</td>
+</tr>
+<tr>
+<td>characterEncoding</td>
+<td>当useUnicode设置为true时，指定字符编码。比如可设置为gb2312或gbk</td>
+<td>false</td>
+<td>1.1g</td>
+</tr>
+<tr>
+<td>autoReconnect</td>
+<td>当数据库连接异常中断时，是否自动重新连接？</td>
+<td>false</td>
+<td>1.1</td>
+</tr>
+<tr>
+<td>autoReconnectForPools</td>
+<td>是否使用针对数据库连接池的重连策略</td>
+<td>false</td>
+<td>3.1.3</td>
+</tr>
+<tr>
+<td>failOverReadOnly</td>
+<td>自动重连成功后，连接是否设置为只读？</td>
+<td>true</td>
+<td>3.0.12</td>
+</tr>
+<tr>
+<td>maxReconnects</td>
+<td>autoReconnect设置为true时，重试连接的次数</td>
+<td>3</td>
+<td>1.1</td>
+</tr>
+<tr>
+<td>initialTimeout</td>
+<td>autoReconnect设置为true时，两次重连之间的时间间隔，单位：秒</td>
+<td>2</td>
+<td>1.1</td>
+</tr>
+<tr>
+<td>connectTimeout</td>
+<td>和数据库服务器建立socket连接时的超时，单位：毫秒。 0表示永不超时，适用于JDK 1.4及更高版本</td>
+<td>0</td>
+<td>3.0.1</td>
+</tr>
+<tr>
+<td>socketTimeout</td>
+<td>socket操作（读写）超时，单位：毫秒。 0表示永不超时</td>
+<td>0</td>
+<td>3.0.1</td>
+</tr>
+</tbody></table>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag"># 随笔</a>
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/02/13/Linux/Centos%207%20Mq/" rel="prev" title="Centos 7 Mq-- 小米规整">
+                  <i class="fa fa-chevron-left"></i> Centos 7 Mq-- 小米规整
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/03/21/Linux/Linux%E5%B8%B8%E7%94%A8%E7%9A%84Shell%E5%91%BD%E4%BB%A4/" rel="next" title="Linux常用的Shell命令">
+                  Linux常用的Shell命令 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">米薏</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">244k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:42</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><script defer src="/lib/three.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.8.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'dark',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

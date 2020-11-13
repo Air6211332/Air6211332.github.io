@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"air6211332.github.io","root":"/","scheme":"Pisces","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="收集规整的面试题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试题--微服务--小米归纳">
+<meta property="og:url" content="https://air6211332.github.io/2019/03/19/%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%BE%AE%E6%9C%8D%E5%8A%A1/index.html">
+<meta property="og:site_name" content="米薏小天地">
+<meta property="og:description" content="收集规整的面试题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90b73662fd8.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90b78c7722a.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90b7a798e40.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90b80f82113.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90b81dec0cb.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90b8c15a970.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90b9a246819.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90b9abdb0a0.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90b9b7884a5.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90ba2940125.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90ba7ae7c9b.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90bb2116b58.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90bb3297d7f.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90bb735fb05.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90bb8fe26f4.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90bba02e670.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/19/5c90bc400f9cc.png">
+<meta property="article:published_time" content="2019-03-19T04:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-20T09:05:35.006Z">
+<meta property="article:author" content="米薏">
+<meta property="article:tag" content="面试题">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2019/03/19/5c90b73662fd8.png">
+
+
+<link rel="canonical" href="https://air6211332.github.io/2019/03/19/%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>面试题--微服务--小米归纳 | 米薏小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="米薏小天地" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">米薏小天地</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#未归类"><span class="nav-number">1.</span> <span class="nav-text">未归类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#您对微服务有何了解？"><span class="nav-number">1.1.</span> <span class="nav-text">您对微服务有何了解？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微服务架构有哪些优势？"><span class="nav-number">1.2.</span> <span class="nav-text">微服务架构有哪些优势？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微服务有哪些特点？"><span class="nav-number">1.3.</span> <span class="nav-text">微服务有哪些特点？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计微服务的最佳实践是什么？"><span class="nav-number">1.4.</span> <span class="nav-text">设计微服务的最佳实践是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微服务架构如何运作？"><span class="nav-number">1.5.</span> <span class="nav-text">微服务架构如何运作？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微服务架构的优缺点是什么？"><span class="nav-number">1.6.</span> <span class="nav-text">微服务架构的优缺点是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单机，SOA和微服务架构有什么区别？"><span class="nav-number">1.7.</span> <span class="nav-text">单机，SOA和微服务架构有什么区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在使用微服务架构时，您面临哪些挑战？"><span class="nav-number">1.8.</span> <span class="nav-text">在使用微服务架构时，您面临哪些挑战？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SOA和微服务架构之间的主要区别是什么？"><span class="nav-number">1.9.</span> <span class="nav-text">SOA和微服务架构之间的主要区别是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微服务有什么特点？"><span class="nav-number">1.10.</span> <span class="nav-text">微服务有什么特点？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是领域驱动设计？"><span class="nav-number">1.11.</span> <span class="nav-text">什么是领域驱动设计？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么需要域驱动设计（DDD）？"><span class="nav-number">1.12.</span> <span class="nav-text">为什么需要域驱动设计（DDD）？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是无所不在的语言？"><span class="nav-number">1.13.</span> <span class="nav-text">什么是无所不在的语言？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是凝聚力？"><span class="nav-number">1.14.</span> <span class="nav-text">什么是凝聚力？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是耦合？"><span class="nav-number">1.15.</span> <span class="nav-text">什么是耦合？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是REST-RESTful以及它的用途是什么？"><span class="nav-number">1.16.</span> <span class="nav-text">什么是REST &#x2F; RESTful以及它的用途是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#你对Spring-Boot有什么了解？"><span class="nav-number">1.17.</span> <span class="nav-text">你对Spring Boot有什么了解？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Spring引导的执行器？"><span class="nav-number">1.18.</span> <span class="nav-text">什么是Spring引导的执行器？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Spring-Cloud？"><span class="nav-number">1.19.</span> <span class="nav-text">什么是Spring Cloud？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Cloud解决了哪些问题？"><span class="nav-number">1.20.</span> <span class="nav-text">Spring Cloud解决了哪些问题？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在Spring-MVC应用程序中使用WebMvcTest注释有什么用处？"><span class="nav-number">1.21.</span> <span class="nav-text">在Spring MVC应用程序中使用WebMvcTest注释有什么用处？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#你能否给出关于休息和微服务的要点？"><span class="nav-number">1.22.</span> <span class="nav-text">你能否给出关于休息和微服务的要点？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是不同类型的微服务测试？"><span class="nav-number">1.23.</span> <span class="nav-text">什么是不同类型的微服务测试？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#您对Distributed-Transaction有何了解？"><span class="nav-number">1.24.</span> <span class="nav-text">您对Distributed Transaction有何了解？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Idempotence以及它在哪里使用？"><span class="nav-number">1.25.</span> <span class="nav-text">什么是Idempotence以及它在哪里使用？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是有界上下文？"><span class="nav-number">1.26.</span> <span class="nav-text">什么是有界上下文？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是双因素身份验证？"><span class="nav-number">1.27.</span> <span class="nav-text">什么是双因素身份验证？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#双因素身份验证的凭据类型有哪些？"><span class="nav-number">1.28.</span> <span class="nav-text">双因素身份验证的凭据类型有哪些？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是客户证书？"><span class="nav-number">1.29.</span> <span class="nav-text">什么是客户证书？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PACT在微服务架构中的用途是什么？"><span class="nav-number">1.30.</span> <span class="nav-text">PACT在微服务架构中的用途是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是OAuth？"><span class="nav-number">1.31.</span> <span class="nav-text">什么是OAuth？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#康威定律是什么？"><span class="nav-number">1.32.</span> <span class="nav-text">康威定律是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合同测试你懂什么？"><span class="nav-number">1.33.</span> <span class="nav-text">合同测试你懂什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是端到端微服务测试？"><span class="nav-number">1.34.</span> <span class="nav-text">什么是端到端微服务测试？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Container在微服务中的用途是什么？"><span class="nav-number">1.35.</span> <span class="nav-text">Container在微服务中的用途是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是微服务架构中的DRY？"><span class="nav-number">1.36.</span> <span class="nav-text">什么是微服务架构中的DRY？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是消费者驱动的合同（CDC）？"><span class="nav-number">1.37.</span> <span class="nav-text">什么是消费者驱动的合同（CDC）？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web，RESTful-API在微服务中的作用是什么？"><span class="nav-number">1.38.</span> <span class="nav-text">Web，RESTful API在微服务中的作用是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#您对微服务架构中的语义监控有何了解？"><span class="nav-number">1.39.</span> <span class="nav-text">您对微服务架构中的语义监控有何了解？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我们如何进行跨功能测试？"><span class="nav-number">1.40.</span> <span class="nav-text">我们如何进行跨功能测试？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我们如何在测试中消除非决定论？"><span class="nav-number">1.41.</span> <span class="nav-text">我们如何在测试中消除非决定论？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mock或Stub有什么区别？"><span class="nav-number">1.42.</span> <span class="nav-text">Mock或Stub有什么区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#您对Mike-Cohn的测试金字塔了解多少？"><span class="nav-number">1.43.</span> <span class="nav-text">您对Mike Cohn的测试金字塔了解多少？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker的目的是什么？"><span class="nav-number">1.44.</span> <span class="nav-text">Docker的目的是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是金丝雀释放？"><span class="nav-number">1.45.</span> <span class="nav-text">什么是金丝雀释放？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是持续集成（CI）？"><span class="nav-number">1.46.</span> <span class="nav-text">什么是持续集成（CI）？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是持续监测？"><span class="nav-number">1.47.</span> <span class="nav-text">什么是持续监测？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#架构师在微服务架构中的角色是什么？"><span class="nav-number">1.48.</span> <span class="nav-text">架构师在微服务架构中的角色是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我们可以用微服务创建状态机吗？"><span class="nav-number">1.49.</span> <span class="nav-text">我们可以用微服务创建状态机吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是微服务中的反应性扩展？"><span class="nav-number">1.50.</span> <span class="nav-text">什么是微服务中的反应性扩展？</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">米薏</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/air6211332" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;air6211332" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:744471805" title="E-Mail → mailto:744471805" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://iamli.net/" title="https:&#x2F;&#x2F;iamli.net&#x2F;" rel="noopener" target="_blank">木子</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mmpmmmp.github.io/" title="https:&#x2F;&#x2F;mmpmmmp.github.io&#x2F;" rel="noopener" target="_blank">啧啧</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.hoofungson.cn/index.html" title="https:&#x2F;&#x2F;blog.hoofungson.cn&#x2F;index.html" rel="noopener" target="_blank">凤松轩</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xu-shuai.github.io/" title="https:&#x2F;&#x2F;xu-shuai.github.io&#x2F;" rel="noopener" target="_blank">水星很热</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.didispace.com/" title="http:&#x2F;&#x2F;blog.didispace.com&#x2F;" rel="noopener" target="_blank">程序猿DD</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://vincentxin-scott.github.io/" title="https:&#x2F;&#x2F;vincentxin-scott.github.io&#x2F;" rel="noopener" target="_blank">Vincent Xin</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://air6211332.github.io/2019/03/19/%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="米薏">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米薏小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          面试题--微服务--小米归纳
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-03-19 12:00:00" itemprop="dateCreated datePublished" datetime="2019-03-19T12:00:00+08:00">2019-03-19</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-10-20 17:05:35" itemprop="dateModified" datetime="2020-10-20T17:05:35+08:00">2020-10-20</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">面试题</span></a>
+        </span>
+    </span>
+
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">收集规整的面试题</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="未归类"><a href="#未归类" class="headerlink" title="未归类"></a>未归类</h1><h2 id="您对微服务有何了解？"><a href="#您对微服务有何了解？" class="headerlink" title="您对微服务有何了解？"></a>您对微服务有何了解？</h2><p><strong>微服务</strong>，又称微服务<strong>架构</strong>，是一种架构风格，它将应用程序构建为以<strong>业务领域</strong>为模型的小型自治服务集合  。</p>
+<p>通俗地说，你必须看到蜜蜂如何通过对齐六角形蜡细胞来构建它们的蜂窝状物。他们最初从使用各种材料的小部分开始，并继续从中构建一个大型蜂箱。这些细胞形成图案，产生坚固的结构，将蜂窝的特定部分固定在一起。这里，每个细胞独立于另一个细胞，但它也与其他细胞相关。这意味着对一个细胞的损害不会损害其他细胞，因此，蜜蜂可以在不影响完整蜂箱的情况下重建这些细胞。</p>
+<p><img src="https://i.loli.net/2019/03/19/5c90b73662fd8.png" alt=""></p>
+<p>请参考上图。这里，每个六边形形状代表单独的服务组件。与蜜蜂的工作类似，每个敏捷团队都使用可用的框架和所选的技术堆栈构建单独的服务组件。就像在蜂箱中一样，每个服务组件形成一个强大的微服务架构，以提供更好的可扩展性。此外，敏捷团队可以单独处理每个服务组件的问题，而对整个应用程序没有影响或影响最小。</p>
+<h2 id="微服务架构有哪些优势？"><a href="#微服务架构有哪些优势？" class="headerlink" title="微服务架构有哪些优势？"></a>微服务架构有哪些优势？</h2><p><img src="https://i.loli.net/2019/03/19/5c90b78c7722a.png" alt=""></p>
+<ul>
+<li><strong>独立开发</strong>  – 所有微服务都可以根据各自的功能轻松开发</li>
+<li><strong>独立部署</strong>  – 基于其服务，可以在任何应用程序中单独部署它们</li>
+<li><strong>故障隔离</strong>  – 即使应用程序的一项服务不起作用，系统仍可继续运行</li>
+<li><strong>混合技术堆栈</strong>  – 可以使用不同的语言和技术来构建同一应用程序的不同服务</li>
+<li><strong>粒度缩放</strong>  – 单个组件可根据需要进行缩放，无需将所有组件缩放在一起</li>
+</ul>
+<h2 id="微服务有哪些特点？"><a href="#微服务有哪些特点？" class="headerlink" title="微服务有哪些特点？"></a>微服务有哪些特点？</h2><p><img src="https://i.loli.net/2019/03/19/5c90b7a798e40.png" alt=""></p>
+<ul>
+<li><strong>解耦</strong>  – 系统内的服务很大程度上是分离的。因此，整个应用程序可以轻松构建，更改和扩展</li>
+<li><strong>组件化</strong>  – 微服务被视为可以轻松更换和升级的独立组件<br>业务能力  – 微服务非常简单，专注于单一功能</li>
+<li><strong>自治</strong>  – 开发人员和团队可以彼此独立工作，从而提高速度<br>持续交付  – 通过软件创建，测试和批准的系统自动化，允许频繁发布软件</li>
+<li><strong>责任</strong>  – 微服务不关注应用程序作为项目。相反，他们将应用程序视为他们负责的产品</li>
+<li><strong>分散治理</strong>  – 重点是使用正确的工具来做正确的工作。这意味着没有标准化模式或任何技术模式。开发人员可以自由选择最有用的工具来解决他们的问题</li>
+<li><strong>敏捷</strong>  – 微服务支持敏捷开发。任何新功能都可以快速开发并再次丢弃</li>
+</ul>
+<h2 id="设计微服务的最佳实践是什么？"><a href="#设计微服务的最佳实践是什么？" class="headerlink" title="设计微服务的最佳实践是什么？"></a>设计微服务的最佳实践是什么？</h2><p><img src="https://i.loli.net/2019/03/19/5c90b80f82113.png" alt=""></p>
+<h2 id="微服务架构如何运作？"><a href="#微服务架构如何运作？" class="headerlink" title="微服务架构如何运作？"></a>微服务架构如何运作？</h2><p>微服务架构具有以下组件：<br><img src="https://i.loli.net/2019/03/19/5c90b81dec0cb.png" alt=""></p>
+<ul>
+<li><strong>客户端</strong>  – 来自不同设备的不同用户发送请求。</li>
+<li><strong>身份提供商</strong>  – 验证用户或客户身份并颁发安全令牌。</li>
+<li><strong>API网关</strong>  – 处理客户端请求。</li>
+<li><strong>静态内容</strong>  – 容纳系统的所有内容。</li>
+<li><strong>管理</strong>  – 在节点上平衡服务并识别故障。</li>
+<li><strong>服务发现</strong>  – 查找微服务之间通信路径的指南。</li>
+<li><strong>内容交付网络</strong>  – 代理服务器及其数据中心的分布式网络。</li>
+<li><strong>远程服务</strong>  – 启用驻留在IT设备网络上的远程访问信息。</li>
+</ul>
+<h2 id="微服务架构的优缺点是什么？"><a href="#微服务架构的优缺点是什么？" class="headerlink" title="微服务架构的优缺点是什么？"></a>微服务架构的优缺点是什么？</h2><table>
+<thead>
+<tr>
+<th align="center">微服务架构的优点</th>
+<th align="center">微服务架构的缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">自由使用不同的技术</td>
+<td align="center">增加故障排除挑战</td>
+</tr>
+<tr>
+<td align="center">每个微服务都侧重于单一功能</td>
+<td align="center">由于远程呼叫而增加延迟</td>
+</tr>
+<tr>
+<td align="center">支持单个可部署单元</td>
+<td align="center">增加了配置和其他操作的工作量</td>
+</tr>
+<tr>
+<td align="center">允许经常发布软件</td>
+<td align="center">难以保持交易安全</td>
+</tr>
+<tr>
+<td align="center">确保每项服务的安全性</td>
+<td align="center">艰难地跨越各种边界跟踪数据</td>
+</tr>
+<tr>
+<td align="center">多个服务是并行开发和部署的</td>
+<td align="center">难以在服务之间进行编码</td>
+</tr>
+</tbody></table>
+<h2 id="单机，SOA和微服务架构有什么区别？"><a href="#单机，SOA和微服务架构有什么区别？" class="headerlink" title="单机，SOA和微服务架构有什么区别？"></a>单机，SOA和微服务架构有什么区别？</h2><p><img src="https://i.loli.net/2019/03/19/5c90b8c15a970.png" alt=""></p>
+<ul>
+<li><strong>单机架构</strong>类似于大容器，其中应用程序的所有软件组件组装在一起并紧密封装。</li>
+<li>一个<strong>面向服务</strong>的架构是一种相互通信服务的集合。通信可以涉及简单的数据传递，也可以涉及两个或多个协调某些活动的服务。</li>
+<li><strong>微服务架构</strong>是一种架构风格，它将应用程序构建为以业务域为模型的小型自治服务集合。</li>
+</ul>
+<h2 id="在使用微服务架构时，您面临哪些挑战？"><a href="#在使用微服务架构时，您面临哪些挑战？" class="headerlink" title="在使用微服务架构时，您面临哪些挑战？"></a>在使用微服务架构时，您面临哪些挑战？</h2><p>开发一些较小的微服务听起来很容易，但开发它们时经常遇到的挑战如下。</p>
+<ul>
+<li><strong>自动化组件</strong>：难以自动化，因为有许多较小的组件。因此，对于每个组件，我们必须遵循Build，Deploy和Monitor的各个阶段。</li>
+<li><strong>易感性</strong>：将大量组件维护在一起变得难以部署，维护，监控和识别问题。它需要在所有组件周围具有很好的感知能力。</li>
+<li><strong>配置管理</strong>：有时在各种环境中维护组件的配置变得困难。</li>
+<li><strong>调试</strong>：很难找到错误的每一项服务。维护集中式日志记录和仪表板以调试问题至关重要。</li>
+</ul>
+<h2 id="SOA和微服务架构之间的主要区别是什么？"><a href="#SOA和微服务架构之间的主要区别是什么？" class="headerlink" title="SOA和微服务架构之间的主要区别是什么？"></a>SOA和微服务架构之间的主要区别是什么？</h2><table>
+<thead>
+<tr>
+<th align="center">SOA</th>
+<th align="center">微服务</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">遵循“ 尽可能多的共享 ”架构方法</td>
+<td align="center">遵循“ 尽可能少分享 ”的架构方法</td>
+</tr>
+<tr>
+<td align="center">重要性在于  业务功能  重用</td>
+<td align="center">重要性在于“ 有界背景 ” 的概念</td>
+</tr>
+<tr>
+<td align="center">他们有  共同的 治理  和标准</td>
+<td align="center">他们专注于  人们的 合作  和其他选择的自由</td>
+</tr>
+<tr>
+<td align="center">使用  企业服务总线（ESB）  进行通信</td>
+<td align="center">简单的消息系统</td>
+</tr>
+<tr>
+<td align="center">它们支持  多种消息协议</td>
+<td align="center">他们使用  轻量级协议  ，如  HTTP / REST  等。</td>
+</tr>
+<tr>
+<td align="center">多线程，  有更多的开销来处理I / O.</td>
+<td align="center">单线程  通常使用Event Loop功能进行非锁定I / O处理</td>
+</tr>
+<tr>
+<td align="center">最大化应用程序服务可重用性</td>
+<td align="center">专注于  解耦</td>
+</tr>
+<tr>
+<td align="center">传统的关系数据库  更常用</td>
+<td align="center">现代  关系数据库 更常用</td>
+</tr>
+<tr>
+<td align="center">系统的变化需要修改整体</td>
+<td align="center">系统的变化是创造一种新的服务</td>
+</tr>
+<tr>
+<td align="center">DevOps / Continuous Delivery正在变得流行，但还不是主流</td>
+<td align="center">专注于DevOps /持续交付</td>
+</tr>
+</tbody></table>
+<h2 id="微服务有什么特点？"><a href="#微服务有什么特点？" class="headerlink" title="微服务有什么特点？"></a>微服务有什么特点？</h2><p><img src="https://i.loli.net/2019/03/19/5c90b9a246819.png" alt=""></p>
+<h2 id="什么是领域驱动设计？"><a href="#什么是领域驱动设计？" class="headerlink" title="什么是领域驱动设计？"></a>什么是领域驱动设计？</h2><p><img src="https://i.loli.net/2019/03/19/5c90b9abdb0a0.png" alt=""></p>
+<h2 id="为什么需要域驱动设计（DDD）？"><a href="#为什么需要域驱动设计（DDD）？" class="headerlink" title="为什么需要域驱动设计（DDD）？"></a>为什么需要域驱动设计（DDD）？</h2><p><img src="https://i.loli.net/2019/03/19/5c90b9b7884a5.png" alt=""></p>
+<h2 id="什么是无所不在的语言？"><a href="#什么是无所不在的语言？" class="headerlink" title="什么是无所不在的语言？"></a>什么是无所不在的语言？</h2><p>如果您必须定义<strong>泛在语言（UL）</strong>，那么它是特定域的开发人员和用户使用的通用语言，通过该语言可以轻松解释域。</p>
+<p>无处不在的语言必须非常清晰，以便它将所有团队成员放在同一页面上，并以机器可以理解的方式进行翻译。</p>
+<h2 id="什么是凝聚力？"><a href="#什么是凝聚力？" class="headerlink" title="什么是凝聚力？"></a>什么是凝聚力？</h2><p>模块内部元素所属的程度被认为是<strong>凝聚力</strong>。</p>
+<h2 id="什么是耦合？"><a href="#什么是耦合？" class="headerlink" title="什么是耦合？"></a>什么是耦合？</h2><p>组件之间依赖关系强度的度量被认为是<strong>耦合</strong>。一个好的设计总是被认为具有<strong>高内聚力</strong>和<strong>低耦合性</strong>。</p>
+<h2 id="什么是REST-RESTful以及它的用途是什么？"><a href="#什么是REST-RESTful以及它的用途是什么？" class="headerlink" title="什么是REST / RESTful以及它的用途是什么？"></a>什么是REST / RESTful以及它的用途是什么？</h2><p><strong>Representational State Transfer（REST）/ RESTful</strong>  Web服务是一种帮助计算机系统通过Internet进行通信的架构风格。这使得微服务更容易理解和实现。</p>
+<p>微服务可以使用或不使用RESTful API实现，但使用RESTful API构建松散耦合的微服务总是更容易。</p>
+<h2 id="你对Spring-Boot有什么了解？"><a href="#你对Spring-Boot有什么了解？" class="headerlink" title="你对Spring Boot有什么了解？"></a>你对Spring Boot有什么了解？</h2><p>事实上，随着新功能的增加，弹簧变得越来越复杂。如果必须启动新的spring项目，则必须添加构建路径或添加maven依赖项，配置应用程序服务器，添加spring配置。所以一切都必须从头开始。</p>
+<p><strong>Spring Boot</strong>是解决这个问题的方法。使用spring boot可以避免所有样板代码和配置。因此，基本上认为自己就好像你正在烘烤蛋糕一样，春天就像制作蛋糕所需的成分一样，弹簧靴就是你手中的完整蛋糕。</p>
+<p><img src="https://i.loli.net/2019/03/19/5c90ba2940125.png" alt=""></p>
+<h2 id="什么是Spring引导的执行器？"><a href="#什么是Spring引导的执行器？" class="headerlink" title="什么是Spring引导的执行器？"></a>什么是Spring引导的执行器？</h2><p>Spring Boot执行程序提供了restful Web服务，以访问生产环境中运行应用程序的当前状态。在执行器的帮助下，您可以检查各种指标并监控您的应用程序。</p>
+<h2 id="什么是Spring-Cloud？"><a href="#什么是Spring-Cloud？" class="headerlink" title="什么是Spring Cloud？"></a>什么是Spring Cloud？</h2><p>根据Spring Cloud的官方网站，Spring Cloud为开发人员提供了快速构建分布式系统中一些常见模式的工具（例如配置管理，服务发现，断路器，智能路由，领导选举，分布式会话，集群状态）。</p>
+<h2 id="Spring-Cloud解决了哪些问题？"><a href="#Spring-Cloud解决了哪些问题？" class="headerlink" title="Spring Cloud解决了哪些问题？"></a>Spring Cloud解决了哪些问题？</h2><p>在使用Spring Boot开发分布式微服务时，我们面临的问题很少由Spring Cloud解决。</p>
+<ul>
+<li><strong>与分布式系统相关的复杂性</strong> – 包括网络问题，延迟开销，带宽问题，安全问题。</li>
+<li><strong>处理服务发现的能力</strong> – 服务发现允许集群中的进程和服务找到彼此并进行通信。</li>
+<li><strong>解决冗余问题</strong> – 冗余问题经常发生在分布式系统中。</li>
+<li><strong>负载平衡</strong>  – 改进跨多个计算资源（例如计算机集群，网络链接，中央处理单元）的工作负载分布。</li>
+<li><strong>减少性能问题</strong> – 减少因各种操作开销导致的性能问题。</li>
+</ul>
+<h2 id="在Spring-MVC应用程序中使用WebMvcTest注释有什么用处？"><a href="#在Spring-MVC应用程序中使用WebMvcTest注释有什么用处？" class="headerlink" title="在Spring MVC应用程序中使用WebMvcTest注释有什么用处？"></a>在Spring MVC应用程序中使用WebMvcTest注释有什么用处？</h2><p><img src="https://i.loli.net/2019/03/19/5c90ba7ae7c9b.png" alt=""></p>
+<p>在测试目标只关注Spring MVC组件的情况下，<strong>WebMvcTest</strong>注释用于单元测试Spring MVC应用程序。在上面显示的快照中，我们只想启动ToTestController。执行此单元测试时，不会启动所有其他控制器和映射。</p>
+<h2 id="你能否给出关于休息和微服务的要点？"><a href="#你能否给出关于休息和微服务的要点？" class="headerlink" title="你能否给出关于休息和微服务的要点？"></a>你能否给出关于休息和微服务的要点？</h2><p><strong>休息</strong></p>
+<p>虽然您可以通过多种方式实现微服务，但REST over HTTP是实现微服务的一种方式。REST还可用于其他应用程序，如Web应用程序，API设计和MVC应用程序，以提供业务数据。</p>
+<p><strong>微服务</strong></p>
+<p>微服务是一种体系结构，其中系统的所有组件都被放入单独的组件中，这些组件可以单独构建，部署和扩展。微服务的某些原则和最佳实践有助于构建弹性应用程序。</p>
+<p>简而言之，您可以说REST是构建微服务的媒介。</p>
+<h2 id="什么是不同类型的微服务测试？"><a href="#什么是不同类型的微服务测试？" class="headerlink" title="什么是不同类型的微服务测试？"></a>什么是不同类型的微服务测试？</h2><p>在使用微服务时，由于有多个微服务协同工作，测试变得非常复杂。因此，测试分为不同的级别。</p>
+<ul>
+<li>在<strong>底层</strong>，我们有<strong>面向技术的测试</strong>，如单元测试和性能测试。这些是完全自动化的。</li>
+<li>在<strong>中间层面</strong>，我们进行了诸如压力测试和可用性测试之类的<strong>探索性测试</strong>。</li>
+<li>在<strong>顶层</strong>， 我们的<strong>验收测试</strong>数量很少。这些验收测试有助于利益相关者理解和验证软件功能。</li>
+</ul>
+<h2 id="您对Distributed-Transaction有何了解？"><a href="#您对Distributed-Transaction有何了解？" class="headerlink" title="您对Distributed Transaction有何了解？"></a>您对Distributed Transaction有何了解？</h2><p><strong>分布式事务</strong>是指单个事件导致两个或多个不能以原子方式提交的单独数据源的突变的任何情况。在微服务的世界中，它变得更加复杂，因为每个服务都是一个工作单元，并且大多数时候多个服务必须协同工作才能使业务成功。</p>
+<h2 id="什么是Idempotence以及它在哪里使用？"><a href="#什么是Idempotence以及它在哪里使用？" class="headerlink" title="什么是Idempotence以及它在哪里使用？"></a>什么是Idempotence以及它在哪里使用？</h2><p><strong>幂等</strong>性是能够以这样的方式做两次事情的特性，即最终结果将保持不变，即好像它只做了一次。</p>
+<p><strong>用法</strong>：在远程服务或数据源中<strong>使用</strong> Idempotence，这样当它多次接收指令时，它只处理指令一次。</p>
+<h2 id="什么是有界上下文？"><a href="#什么是有界上下文？" class="headerlink" title="什么是有界上下文？"></a>什么是有界上下文？</h2><p>有界上下文是域驱动设计的核心模式。DDD战略设计部门的重点是处理大型模型和团队。DDD通过将大型模型划分为不同的有界上下文并明确其相互关系来处理大型模型。</p>
+<h2 id="什么是双因素身份验证？"><a href="#什么是双因素身份验证？" class="headerlink" title="什么是双因素身份验证？"></a>什么是双因素身份验证？</h2><p>双因素身份验证为帐户登录过程启用第二级身份验证。<br><img src="https://i.loli.net/2019/03/19/5c90bb2116b58.png" alt=""><br>因此，假设用户必须只输入用户名和密码，那么这被认为是单因素身份验证。</p>
+<h2 id="双因素身份验证的凭据类型有哪些？"><a href="#双因素身份验证的凭据类型有哪些？" class="headerlink" title="双因素身份验证的凭据类型有哪些？"></a>双因素身份验证的凭据类型有哪些？</h2><p>这三种凭证是：<br><img src="https://i.loli.net/2019/03/19/5c90bb3297d7f.png" alt=""></p>
+<h2 id="什么是客户证书？"><a href="#什么是客户证书？" class="headerlink" title="什么是客户证书？"></a>什么是客户证书？</h2><p>客户端系统用于向远程服务器发出经过身份验证的请求的一种数字证书称为<strong>客户端证书</strong>。客户端证书在许多相互认证设计中起着非常重要的作用，为请求者的身份提供了强有力的保证。</p>
+<h2 id="PACT在微服务架构中的用途是什么？"><a href="#PACT在微服务架构中的用途是什么？" class="headerlink" title="PACT在微服务架构中的用途是什么？"></a>PACT在微服务架构中的用途是什么？</h2><p><strong>PACT</strong>是一个开源工具，允许测试服务提供者和消费者之间的交互，与合同隔离，从而提高微服务集成的可靠性。</p>
+<p>微服务中的用法：</p>
+<ul>
+<li>用于在微服务中实现消费者驱动的合同。</li>
+<li>测试微服务的消费者和提供者之间的消费者驱动的合同。</li>
+</ul>
+<h2 id="什么是OAuth？"><a href="#什么是OAuth？" class="headerlink" title="什么是OAuth？"></a>什么是OAuth？</h2><p><strong>OAuth</strong>代表开放授权协议。这允许通过在HTTP服务上启用客户端应用程序（例如第三方提供商Facebook，GitHub等）来访问资源所有者的资源。因此，您可以在不使用其凭据的情况下与另一个站点共享存储在一个站点上的资源。</p>
+<h2 id="康威定律是什么？"><a href="#康威定律是什么？" class="headerlink" title="康威定律是什么？"></a>康威定律是什么？</h2><p>任何设计系统的组织（广泛定义）都将产生一种设计，其结构是组织通信结构的副本。” –  <strong>Mel Conway</strong></p>
+<p><img src="https://i.loli.net/2019/03/19/5c90bb735fb05.png" alt=""></p>
+<p>该法律基本上试图传达这样一个事实：为了使软件模块起作用，整个团队应该进行良好的沟通。因此，系统的结构反映了产生它的组织的社会边界。</p>
+<h2 id="合同测试你懂什么？"><a href="#合同测试你懂什么？" class="headerlink" title="合同测试你懂什么？"></a>合同测试你懂什么？</h2><p>根据Martin Flower的说法，<strong>合同测试</strong>是在外部服务边界进行的测试，用于验证其是否符合消费服务预期的合同。</p>
+<p>此外，合同测试不会深入测试服务的行为。更确切地说，它测试该服务调用的输入＆输出包含所需的属性和所述响应延迟，吞吐量是允许的限度内。</p>
+<h2 id="什么是端到端微服务测试？"><a href="#什么是端到端微服务测试？" class="headerlink" title="什么是端到端微服务测试？"></a>什么是端到端微服务测试？</h2><p>端到端测试验证了工作流中的每个流程都正常运行。这可确保系统作为一个整体协同工作并满足所有要求。</p>
+<p>通俗地说，你可以说端到端测试是一种测试，在特定时期后测试所有东西。</p>
+<p><img src="https://i.loli.net/2019/03/19/5c90bb8fe26f4.png" alt=""></p>
+<h2 id="Container在微服务中的用途是什么？"><a href="#Container在微服务中的用途是什么？" class="headerlink" title="Container在微服务中的用途是什么？"></a>Container在微服务中的用途是什么？</h2><p>容器是管理基于微服务的应用程序以便单独开发和部署它们的好方法。您可以将微服务封装在容器映像及其依赖项中，然后可以使用它来滚动按需实例的微服务，而无需任何额外的工作。</p>
+<p><img src="https://i.loli.net/2019/03/19/5c90bba02e670.png" alt=""></p>
+<h2 id="什么是微服务架构中的DRY？"><a href="#什么是微服务架构中的DRY？" class="headerlink" title="什么是微服务架构中的DRY？"></a>什么是微服务架构中的DRY？</h2><p><strong>DRY</strong>代表<strong>不要重复自己</strong>。它基本上促进了重用代码的概念。这导致开发和共享库，这反过来导致紧密耦合。</p>
+<h2 id="什么是消费者驱动的合同（CDC）？"><a href="#什么是消费者驱动的合同（CDC）？" class="headerlink" title="什么是消费者驱动的合同（CDC）？"></a>什么是消费者驱动的合同（CDC）？</h2><p>这基本上是用于开发微服务的模式，以便它们可以被外部系统使用。当我们处理微服务时，有一个特定的提供者构建它，并且有一个或多个使用微服务的消费者。</p>
+<p>通常，提供程序在XML文档中指定接口。但在消费者驱动的合同中，每个服务消费者都传达了提供商期望的接口。</p>
+<h2 id="Web，RESTful-API在微服务中的作用是什么？"><a href="#Web，RESTful-API在微服务中的作用是什么？" class="headerlink" title="Web，RESTful API在微服务中的作用是什么？"></a>Web，RESTful API在微服务中的作用是什么？</h2><p>微服务架构基于一个概念，其中所有服务应该能够彼此交互以构建业务功能。因此，要实现这一点，每个微服务必须具有接口。这使得Web API成为微服务的一个非常重要的推动者。RESTful API基于Web的开放网络原则，为构建微服务架构的各个组件之间的接口提供了最合理的模型。</p>
+<h2 id="您对微服务架构中的语义监控有何了解？"><a href="#您对微服务架构中的语义监控有何了解？" class="headerlink" title="您对微服务架构中的语义监控有何了解？"></a>您对微服务架构中的语义监控有何了解？</h2><p>语义监控，也称为 <strong>综合监控</strong>,  将自动化测试与监控应用程序相结合，以检测业务失败因素。</p>
+<h2 id="我们如何进行跨功能测试？"><a href="#我们如何进行跨功能测试？" class="headerlink" title="我们如何进行跨功能测试？"></a>我们如何进行跨功能测试？</h2><p>跨功能测试是对非功能性需求的验证，即那些无法像普通功能那样实现的需求。</p>
+<h2 id="我们如何在测试中消除非决定论？"><a href="#我们如何在测试中消除非决定论？" class="headerlink" title="我们如何在测试中消除非决定论？"></a>我们如何在测试中消除非决定论？</h2><p><strong>非确定性测试</strong>（NDT）基本上是不可靠的测试。所以，有时可能会发生它们通过，显然有时它们也可能会失败。当它们失败时，它们会重新运行通过。</p>
+<p>从测试中删除非确定性的一些方法如下：</p>
+<ol>
+<li>隔离</li>
+<li>异步</li>
+<li>远程服务</li>
+<li>隔离</li>
+<li>时间</li>
+<li>资源泄漏</li>
+</ol>
+<h2 id="Mock或Stub有什么区别？"><a href="#Mock或Stub有什么区别？" class="headerlink" title="Mock或Stub有什么区别？"></a>Mock或Stub有什么区别？</h2><p><strong>存根</strong></p>
+<ul>
+<li>一个有助于运行测试的虚拟对象。</li>
+<li>在某些可以硬编码的条件下提供固定行为。</li>
+<li>永远不会测试存根的任何其他行为。</li>
+</ul>
+<p>例如，对于空堆栈，您可以创建一个只为empty（）方法返回true的存根。因此，这并不关心堆栈中是否存在元素。</p>
+<p><strong>嘲笑</strong></p>
+<ul>
+<li>一个虚拟对象，其中最初设置了某些属性。</li>
+<li>此对象的行为取决于set属性。</li>
+<li>也可以测试对象的行为。</li>
+</ul>
+<p>例如，对于Customer对象，您可以通过设置名称和年龄来模拟它。您可以将age设置为12，然后测试isAdult（）方法，该方法将在年龄大于18时返回true。因此，您的Mock Customer对象适用于指定的条件。</p>
+<h2 id="您对Mike-Cohn的测试金字塔了解多少？"><a href="#您对Mike-Cohn的测试金字塔了解多少？" class="headerlink" title="您对Mike Cohn的测试金字塔了解多少？"></a>您对Mike Cohn的测试金字塔了解多少？</h2><p><strong>Mike Cohn</strong>  提供了一个名为<strong>Test Pyramid</strong>的模型。这描述了软件开发所需的自动化测试类型。</p>
+<p><img src="https://i.loli.net/2019/03/19/5c90bc400f9cc.png" alt=""></p>
+<p>根据金字塔，第一层的测试数量应该最高。在服务层，测试次数应小于单元测试级别，但应大于端到端级别。</p>
+<h2 id="Docker的目的是什么？"><a href="#Docker的目的是什么？" class="headerlink" title="Docker的目的是什么？"></a>Docker的目的是什么？</h2><p>Docker提供了一个可用于托管任何应用程序的容器环境。在此，软件应用程序和支持它的依赖项紧密打包在一起。</p>
+<p>因此，这个打包的产品被称为Container，因为它是由Docker完成的，所以它被称为Docker容器！</p>
+<h2 id="什么是金丝雀释放？"><a href="#什么是金丝雀释放？" class="headerlink" title="什么是金丝雀释放？"></a>什么是金丝雀释放？</h2><p>Canary Releasing是一种降低在生产中引入新软件版本的风险的技术。这是通过将变更缓慢地推广到一小部分用户，然后将其发布到整个基础架构，即将其提供给每个人来完成的。</p>
+<h2 id="什么是持续集成（CI）？"><a href="#什么是持续集成（CI）？" class="headerlink" title="什么是持续集成（CI）？"></a>什么是持续集成（CI）？</h2><p>持续集成（CI）是每次团队成员提交版本控制更改时自动构建和测试代码的过程。这鼓励开发人员通过在每个小任务完成后将更改合并到共享版本控制存储库来共享代码和单元测试。</p>
+<h2 id="什么是持续监测？"><a href="#什么是持续监测？" class="headerlink" title="什么是持续监测？"></a>什么是持续监测？</h2><p>持续监控深入监控覆盖范围，从浏览器内前端性能指标，到应用程序性能，再到主机虚拟化基础架构指标。</p>
+<h2 id="架构师在微服务架构中的角色是什么？"><a href="#架构师在微服务架构中的角色是什么？" class="headerlink" title="架构师在微服务架构中的角色是什么？"></a>架构师在微服务架构中的角色是什么？</h2><p>微服务架构中的架构师扮演以下角色：</p>
+<ul>
+<li>决定整个软件系统的布局。</li>
+<li>帮助确定组件的分区。因此，他们确保组件相互粘合，但不紧密耦合。</li>
+<li>与开发人员共同编写代码，了解日常生活中面临的挑战。</li>
+<li>为开发微服务的团队提供某些工具和技术的建议。</li>
+<li>提供技术治理，以便技术开发团队遵循微服务原则。</li>
+</ul>
+<h2 id="我们可以用微服务创建状态机吗？"><a href="#我们可以用微服务创建状态机吗？" class="headerlink" title="我们可以用微服务创建状态机吗？"></a>我们可以用微服务创建状态机吗？</h2><p>我们知道拥有自己的数据库的每个微服务都是一个可独立部署的程序单元，这反过来又让我们可以创建一个状态机。因此，我们可以为特定的微服务指定不同的状态和事件。</p>
+<p>例如，我们可以定义Order微服务。订单可以具有不同的状态。Order状态的转换可以是Order微服务中的独立事件。</p>
+<h2 id="什么是微服务中的反应性扩展？"><a href="#什么是微服务中的反应性扩展？" class="headerlink" title="什么是微服务中的反应性扩展？"></a>什么是微服务中的反应性扩展？</h2><p>Reactive Extensions也称为Rx。这是一种设计方法，我们通过调用多个服务来收集结果，然后编译组合响应。这些调用可以是同步或异步，阻塞或非阻塞。Rx是分布式系统中非常流行的工具，与传统流程相反。</p>
+<p>希望这些微服务面试问题可以帮助您进行微服务架构师访谈。</p>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag"># 面试题</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/12/%E6%9D%82%E8%AE%B0/chrome%20flag/" rel="prev" title="chrome flags -- 小米收纳整理">
+                  <i class="fa fa-chevron-left"></i> chrome flags -- 小米收纳整理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/03/21/%E9%9D%A2%E8%AF%95%E9%A2%98/Java%E5%9F%BA%E7%A1%80/" rel="next" title="面试题--Java基础--小米归纳">
+                  面试题--Java基础--小米归纳 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">米薏</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">244k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:42</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><script defer src="/lib/three.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.8.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'dark',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"air6211332.github.io","root":"/","scheme":"Pisces","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="Spring 5 如何利用 Java 8 的函数式语法和一种新的反应式编程模型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Framework 5 中的新特性">
+<meta property="og:url" content="https://air6211332.github.io/2018/12/10/Java/spring/Spring%20Framework%205%20%E4%B8%AD%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7/index.html">
+<meta property="og:site_name" content="米薏小天地">
+<meta property="og:description" content="Spring 5 如何利用 Java 8 的函数式语法和一种新的反应式编程模型">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-12-10T04:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-20T09:05:34.997Z">
+<meta property="article:author" content="米薏">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://air6211332.github.io/2018/12/10/Java/spring/Spring%20Framework%205%20%E4%B8%AD%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Spring Framework 5 中的新特性 | 米薏小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="米薏小天地" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">米薏小天地</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#升级到-Java-SE-8-和-Java-EE-7"><span class="nav-number">1.</span> <span class="nav-text">升级到 Java SE 8 和 Java EE 7</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#反应式编程模型"><span class="nav-number">2.</span> <span class="nav-text">反应式编程模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用注解进行编程"><span class="nav-number">3.</span> <span class="nav-text">使用注解进行编程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函数式编程"><span class="nav-number">4.</span> <span class="nav-text">函数式编程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用-REST-端点执行反应式编程"><span class="nav-number">5.</span> <span class="nav-text">使用 REST 端点执行反应式编程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP-2-支持"><span class="nav-number">6.</span> <span class="nav-text">HTTP&#x2F;2 支持</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kotlin-和-Spring-WebFlux"><span class="nav-number">7.</span> <span class="nav-text">Kotlin 和 Spring WebFlux</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用-Lambda-表达式注册-bean"><span class="nav-number">8.</span> <span class="nav-text">使用 Lambda 表达式注册 bean</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-WebMVC-支持最新的-API"><span class="nav-number">9.</span> <span class="nav-text">Spring WebMVC 支持最新的 API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用-JUnit-5-执行条件和并发测试"><span class="nav-number">10.</span> <span class="nav-text">使用 JUnit 5 执行条件和并发测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用-Spring-WebFlux-执行集成测试"><span class="nav-number">11.</span> <span class="nav-text">使用 Spring WebFlux 执行集成测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#包清理和弃用"><span class="nav-number">12.</span> <span class="nav-text">包清理和弃用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对-Spring-核心和容器的一般更新"><span class="nav-number">13.</span> <span class="nav-text">对 Spring 核心和容器的一般更新</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结束语"><span class="nav-number">14.</span> <span class="nav-text">结束语</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">米薏</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/air6211332" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;air6211332" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:744471805" title="E-Mail → mailto:744471805" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://iamli.net/" title="https:&#x2F;&#x2F;iamli.net&#x2F;" rel="noopener" target="_blank">木子</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mmpmmmp.github.io/" title="https:&#x2F;&#x2F;mmpmmmp.github.io&#x2F;" rel="noopener" target="_blank">啧啧</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.hoofungson.cn/index.html" title="https:&#x2F;&#x2F;blog.hoofungson.cn&#x2F;index.html" rel="noopener" target="_blank">凤松轩</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xu-shuai.github.io/" title="https:&#x2F;&#x2F;xu-shuai.github.io&#x2F;" rel="noopener" target="_blank">水星很热</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.didispace.com/" title="http:&#x2F;&#x2F;blog.didispace.com&#x2F;" rel="noopener" target="_blank">程序猿DD</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://vincentxin-scott.github.io/" title="https:&#x2F;&#x2F;vincentxin-scott.github.io&#x2F;" rel="noopener" target="_blank">Vincent Xin</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://air6211332.github.io/2018/12/10/Java/spring/Spring%20Framework%205%20%E4%B8%AD%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="米薏">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米薏小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Spring Framework 5 中的新特性
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-12-10 12:00:00" itemprop="dateCreated datePublished" datetime="2018-12-10T12:00:00+08:00">2018-12-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-10-20 17:05:34" itemprop="dateModified" datetime="2020-10-20T17:05:34+08:00">2020-10-20</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
+        </span>
+    </span>
+
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">Spring 5 如何利用 Java 8 的函数式语法和一种新的反应式编程模型</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Spring 5 于 2017 年 9 月发布了通用版本 (GA)，它标志着自 2013 年 12 月以来第一个主要 Spring Framework 版本。它提供了一些人们期待已久的改进，还采用了一种全新的编程范例，以反应式宣言中陈述的反应式原则为基础。</p>
+<p>这个版本是很长时间以来最令人兴奋的 Spring Framework 版本。Spring 5 兼容 Java™8 和 JDK 9，它集成了反应式流，以便提供一种颠覆性方法来实现端点和 Web 应用程序开发。</p>
+<p>诚然，反应式编程不仅是此版本的主题，还是令许多开发人员激动不已的重大特性。人们对能够针对负载波动进行无缝扩展的灾备和响应式服务的需求在不断增加，Spring 5 很好地满足了这一需求。</p>
+<p>本文将全面介绍 Spring 5。我将介绍 Java SE 8 和 Java EE 7 API 的基准升级、Spring 5 的新反应式编程模型、HTTP/2 支持，以及 Spring 通过 Kotlin 对函数式编程的全面支持。我还会简要介绍测试和性能增强，最后介绍对 Spring 核心和容器的一般性修订。</p>
+<h1 id="升级到-Java-SE-8-和-Java-EE-7"><a href="#升级到-Java-SE-8-和-Java-EE-7" class="headerlink" title="升级到 Java SE 8 和 Java EE 7"></a>升级到 Java SE 8 和 Java EE 7</h1><p>直到现在，Spring Framework 仍支持一些弃用的 Java 版本，但 Spring 5 已从旧包袱中解放出来。为了充分利用 Java 8 特性，它的代码库已进行了改进，而且该框架要求将 Java 8 作为最低的 JDK 版本。</p>
+<p>Spring 5 在类路径（和模块路径）上完全兼容 Java 9，而且它通过了 JDK 9 测试套件的测试。对 Java 9 爱好者而言，这是一条好消息，因为在 Java 9 发布后，Spring 能立即使用它。</p>
+<p>在 API 级别上，Spring 5 兼容 Java EE 8 技术，满足对 Servlet 4.0、Bean Validation 2.0 和全新的 JSON Binding API 的需求。对 Java EE API 的最低要求为 V7，该版本引入了针对 Servlet、JPA 和 Bean Validation API 的次要版本。</p>
+<h1 id="反应式编程模型"><a href="#反应式编程模型" class="headerlink" title="反应式编程模型"></a>反应式编程模型</h1><p>Spring 5 最令人兴奋的新特性是它的反应式编程模型。Spring 5 Framework 基于一种反应式基础而构建，而且是完全异步和非阻塞的。只需少量的线程，新的事件循环执行模型就可以垂直扩展。</p>
+<p>该框架采用反应式流来提供在反应式组件中传播负压的机制。负压是一个确保来自多个生产者的数据不会让使用者不堪重负的概念。</p>
+<p>Spring WebFlux 是 Spring 5 的反应式核心，它为开发人员提供了两种为 Spring Web 编程而设计的编程模型：一种基于注解的模型和 Functional Web Framework (WebFlux.fn)。</p>
+<p>基于注解的模型是 Spring WebMVC 的现代替代方案，该模型基于反应式基础而构建，而 Functional Web Framework 是基于 @Controller 注解的编程模型的替代方案。这些模型都通过同一种反应式基础来运行，后者调整非阻塞 HTTP 来适应反应式流 API。</p>
+<h1 id="使用注解进行编程"><a href="#使用注解进行编程" class="headerlink" title="使用注解进行编程"></a>使用注解进行编程</h1><p>WebMVC 程序员应该对 Spring 5 的基于注解的编程模型非常熟悉。Spring 5 调整了 WebMVC 的 @Controller 编程模型，采用了相同的注解。</p>
+<p>在清单 1 中，BookController 类提供了两个方法，分别响应针对某个图书列表的 HTTP 请求，以及针对具有给定 id 的图书的 HTTP 请求。请注意 resource 方法返回的对象（Mono 和 Flux）。这些对象是实现反应式流规范中的 Publisher 接口的反应式类型。它们的职责是处理数据流。Mono 对象处理一个仅含 1 个元素的流，而 Flux 表示一个包含 N 个元素的流。</p>
+<p>清单 1. 反应式控制器</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BookController</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/book"</span><span class="token punctuation">)</span>
+    Flux<span class="token operator">&lt;</span>Book<span class="token operator">></span> <span class="token function">list</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>repository<span class="token punctuation">.</span><span class="token function">findAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/book/{id}"</span><span class="token punctuation">)</span>
+    Mono<span class="token operator">&lt;</span>Book<span class="token operator">></span> <span class="token function">findById</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> String id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>repository<span class="token punctuation">.</span><span class="token function">findOne</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// Plumbing code omitted for brevity</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这是针对 Spring Web 编程的注解。现在我们使用函数式 Web 框架来解决同一个问题。</p>
+<h1 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h1><p>Spring 5 的新函数式方法将请求委托给处理函数，这些函数接受一个服务器请求实例并返回一种反应式类型。清单 2 演示了这一过程，其中 listBook 和 getBook 方法类似于清单 1 中的功能。</p>
+<p>清单 2. 清单 2.BookHandler 函数类</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BookHandler</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> Mono<span class="token operator">&lt;</span>ServerResponse<span class="token operator">></span> <span class="token function">listBooks</span><span class="token punctuation">(</span>ServerRequest request<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> ServerResponse<span class="token punctuation">.</span><span class="token function">ok</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">contentType</span><span class="token punctuation">(</span>APPLICATION_JSON<span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">body</span><span class="token punctuation">(</span>repository<span class="token punctuation">.</span><span class="token function">allPeople</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> Book<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> Mono<span class="token operator">&lt;</span>ServerResponse<span class="token operator">></span> <span class="token function">getBook</span><span class="token punctuation">(</span>ServerRequest request<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> repository<span class="token punctuation">.</span><span class="token function">getBook</span><span class="token punctuation">(</span>request<span class="token punctuation">.</span><span class="token function">pathVariable</span><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>book <span class="token operator">-</span><span class="token operator">></span> ServerResponse<span class="token punctuation">.</span><span class="token function">ok</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">contentType</span><span class="token punctuation">(</span>APPLICATION_JSON<span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">body</span><span class="token punctuation">(</span><span class="token function">fromObject</span><span class="token punctuation">(</span>book<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">otherwiseIfEmpty</span><span class="token punctuation">(</span>ServerResponse<span class="token punctuation">.</span><span class="token function">notFound</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">// Plumbing code omitted for brevity</span>
+<span class="token punctuation">}</span></code></pre>
+<p>通过路由函数来匹配 HTTP 请求谓词与媒体类型，将客户端请求路由到处理函数。清单 3 展示了图书资源端点 URI 将调用委托给合适的处理函数：</p>
+<p>清单 3. Router 函数</p>
+<pre class=" language-java"><code class="language-java">BookHandler handler <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BookHandler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+RouterFunction<span class="token operator">&lt;</span>ServerResponse<span class="token operator">></span> personRoute <span class="token operator">=</span>
+    <span class="token function">route</span><span class="token punctuation">(</span>
+        <span class="token function">GET</span><span class="token punctuation">(</span><span class="token string">"/books/{id}"</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">and</span><span class="token punctuation">(</span><span class="token function">accept</span><span class="token punctuation">(</span>APPLICATION_JSON<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> handler<span class="token operator">:</span><span class="token operator">:</span>getBook<span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">andRoute</span><span class="token punctuation">(</span>
+    <span class="token function">GET</span><span class="token punctuation">(</span><span class="token string">"/books"</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">and</span><span class="token punctuation">(</span><span class="token function">accept</span><span class="token punctuation">(</span>APPLICATION_JSON<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> handler<span class="token operator">:</span><span class="token operator">:</span>listBooks<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>这些示例背后的数据存储库也支持完整的反应式体验，该体验是通过 Spring Data 对反应式 Couchbase、Reactive MongoDB 和 Cassandra 的支持来实现的。</p>
+<h1 id="使用-REST-端点执行反应式编程"><a href="#使用-REST-端点执行反应式编程" class="headerlink" title="使用 REST 端点执行反应式编程"></a>使用 REST 端点执行反应式编程</h1><p>新的编程模型脱离了传统的 Spring WebMVC 模型，引入了一些很不错的新特性。</p>
+<p>举例来说，WebFlux 模块为 RestTemplate 提供了一种完全非阻塞、反应式的替代方案，名为 WebClient。清单 4 创建了一个 WebClient，并调用 books 端点来请求一本给定 id 为 1234 的图书。</p>
+<p>清单 4. 通过 WebClient 调用 REST 端点</p>
+<pre class=" language-java"><code class="language-java">Mono<span class="token operator">&lt;</span>Book<span class="token operator">></span> book <span class="token operator">=</span> WebClient<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token string">"http://localhost:8080"</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">url</span><span class="token punctuation">(</span><span class="token string">"/books/{id}"</span><span class="token punctuation">,</span> <span class="token number">1234</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">accept</span><span class="token punctuation">(</span>APPLICATION_JSON<span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">exchange</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>response <span class="token operator">-</span><span class="token operator">></span> response<span class="token punctuation">.</span><span class="token function">bodyToMono</span><span class="token punctuation">(</span>Book<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h1 id="HTTP-2-支持"><a href="#HTTP-2-支持" class="headerlink" title="HTTP/2 支持"></a>HTTP/2 支持</h1><blockquote>
+<p><strong>HTTP/2 幕后原理</strong>：要了解 HTTP/2 如何提高传输性能，减少延迟，并帮助提高应用程序吞吐量，从而提供经过改进的丰富 Web 体验。</p>
+</blockquote>
+<p>Spring Framework 5.0 将提供专门的 HTTP/2 特性支持，还支持人们期望出现在 JDK 9 中的新 HTTP 客户端。尽管 HTTP/2 的服务器推送功能已通过 Jetty servlet 引擎的 ServerPushFilter 类向 Spring 开发人员公开了很长一段时间，但如果发现 Spring 5 中开箱即用地提供了 HTTP/2 性能增强，Web 优化者们一定会为此欢呼雀跃。</p>
+<p>Java EE Servlet 规范预计将于 2017 年第 4 季度发布，Servlet 4.0 支持将在 Spring 5.1 中提供。到那时，HTTP/2 特性将由 Tomcat 9.0、Jetty 9.3 和 Undertow 1.4 原生提供。</p>
+<h1 id="Kotlin-和-Spring-WebFlux"><a href="#Kotlin-和-Spring-WebFlux" class="headerlink" title="Kotlin 和 Spring WebFlux"></a>Kotlin 和 Spring WebFlux</h1><p>Kotlin 是一种来自 JetBrains 的面向对象的语言，它支持函数式编程。它的主要优势之一是与 Java 有非常高的互操作性。通过引入对 Kotlin 的专门支持，Spring 在 V5 中全面吸纳了这一优势。它的函数式编程风格与 Spring WebFlux 模块完美匹配，它的新路由 DSL 利用了函数式 Web 框架以及干净且符合语言习惯的代码。可以像清单 5 中这样简单地表达端点路由：</p>
+<p>清单 5. Kotlin 的用于定义端点的路由 DSL</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Bean</span>
+fun <span class="token function">apiRouter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span> router <span class="token punctuation">{</span>
+    <span class="token punctuation">(</span><span class="token function">accept</span><span class="token punctuation">(</span>APPLICATION_JSON<span class="token punctuation">)</span> and <span class="token string">"/api"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>nest <span class="token punctuation">{</span>
+        <span class="token string">"/book"</span><span class="token punctuation">.</span>nest <span class="token punctuation">{</span>
+            <span class="token function">GET</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">,</span> bookHandler<span class="token operator">:</span><span class="token operator">:</span>findAll<span class="token punctuation">)</span>
+            <span class="token function">GET</span><span class="token punctuation">(</span><span class="token string">"/{id}"</span><span class="token punctuation">,</span> bookHandler<span class="token operator">:</span><span class="token operator">:</span>findOne<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        <span class="token string">"/video"</span><span class="token punctuation">.</span>nest <span class="token punctuation">{</span>
+            <span class="token function">GET</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">,</span> videoHandler<span class="token operator">:</span><span class="token operator">:</span>findAll<span class="token punctuation">)</span>
+            <span class="token function">GET</span><span class="token punctuation">(</span><span class="token string">"/{genre}"</span><span class="token punctuation">,</span> videoHandler<span class="token operator">:</span><span class="token operator">:</span>findByGenre<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>使用 Kotlin 1.1.4+ 时，还添加了对 Kotlin 的不可变类的支持（通过带默认值的可选参数），以及对完全支持 null 的 API 的支持。</p>
+<h1 id="使用-Lambda-表达式注册-bean"><a href="#使用-Lambda-表达式注册-bean" class="headerlink" title="使用 Lambda 表达式注册 bean"></a>使用 Lambda 表达式注册 bean</h1><p>作为传统 XML 和 JavaConfig 的替代方案，现在可以使用 lambda 表达式注册 Spring bean，使 bean 可以实际注册为提供者。清单 6 使用 lambda 表达式注册了一个 Book bean。</p>
+<p>清单 6. 将 Bean 注册为提供者</p>
+<pre class=" language-java"><code class="language-java">GenericApplicationContext context <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">GenericApplicationContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+context<span class="token punctuation">.</span><span class="token function">registerBean</span><span class="token punctuation">(</span>Book<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token keyword">new</span> 
+              <span class="token class-name">Book</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">getBean</span><span class="token punctuation">(</span>Author<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h1 id="Spring-WebMVC-支持最新的-API"><a href="#Spring-WebMVC-支持最新的-API" class="headerlink" title="Spring WebMVC 支持最新的 API"></a>Spring WebMVC 支持最新的 API</h1><p>全新的 WebFlux 模块提供了许多新的、令人兴奋的功能，但 Spring 5 也迎合了愿意继续使用 Spring MVC 的开发人员的需求。Spring 5 中更新了模型-视图-控制器框架，以兼容 WebFlux 和最新版的 Jackson 2.9 和 Protobuf 3.0，甚至包括对新的 Java EE 8 JSON-Binding API 的支持。</p>
+<p>除了 HTTP/2 特性的基础服务器实现之外，Spring WebMVC 还通过 MVC 控制器方法的一个参数来支持 Servlet 4.0 的 PushBuilder。最后，WebMVC 全面支持 Reactor 3.1 的 Flux 和 Mono 对象，以及 RxJava 1.3 和 2.1，它们被视为来自 MVC 控制器方法的返回值。这项支持的最终目的是支持 Spring Data 中的新的反应式 WebClient 和反应式存储库。</p>
+<h1 id="使用-JUnit-5-执行条件和并发测试"><a href="#使用-JUnit-5-执行条件和并发测试" class="headerlink" title="使用 JUnit 5 执行条件和并发测试"></a>使用 JUnit 5 执行条件和并发测试</h1><blockquote>
+<p><strong>JUnit 和 Spring 5</strong>：Spring 5 全面接纳了函数式范例，并支持 JUnit 5 及其新的函数式测试风格。还提供了对 JUnit 4 的向后兼容性，以确保不会破坏旧代码。</p>
+</blockquote>
+<p>Spring 5 的测试套件通过多种方式得到了增强，但最明显的是它对 JUnit 5 的支持。现在可以在您的单元测试中利用 Java 8 中提供的函数式编程特性。清单 7 演示了这一支持：</p>
+<p>清单 7. 清单 7.JUnit 5 全面接纳了 Java 8 流和 lambda 表达式</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Test</span>
+<span class="token keyword">void</span> <span class="token function">givenStreamOfInts_SumShouldBeMoreThanFive</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">assertTrue</span><span class="token punctuation">(</span>Stream<span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">40</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">mapToInt</span><span class="token punctuation">(</span>i <span class="token operator">-</span><span class="token operator">></span> i<span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">sum</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">110</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token string">"Total should be more than 100"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<blockquote>
+<p><strong>迁移到 JUnit 5</strong>：如果您对升级到 JUnit 5 持观望态度，Steve Perry 的分两部分的深入剖析教程将说服您冒险尝试。</p>
+</blockquote>
+<p>Spring 5 继承了 JUnit 5 在 Spring TestContext Framework 内实现多个扩展 API 的灵活性。举例而言，开发人员可以使用 JUnit 5 的条件测试执行注解 @EnabledIf 和 @DisabledIf 来自动计算一个 SpEL (Spring Expression Language) 表达式，并适当地启用或禁用测试。借助这些注解，Spring 5 支持以前很难实现的复杂的条件测试方案。Spring TextContext Framework 现在能够并发执行测试。</p>
+<h1 id="使用-Spring-WebFlux-执行集成测试"><a href="#使用-Spring-WebFlux-执行集成测试" class="headerlink" title="使用 Spring WebFlux 执行集成测试"></a>使用 Spring WebFlux 执行集成测试</h1><p>Spring Test 现在包含一个 WebTestClient，后者支持对 Spring WebFlux 服务器端点执行集成测试。WebTestClient 使用模拟请求和响应来避免耗尽服务器资源，并能直接绑定到 WebFlux 服务器基础架构。</p>
+<p>WebTestClient 可绑定到真实的服务器，或者使用控制器或函数。在清单 8 中，WebTestClient 被绑定到 localhost：</p>
+<p>清单 8. 绑定到 localhost 的 WebTestClient</p>
+<pre class=" language-java"><code class="language-java">WebTestClient testClient <span class="token operator">=</span> WebTestClient
+  <span class="token punctuation">.</span><span class="token function">bindToServer</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">baseUrl</span><span class="token punctuation">(</span><span class="token string">"http://localhost:8080"</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>在清单 9 中，测试了 RouterFunction：</p>
+<p>清单 9. 将 WebTestClient 绑定到 RouterFunction</p>
+<pre class=" language-java"><code class="language-java">RouterFunction bookRouter <span class="token operator">=</span> RouterFunctions<span class="token punctuation">.</span><span class="token function">route</span><span class="token punctuation">(</span>
+  RequestPredicates<span class="token punctuation">.</span><span class="token function">GET</span><span class="token punctuation">(</span><span class="token string">"/books"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  request <span class="token operator">-</span><span class="token operator">></span> ServerResponse<span class="token punctuation">.</span><span class="token function">ok</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+WebTestClient
+  <span class="token punctuation">.</span><span class="token function">bindToRouterFunction</span><span class="token punctuation">(</span>bookRouter<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">uri</span><span class="token punctuation">(</span><span class="token string">"/books"</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">exchange</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">expectStatus</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isOk</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">expectBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h1 id="包清理和弃用"><a href="#包清理和弃用" class="headerlink" title="包清理和弃用"></a>包清理和弃用</h1><p>Spring 5 中止了对一些过时 API 的支持。遭此厄运的还有 Hibernate 3 和 4，为了支持 Hibernate 5，它们遭到了弃用。另外，对 Portlet、Velocity、JasperReports、XMLBeans、JDO 和 Guava 的支持也已中止。</p>
+<p>包级别上的清理工作仍在继续：Spring 5 不再支持 beans.factory.access、jdbc.support.nativejdbc、mock.staticmock（来自 spring-aspects 模块）或 web.view.tiles2M。Tiles 3 现在是 Spring 的最低要求。</p>
+<h1 id="对-Spring-核心和容器的一般更新"><a href="#对-Spring-核心和容器的一般更新" class="headerlink" title="对 Spring 核心和容器的一般更新"></a>对 Spring 核心和容器的一般更新</h1><p>Spring Framework 5 改进了扫描和识别组件的方法，使大型项目的性能得到提升。目前，扫描是在编译时执行的，而且向 META-INF/spring.components 文件中的索引文件添加了组件坐标。该索引是通过一个为项目定义的特定于平台的应用程序构建任务来生成的。</p>
+<p>标有来自 javax 包的注解的组件会添加到索引中，任何带 @Index 注解的类或接口都会添加到索引中。Spring 的传统类路径扫描方式没有删除，而是保留为一种后备选择。有许多针对大型代码库的明显性能优势，而托管许多 Spring 项目的服务器也会缩短启动时间。</p>
+<p>Spring 5 还添加了对 @Nullable 的支持，后者可用于指示可选的注入点。使用者现在必须准备接受 null 值。此外，还可以使用此注解来标记可以为 null 的参数、字段和返回值。@Nullable 主要用于 IntelliJ IDEA 等 IDE，但也可用于 Eclipse 和 FindBugs，它使得在编译时处理 null 值变得更方便，而无需在运行时发送 NullPointerExceptions。</p>
+<p>Spring Logging 还提升了性能，自带开箱即用的 Commons Logging 桥接器。现在已通过资源抽象支持防御性编程，为 getFile 访问提供了 isFile 指示器。</p>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>Spring 5 的首要特性是新的反应式编程模型，这代表着对提供可无缝扩展、基于 Spring 的响应式服务的重大保障。随着人们对 Spring 5 的采用，开发人员有望看到反应式编程将会成为使用 Java 语言的 Web 和企业应用程序开发的未来发展道路。</p>
+<p>未来的 Spring Framework 版本将继续反映这一承诺，因为 Spring Security、Spring Data 和 Spring Integration 有望采用反应式编程的特征和优势。</p>
+<p>总之，Spring 5 代表着一次大受 Spring 开发人员欢迎的范例转变，同时也为其他框架指出了一条发展之路。</p>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/Spring/" rel="tag"># Spring</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/11/12/Linux/centos7.5%20%E5%AE%89%E8%A3%85thefuck/" rel="prev" title="centos7.5 安装 thefuck -- 小米实战">
+                  <i class="fa fa-chevron-left"></i> centos7.5 安装 thefuck -- 小米实战
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/12/10/Java/spring/spring%20mvc%20valid/" rel="next" title="spring mvc valid">
+                  spring mvc valid <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">米薏</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">244k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:42</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><script defer src="/lib/three.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.8.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'dark',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

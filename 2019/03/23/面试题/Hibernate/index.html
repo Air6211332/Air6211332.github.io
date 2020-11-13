@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"air6211332.github.io","root":"/","scheme":"Pisces","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="收集规整的Hibernate的面试题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试题--Hibernate--小米归纳">
+<meta property="og:url" content="https://air6211332.github.io/2019/03/23/%E9%9D%A2%E8%AF%95%E9%A2%98/Hibernate/index.html">
+<meta property="og:site_name" content="米薏小天地">
+<meta property="og:description" content="收集规整的Hibernate的面试题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2019/03/22/5c94a8d581abb.png">
+<meta property="article:published_time" content="2019-03-23T04:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-20T09:05:35.005Z">
+<meta property="article:author" content="米薏">
+<meta property="article:tag" content="面试题">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2019/03/22/5c94a8d581abb.png">
+
+
+<link rel="canonical" href="https://air6211332.github.io/2019/03/23/%E9%9D%A2%E8%AF%95%E9%A2%98/Hibernate/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>面试题--Hibernate--小米归纳 | 米薏小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="米薏小天地" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">米薏小天地</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#未归类"><span class="nav-number">1.</span> <span class="nav-text">未归类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hibernate是如何延迟加载-懒加载"><span class="nav-number">1.1.</span> <span class="nav-text">Hibernate是如何延迟加载(懒加载)?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hibernate中怎样实现类之间的关系-如：一对多、多对多的关系"><span class="nav-number">1.2.</span> <span class="nav-text">Hibernate中怎样实现类之间的关系?(如：一对多、多对多的关系)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hibernate的三种状态之间如何转换"><span class="nav-number">1.3.</span> <span class="nav-text">hibernate的三种状态之间如何转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比较hibernate的三种检索策略优缺点"><span class="nav-number">1.4.</span> <span class="nav-text">比较hibernate的三种检索策略优缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hibernate都支持哪些缓存策略"><span class="nav-number">1.5.</span> <span class="nav-text">hibernate都支持哪些缓存策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hibernate里面的sorted-collection-和ordered-collection有什么区别"><span class="nav-number">1.6.</span> <span class="nav-text">hibernate里面的sorted collection 和ordered collection有什么区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#说下Hibernate的缓存机制"><span class="nav-number">1.7.</span> <span class="nav-text">说下Hibernate的缓存机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hibernate的查询方式有几种"><span class="nav-number">1.8.</span> <span class="nav-text">Hibernate的查询方式有几种</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何优化Hibernate？"><span class="nav-number">1.9.</span> <span class="nav-text">如何优化Hibernate？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#谈谈Hibernate中inverse的作用"><span class="nav-number">1.10.</span> <span class="nav-text">谈谈Hibernate中inverse的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDBC-hibernate-和-ibatis-的区别"><span class="nav-number">1.11.</span> <span class="nav-text">JDBC hibernate 和 ibatis 的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在数据库中条件查询速度很慢的时候-如何优化"><span class="nav-number">1.12.</span> <span class="nav-text">在数据库中条件查询速度很慢的时候,如何优化?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是SessionFactory-她是线程安全么"><span class="nav-number">1.13.</span> <span class="nav-text">什么是SessionFactory,她是线程安全么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#get和load区别"><span class="nav-number">1.14.</span> <span class="nav-text">get和load区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主键生成-策略有哪些"><span class="nav-number">1.15.</span> <span class="nav-text">主键生成 策略有哪些</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hibernate的五个核心接口"><span class="nav-number">1.16.</span> <span class="nav-text">Hibernate的五个核心接口</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">米薏</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/air6211332" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;air6211332" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:744471805" title="E-Mail → mailto:744471805" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://iamli.net/" title="https:&#x2F;&#x2F;iamli.net&#x2F;" rel="noopener" target="_blank">木子</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mmpmmmp.github.io/" title="https:&#x2F;&#x2F;mmpmmmp.github.io&#x2F;" rel="noopener" target="_blank">啧啧</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.hoofungson.cn/index.html" title="https:&#x2F;&#x2F;blog.hoofungson.cn&#x2F;index.html" rel="noopener" target="_blank">凤松轩</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xu-shuai.github.io/" title="https:&#x2F;&#x2F;xu-shuai.github.io&#x2F;" rel="noopener" target="_blank">水星很热</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.didispace.com/" title="http:&#x2F;&#x2F;blog.didispace.com&#x2F;" rel="noopener" target="_blank">程序猿DD</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://vincentxin-scott.github.io/" title="https:&#x2F;&#x2F;vincentxin-scott.github.io&#x2F;" rel="noopener" target="_blank">Vincent Xin</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://air6211332.github.io/2019/03/23/%E9%9D%A2%E8%AF%95%E9%A2%98/Hibernate/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="米薏">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米薏小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          面试题--Hibernate--小米归纳
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-03-23 12:00:00" itemprop="dateCreated datePublished" datetime="2019-03-23T12:00:00+08:00">2019-03-23</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-10-20 17:05:35" itemprop="dateModified" datetime="2020-10-20T17:05:35+08:00">2020-10-20</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">面试题</span></a>
+        </span>
+    </span>
+
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">收集规整的Hibernate的面试题</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>大纲<br><img src="https://i.loli.net/2019/03/22/5c94a8d581abb.png" alt=""></p>
+<h1 id="未归类"><a href="#未归类" class="headerlink" title="未归类"></a>未归类</h1><h2 id="Hibernate是如何延迟加载-懒加载"><a href="#Hibernate是如何延迟加载-懒加载" class="headerlink" title="Hibernate是如何延迟加载(懒加载)?"></a>Hibernate是如何延迟加载(懒加载)?</h2><p>通过设置属性 <code>lazy</code> 进行设置是否需要懒加载</p>
+<p>当Hibernate在查询数据的时候，数据并没有存在与内存中，当程序真正对数据的操作时，对象才存在与内存中，就实现了延迟加载，他节省了服务器的内存开销，从而提高了服务器的性能。</p>
+<h2 id="Hibernate中怎样实现类之间的关系-如：一对多、多对多的关系"><a href="#Hibernate中怎样实现类之间的关系-如：一对多、多对多的关系" class="headerlink" title="Hibernate中怎样实现类之间的关系?(如：一对多、多对多的关系)"></a>Hibernate中怎样实现类之间的关系?(如：一对多、多对多的关系)</h2><p>它们通过配置文件中的 <code>many-to-one</code> 、<code>one-to-many</code> 、<code>many-to-many</code> 来实现类之间的关联关系的。</p>
+<h2 id="hibernate的三种状态之间如何转换"><a href="#hibernate的三种状态之间如何转换" class="headerlink" title="hibernate的三种状态之间如何转换"></a>hibernate的三种状态之间如何转换</h2><p>Hibernate中对象的状态：</p>
+<ul>
+<li><p>临时/瞬时状态</p>
+</li>
+<li><p>持久化状态</p>
+</li>
+<li><p>游离状态</p>
+</li>
+<li><p><strong>临时/瞬时状态</strong></p>
+<p>  当我们直接new出来的对象就是临时/瞬时状态的..</p>
+<ul>
+<li>该对象还没有被持久化【没有保存在数据库中】</li>
+<li>不受Session的管理</li>
+</ul>
+</li>
+<li><p><strong>持久化状态</strong></p>
+<p>  当保存在数据库中的对象就是持久化状态了</p>
+<ul>
+<li>当调用session的save/saveOrUpdate/get/load/list等方法的- 时候，对象就是持久化状态</li>
+<li>在数据库有对应的数据</li>
+<li>受Session的管理</li>
+<li>当对对象属性进行更改的时候，会反映到数据库中!</li>
+</ul>
+</li>
+<li><p><strong>游离状态</strong></p>
+<p>  当Session关闭了以后，持久化的对象就变成了游离状态了…</p>
+<ul>
+<li>不处于session的管理</li>
+<li>数据库中有对应的记录</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>new出来的对象是瞬时状态 -&gt; 保存到数据库中(受Session管理)就是持久化状态 -&gt; 将session close掉就是游离状态</p>
+</blockquote>
+<h2 id="比较hibernate的三种检索策略优缺点"><a href="#比较hibernate的三种检索策略优缺点" class="headerlink" title="比较hibernate的三种检索策略优缺点"></a>比较hibernate的三种检索策略优缺点</h2><table>
+<thead>
+<tr>
+<th>策略</th>
+<th>优点</th>
+<th>缺点</th>
+<th>配置方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>立即检索</td>
+<td>对应用程序完全透明，不管对象处于持久化状态，还是游离状态，应用程序都可以方便的从一个对象导航到与它关联的对象；</td>
+<td><ol><li>select语句太多</li><li>可能会加载应用程序不需要访问的对象白白浪费许多内存空间</li></ol></td>
+<td><code>lazy=false；</code></td>
+</tr>
+<tr>
+<td>延迟检索</td>
+<td>由应用程序决定需要加载哪些对象，可以避免可执行多余的select语句，以及避免加载应用程序不需要访问的对象。因此能提高检索性能，并且能节省内存空间；</td>
+<td>应用程序如果希望访问游离状态代理类实例，必须保证他在持久化状态时已经被初始化；</td>
+<td><code>lazy=true；</code></td>
+</tr>
+<tr>
+<td>迫切左外连接检索</td>
+<td><ol><li>对应用程序完全透明，不管对象处于持久化状态，还是游离状态，应用程序都可以方便地冲一个对象导航到与它关联的对象。</li><li>使用了外连接，select语句数目少</li></ol></td>
+<td><ol><li>可能会加载应用程序不需要访问的对象，白白浪费许多内存空间</li><li>复杂的数据库表连接也会影响检索性能</li></ol></td>
+<td><code>fetch=“join”</code></td>
+</tr>
+</tbody></table>
+<h2 id="hibernate都支持哪些缓存策略"><a href="#hibernate都支持哪些缓存策略" class="headerlink" title="hibernate都支持哪些缓存策略"></a>hibernate都支持哪些缓存策略</h2><p>usage的属性有4种：</p>
+<ul>
+<li>放入二级缓存的对象，只读(Read-only);</li>
+<li>非严格的读写(Nonstrict read/write)</li>
+<li>读写； 放入二级缓存的对象可以读、写(Read/write)；</li>
+<li>基于事务的策略(Transactional)</li>
+</ul>
+<h2 id="hibernate里面的sorted-collection-和ordered-collection有什么区别"><a href="#hibernate里面的sorted-collection-和ordered-collection有什么区别" class="headerlink" title="hibernate里面的sorted collection 和ordered collection有什么区别"></a>hibernate里面的<code>sorted collection</code> 和<code>ordered collection</code>有什么区别</h2><ul>
+<li><p>sorted collection</p>
+<p>  是在内存中通过Java比较器进行排序的</p>
+</li>
+<li><p>ordered collection</p>
+<p>  是在数据库中通过order by进行排序的</p>
+</li>
+</ul>
+<p>对于比较大的数据集，为了避免在内存中对它们进行排序而出现 Java中的<code>OutOfMemoryError</code>，最好使用<code>ordered collection</code>。</p>
+<h2 id="说下Hibernate的缓存机制"><a href="#说下Hibernate的缓存机制" class="headerlink" title="说下Hibernate的缓存机制"></a>说下Hibernate的缓存机制</h2><ul>
+<li><p>一级缓存：</p>
+<ul>
+<li>Hibenate中一级缓存，也叫做session的缓存，它可以在session范围内减少数据库的访问次数！ 只在session范围有效！ Session关闭，一级缓存失效！</li>
+<li>只要是持久化对象状态的，都受Session管理，也就是说，都会在Session缓存中！</li>
+<li>Session的缓存由hibernate维护，用户不能操作缓存内容； 如果想操作缓存内容，必须通过hibernate提供的evit/clear方法操作。</li>
+</ul>
+</li>
+<li><p>二级缓存：</p>
+<ul>
+<li>二级缓存是基于应用程序的缓存，所有的Session都可以使用</li>
+<li>Hibernate提供的二级缓存有默认的实现，且是一种可插配的缓存框架！如果用户想用二级缓存，只需要在hibernate.cfg.xml中配置即可； 不想用，直接移除，不影响代码。</li>
+<li>如果用户觉得hibernate提供的框架框架不好用，自己可以换其他的缓存框架或自己实现缓存框架都可以。</li>
+<li>Hibernate二级缓存：存储的是常用的类</li>
+</ul>
+</li>
+</ul>
+<h2 id="Hibernate的查询方式有几种"><a href="#Hibernate的查询方式有几种" class="headerlink" title="Hibernate的查询方式有几种"></a>Hibernate的查询方式有几种</h2><ol>
+<li>对象导航查询(objectcomposition)</li>
+<li>HQL查询<ol>
+<li>属性查询</li>
+<li>参数查询、命名参数查询</li>
+<li>关联查询</li>
+<li>分页查询</li>
+<li>统计函数</li>
+</ol>
+</li>
+<li>Criteria 查询</li>
+<li>SQLQuery本地SQL查询</li>
+</ol>
+<h2 id="如何优化Hibernate？"><a href="#如何优化Hibernate？" class="headerlink" title="如何优化Hibernate？"></a>如何优化Hibernate？</h2><ul>
+<li>数据库设计调整</li>
+<li>HQL优化</li>
+<li>API的正确使用(如根据不同的业务类型选用不同的集合及查询API)</li>
+<li>主配置参数(日志，查询缓存，fetch_size, batch_size等)</li>
+<li>映射文件优化(ID生成策略，二级缓存，延迟加载，关联优化)</li>
+<li>一级缓存的管理</li>
+<li>针对二级缓存，还有许多特有的策略</li>
+</ul>
+<p>详情可参考资料：</p>
+<p><a href="https://www.cnblogs.com/xhj123/p/6106088.html" target="_blank" rel="noopener">https://www.cnblogs.com/xhj123/p/6106088.html</a></p>
+<h2 id="谈谈Hibernate中inverse的作用"><a href="#谈谈Hibernate中inverse的作用" class="headerlink" title="谈谈Hibernate中inverse的作用"></a>谈谈Hibernate中inverse的作用</h2><p>inverse属性默认是false,就是说关系的两端都来维护关系。</p>
+<ul>
+<li>比如Student和Teacher是多对多关系，用一个中间表TeacherStudent维护。Gp)</li>
+<li>如果Student这边inverse=”true”, 那么关系由另一端Teacher维护，就是说当插入Student时，不会操作TeacherStudent表（中间表）。只有Teacher插入或删除时才会触发对中间表的操作。所以两边都inverse=”true”是不对的，会导致任何操作都不触发对中间表的影响；当两边都inverse=”false”或默认时，会导致在中间表中插入两次关系。</li>
+</ul>
+<p>如果表之间的关联关系是“一对多”的话，那么inverse只能在“一”的一方来配置！</p>
+<p>详情可参考：</p>
+<p><a href="https://zhongfucheng.bitcron.com/post/hibernate/hibernate-inversehe-cascadeshu-xing-zhi-shi-yao-dian" target="_blank" rel="noopener">https://zhongfucheng.bitcron.com/post/hibernate/hibernate-inversehe-cascadeshu-xing-zhi-shi-yao-dian</a></p>
+<h2 id="JDBC-hibernate-和-ibatis-的区别"><a href="#JDBC-hibernate-和-ibatis-的区别" class="headerlink" title="JDBC hibernate 和 ibatis 的区别"></a>JDBC hibernate 和 ibatis 的区别</h2><ul>
+<li>jdbc:手动<ul>
+<li>手动写sql</li>
+<li>delete、insert、update要将对象的值一个一个取出传到sql中,不能直接传入一个对象。</li>
+<li>select:返回的是一个resultset，要从ResultSet中一行一行、一个字段一个字段的取出，然后封装到一个对象中，不直接返回一个对象。</li>
+</ul>
+</li>
+<li>ibatis的特点:半自动化<ul>
+<li>sql要手动写</li>
+<li>delete、insert、update:直接传入一个对象</li>
+<li>select:直接返回一个对象</li>
+</ul>
+</li>
+<li>hibernate:全自动<ul>
+<li>不写sql,自动封装</li>
+<li>delete、insert、update:直接传入一个对象</li>
+<li>select:直接返回一个对象</li>
+</ul>
+</li>
+</ul>
+<h2 id="在数据库中条件查询速度很慢的时候-如何优化"><a href="#在数据库中条件查询速度很慢的时候-如何优化" class="headerlink" title="在数据库中条件查询速度很慢的时候,如何优化?"></a>在数据库中条件查询速度很慢的时候,如何优化?</h2><ul>
+<li>建索引</li>
+<li>减少表之间的关联</li>
+<li>优化sql，尽量让sql很快定位数据，不要让sql做全表查询，应该走索引,把数据量大的表排在前面</li>
+<li>简化查询字段，没用的字段不要，已经对返回结果的控制，尽量返回少量数据</li>
+</ul>
+<h2 id="什么是SessionFactory-她是线程安全么"><a href="#什么是SessionFactory-她是线程安全么" class="headerlink" title="什么是SessionFactory,她是线程安全么"></a>什么是SessionFactory,她是线程安全么</h2><p>SessionFactory 是Hibrenate单例数据存储和线程安全的，以至于可以多线程同时访问。一个SessionFactory 在启动的时候只能建立一次。SessionFactory应该包装各种单例以至于它能很简单的在一个应用代码中储存.</p>
+<h2 id="get和load区别"><a href="#get和load区别" class="headerlink" title="get和load区别"></a>get和load区别</h2><ol>
+<li>get如果没有找到会返回null， load如果没有找到会抛出异常。</li>
+<li>get会先查一级缓存， 再查二级缓存，然后查数据库；load会先查一级缓存，如果没有找到，就创建代理对象， 等需要的时候去查询二级缓存和数据库。</li>
+</ol>
+<h2 id="主键生成-策略有哪些"><a href="#主键生成-策略有哪些" class="headerlink" title="主键生成 策略有哪些"></a>主键生成 策略有哪些</h2><p>主键的自动生成策略</p>
+<ul>
+<li>identity 自增长(mysql,db2)</li>
+<li>sequence 自增长(序列)， oracle中自增长是以序列方法实现**</li>
+<li>native 自增长【会根据底层数据库自增长的方式选择identity或sequence】<ul>
+<li>如果是mysql数据库, 采用的自增长方式是identity</li>
+<li>如果是oracle数据库， 使用sequence序列的方式实现自增长</li>
+</ul>
+</li>
+<li>increment 自增长(会有并发访问的问题，一般在服务器集群环境使用会存在问题。)</li>
+<li>assigned 指定主键生成策略为手动指定主键的值</li>
+<li>uuid 指定主键生成策略为UUID生成的值</li>
+<li>foreign(外键的方式)</li>
+</ul>
+<h2 id="Hibernate的五个核心接口"><a href="#Hibernate的五个核心接口" class="headerlink" title="Hibernate的五个核心接口"></a>Hibernate的五个核心接口</h2><ul>
+<li>Configuration 接口：配置Hibernate，根据其启动hibernate，创建  SessionFactory 对象； </li>
+<li>SessionFactory 接口：初始化Hibernate，充当数据存储源的代理，创建 session 对象，sessionFactory 是线程安全的，意味着它的同一个实例可以被应 用的多个线程共享，是重量级、二级缓存； </li>
+<li>Session 接口：负责保存、更新、删除、加载和查询对象，是线程不安全的， 避免多个线程共享同一个session，是轻量级、一级缓存； </li>
+<li>Transaction 接口：管理事务； </li>
+<li>Query 和Criteria 接口：执行数据库的查询。</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag"># 面试题</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/22/%E9%9D%A2%E8%AF%95%E9%A2%98/Java%E9%9B%86%E5%90%88/" rel="prev" title="面试题--Java集合--小米归纳">
+                  <i class="fa fa-chevron-left"></i> 面试题--Java集合--小米归纳
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/07/23/ics/" rel="next" title="ics文件解析">
+                  ics文件解析 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">米薏</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">244k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:42</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><script defer src="/lib/three.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.8.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'dark',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"air6211332.github.io","root":"/","scheme":"Pisces","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="通过 Java EE 8 中新的注解驱动的 HTTP 身份验证机制执行经典和自定义的 Servlet 身份验证">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过 HttpAuthenticationMechanism 执行 Web 身份验证">
+<meta property="og:url" content="https://air6211332.github.io/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%202%20%E9%83%A8%E5%88%86/index.html">
+<meta property="og:site_name" content="米薏小天地">
+<meta property="og:description" content="通过 Java EE 8 中新的注解驱动的 HTTP 身份验证机制执行经典和自定义的 Servlet 身份验证">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.ibm.com/developerworks/cn/java/j-javaee8-security-api-2/MethodCallSequence.png">
+<meta property="article:published_time" content="2019-02-06T10:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-20T09:05:34.994Z">
+<meta property="article:author" content="米薏">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Java EE">
+<meta property="article:tag" content="Security">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.ibm.com/developerworks/cn/java/j-javaee8-security-api-2/MethodCallSequence.png">
+
+
+<link rel="canonical" href="https://air6211332.github.io/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%202%20%E9%83%A8%E5%88%86/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>通过 HttpAuthenticationMechanism 执行 Web 身份验证 | 米薏小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="米薏小天地" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">米薏小天地</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概览"><span class="nav-number">1.</span> <span class="nav-text">概览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装-Soteria"><span class="nav-number">2.</span> <span class="nav-text">安装 Soteria</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内置身份验证机制"><span class="nav-number">3.</span> <span class="nav-text">内置身份验证机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#BasicAuthenticationMechanismDefinition"><span class="nav-number">3.1.</span> <span class="nav-text">@BasicAuthenticationMechanismDefinition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FormAuthenticationMechanismDefinition"><span class="nav-number">3.2.</span> <span class="nav-text">@FormAuthenticationMechanismDefinition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CustomFormAuthenticationMechanismDefinition"><span class="nav-number">3.3.</span> <span class="nav-text">@CustomFormAuthenticationMechanismDefinition</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编写自定义-HttpAuthenticationMechanism"><span class="nav-number">4.</span> <span class="nav-text">编写自定义 HttpAuthenticationMechanism</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP-请求期间的方法执行"><span class="nav-number">5.</span> <span class="nav-text">HTTP 请求期间的方法执行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自定义示例：使用-cookie-的身份验证"><span class="nav-number">6.</span> <span class="nav-text">自定义示例：使用 cookie 的身份验证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第-2-部分小结"><span class="nav-number">7.</span> <span class="nav-text">第 2 部分小结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#测试您的知识"><span class="nav-number">8.</span> <span class="nav-text">测试您的知识</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">米薏</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/air6211332" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;air6211332" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:744471805" title="E-Mail → mailto:744471805" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://iamli.net/" title="https:&#x2F;&#x2F;iamli.net&#x2F;" rel="noopener" target="_blank">木子</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mmpmmmp.github.io/" title="https:&#x2F;&#x2F;mmpmmmp.github.io&#x2F;" rel="noopener" target="_blank">啧啧</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.hoofungson.cn/index.html" title="https:&#x2F;&#x2F;blog.hoofungson.cn&#x2F;index.html" rel="noopener" target="_blank">凤松轩</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xu-shuai.github.io/" title="https:&#x2F;&#x2F;xu-shuai.github.io&#x2F;" rel="noopener" target="_blank">水星很热</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.didispace.com/" title="http:&#x2F;&#x2F;blog.didispace.com&#x2F;" rel="noopener" target="_blank">程序猿DD</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://vincentxin-scott.github.io/" title="https:&#x2F;&#x2F;vincentxin-scott.github.io&#x2F;" rel="noopener" target="_blank">Vincent Xin</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://air6211332.github.io/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%202%20%E9%83%A8%E5%88%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="米薏">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米薏小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          通过 HttpAuthenticationMechanism 执行 Web 身份验证
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-02-06 18:00:00" itemprop="dateCreated datePublished" datetime="2019-02-06T18:00:00+08:00">2019-02-06</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-10-20 17:05:34" itemprop="dateModified" datetime="2020-10-20T17:05:34+08:00">2020-10-20</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/Java-EE/" itemprop="url" rel="index"><span itemprop="name">Java EE</span></a>
+        </span>
+    </span>
+
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>9.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">通过 Java EE 8 中新的注解驱动的 HTTP 身份验证机制执行经典和自定义的 Servlet 身份验证</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h1><p>Java EE 8 Security API 入门，第 1 部分</p>
+<blockquote>
+<p><strong>关于本系列</strong></p>
+<p>期盼已久的新 Java EE Security API (JSR 375) 推动 Java 企业安全性进入了云和微服务计算时代。本系列将展示新安全机制如何简化和标准化各种 Java EE 容器实现之间的安全处理，然后帮助您开始在受云支持的项目中使用它们。</p>
+</blockquote>
+<blockquote>
+<p>此内容是该系列 4 部分中的第 1 部分： Java EE 8 Security API 入门</p>
+<ul>
+<li><a href="/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%201%20%E9%83%A8%E5%88%86/">第 1 部分: 针对云和微服务平台的 Java 企业安全性</a></li>
+<li><a href="/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%202%20%E9%83%A8%E5%88%86/">第 2 部分: 通过 HttpAuthenticationMechanism 执行 Web 身份验证</a></li>
+<li><a href="/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%203%20%E9%83%A8%E5%88%86/">第 3 部分: 通过 IdentityStore 安全地访问用户凭证</a></li>
+<li><a href="http://localhost:4000/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%204%20%E9%83%A8%E5%88%86/" target="_blank" rel="noopener">第 4 部分: 通过 SecurityContext 询问调用方数据</a></li>
+</ul>
+</blockquote>
+<p>本系列的第 1 篇文章概述了 <a href="https://jcp.org/en/jsr/detail?id=375" target="_blank" rel="noopener">Java EE Security API (JSR 375)</a>，包括对新 HttpAuthenticationMechanism、IdentityStore 和 SecurityContext 接口的大体介绍。本文是 3 篇深入剖析文章的第一篇，您将学习如何使用 HttpAuthenticationMechanism 在一个示例 Java Web 应用程序中设置和配置用户身份验证。</p>
+<p>HttpAuthenticationMechanism 接口是 Java™ EE 的新 HTTP 身份验证机制的核心。它提供了 3 个内置的启用了 CDI（上下文和依赖注入）的实现，这些实现自动被实例化并提供给 CDI 容器使用。这些内置的实现支持 Servlet 4.0 指定的 3 种经典身份验证方法：基本 HTTP 身份验证、基于表单的身份验证和基于表单的自定义身份验证。</p>
+<p>除了内置的身份验证方法之外，您还可以选择使用 HttpAuthenticationMechanism 来开发自定义身份验证。如果您需要支持特定的协议和身份验证令牌，可以选择此选项。一些 servlet 容器可能也提供了自定义 HttpAuthenticationMechanism 实现。</p>
+<p>本文将结合实践来介绍如何使用 HttpAuthenticationMechanism 接口和它的 3 种内置实现。我还将展示如何编写您自定义的 HttpAuthenticationMechanism 身份验证机制。</p>
+<p><a href="https://github.com/readlearncode/Java-EE-8-Sampler/tree/master/security-1-0" target="_blank" rel="noopener">获取代码</a></p>
+<h1 id="安装-Soteria"><a href="#安装-Soteria" class="headerlink" title="安装 Soteria"></a>安装 Soteria</h1><p>我们将使用 Java EE 8 Security API 参考实现 <a href="https://github.com/javaee/security-soteria" target="_blank" rel="noopener">Soteria</a> 来探索可通过 HttpAuthenticationMechanism 访问的内置和自定义身份验证机制。您可以通过两种方式之一获取 Soteria。</p>
+<ol>
+<li>在 POM 中显式指定 Soteria</li>
+</ol>
+<p>使用以下 Maven 坐标在 POM 中指定 Soteria：</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.glassfish.soteria<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>javax.security.enterprise<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<ol start="2">
+<li>使用内置的 Java EE 8 坐标<br>符合 Java EE 8 规范的服务器将拥有自己的新 Java EE 8 Security API 实现，否则它们会依靠 Sotoria 的实现。无论如何，您都只需要 Java EE 8 坐标：</li>
+</ol>
+<pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>javax<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>javaee-api<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>8.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>scope</span><span class="token punctuation">></span></span>provided<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>scope</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<h1 id="内置身份验证机制"><a href="#内置身份验证机制" class="headerlink" title="内置身份验证机制"></a>内置身份验证机制</h1><p>内置 HTTP 身份验证机制支持为 <a href="https://javaee.github.io/servlet-spec/downloads/servlet-4.0/servlet-4_0_FINAL.pdf" target="_blank" rel="noopener">Servlet 4.0（13.6 小节）</a>指定的身份验证风格。在接下来的几节中，我将展示如何使用注解来启动这 3 种身份验证机制，以及如何在 Java Web 应用程序中设置和实现每种机制。</p>
+<h2 id="BasicAuthenticationMechanismDefinition"><a href="#BasicAuthenticationMechanismDefinition" class="headerlink" title="@BasicAuthenticationMechanismDefinition"></a>@BasicAuthenticationMechanismDefinition</h2><p>@BasicAuthenticationMechanismDefinition 注解触发 Servlet 4.0（13.6.1 小节）所定义的 HTTP 基本身份验证。它拥有一个可选参数 realmName，该参数指定将通过 WWW-Authenticate 标头发送的范围名称。清单 3 展示了如何为范围名称 user-realm 触发 HTTP 基本身份验证。</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@BasicAuthenticationMechanismDefinition</span><span class="token punctuation">(</span>realmName<span class="token operator">=</span><span class="token string">"user-realm"</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/user"</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@DeclareRoles</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token string">"admin"</span><span class="token punctuation">,</span> <span class="token string">"user"</span><span class="token punctuation">,</span> <span class="token string">"demo"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@ServletSecurity</span><span class="token punctuation">(</span><span class="token annotation punctuation">@HttpConstraint</span><span class="token punctuation">(</span>rolesAllowed <span class="token operator">=</span> <span class="token string">"user"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UserServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span> … <span class="token punctuation">}</span></code></pre>
+<h2 id="FormAuthenticationMechanismDefinition"><a href="#FormAuthenticationMechanismDefinition" class="headerlink" title="@FormAuthenticationMechanismDefinition"></a>@FormAuthenticationMechanismDefinition</h2><p>@FormAuthenticationMechanismDefinition 注解触发 Servlet 4.0 规范（13.6.3 小节）所定义的基于表单的身份验证。它有一个必须设置的配置选项。loginToContinue 选项接受一个已配置的 @LoginToContinue 注解，这使得应用程序能提供“登录并继续操作”的功能。您可以选择使用合理的默认设置，或者为此特性指定 4 种特征之一。</p>
+<p>在清单 4 中，登录页指定为 URI /login-servlet。如果身份验证失败，则将操作流传递给 /login-servlet-fail。</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@FormAuthenticationMechanismDefinition</span><span class="token punctuation">(</span>
+    loginToContinue <span class="token operator">=</span> <span class="token annotation punctuation">@LoginToContinue</span><span class="token punctuation">(</span>
+           loginPage <span class="token operator">=</span> <span class="token string">"/login-servlet"</span><span class="token punctuation">,</span>
+           errorPage <span class="token operator">=</span> <span class="token string">"/login-servlet-fail"</span>
+           <span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@ApplicationScoped</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ApplicationConfig</span> <span class="token punctuation">{</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span></code></pre>
+<p>要设置到达登录页的方式，可以使用 useForwardToLogin 选项。要将此选项设置为“forward”或“redirect”，可以指定 true 或 false，默认设置为 true。也可以通过一个传递给该选项的 EL 表达式来设置该值：useForwardToLoginExpression。</p>
+<p>@LoginToContinue 拥有合理的默认设置。登录页被设置为 /login，错误页被设置为 /login-error。</p>
+<h2 id="CustomFormAuthenticationMechanismDefinition"><a href="#CustomFormAuthenticationMechanismDefinition" class="headerlink" title="@CustomFormAuthenticationMechanismDefinition"></a>@CustomFormAuthenticationMechanismDefinition</h2><p>@CustomFormAuthenticationMechanismDefinition 注解提供了配置一个自定义登录表单的选项。在清单 5 中，可以看到网站的登录页被标识为 login.do。登录页被设置为 loginPage 参数的一个值，传递给 @CustomFormAuthenticationMechanismDefinition 注解的 loginToContinue 参数。请注意，loginToContinue 是唯一的参数，而且它是可选的。</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@CustomFormAuthenticationMechanismDefinition</span><span class="token punctuation">(</span>
+   loginToContinue <span class="token operator">=</span> <span class="token annotation punctuation">@LoginToContinue</span><span class="token punctuation">(</span>
+       loginPage<span class="token operator">=</span><span class="token string">"/login.do"</span>
+   <span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/admin"</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@DeclareRoles</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token string">"admin"</span><span class="token punctuation">,</span> <span class="token string">"user"</span><span class="token punctuation">,</span> <span class="token string">"demo"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@ServletSecurity</span><span class="token punctuation">(</span><span class="token annotation punctuation">@HttpConstraint</span><span class="token punctuation">(</span>rolesAllowed <span class="token operator">=</span> <span class="token string">"admin"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AdminServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span></code></pre>
+<p>login.do 登录页如清单 6 所示，而且是一个受登录后台 bean 支持的 JSF (JavaServer Pages) 页面，如清单 7 所示。</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name"><span class="token namespace">jsf:</span>id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>form<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span>Username<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span>
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name"><span class="token namespace">jsf:</span>id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>username<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span> <span class="token attr-name"><span class="token namespace">jsf:</span>value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>#{loginBean.username}<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span>Password<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span>
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name"><span class="token namespace">jsf:</span>id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>password<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>password<span class="token punctuation">"</span></span> <span class="token attr-name"><span class="token namespace">jsf:</span>value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>#{loginBean.password}<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>Login<span class="token punctuation">"</span></span> <span class="token attr-name"><span class="token namespace">jsf:</span>action</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>#{loginBean.login}<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span></code></pre>
+<p>登录后台 bean 使用一个 SecurityContext 实例来执行身份验证，如清单 7 所示。如果成功，用户可以访问该资源；否则，操作流会被传递给错误的页面。在这种情况下，系统会将用户转发到 /login-error 上的默认登录 URI。</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Named</span>
+<span class="token annotation punctuation">@RequestScoped</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LoginBean</span> <span class="token punctuation">{</span>
+
+   <span class="token annotation punctuation">@Inject</span>
+   <span class="token keyword">private</span> SecurityContext securityContext<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@Inject</span>
+   <span class="token keyword">private</span> FacesContext facesContext<span class="token punctuation">;</span>
+
+   <span class="token keyword">private</span> String username<span class="token punctuation">,</span> password<span class="token punctuation">;</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">login</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+       Credential credential <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">UsernamePasswordCredential</span><span class="token punctuation">(</span>username<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Password</span><span class="token punctuation">(</span>password<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       AuthenticationStatus status <span class="token operator">=</span> securityContext<span class="token punctuation">.</span><span class="token function">authenticate</span><span class="token punctuation">(</span>
+           <span class="token function">getRequestFrom</span><span class="token punctuation">(</span>facesContext<span class="token punctuation">)</span><span class="token punctuation">,</span>
+           <span class="token function">getResponseFrom</span><span class="token punctuation">(</span>facesContext<span class="token punctuation">)</span><span class="token punctuation">,</span>
+           <span class="token function">withParams</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">credential</span><span class="token punctuation">(</span>credential<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token keyword">if</span> <span class="token punctuation">(</span>status<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>SEND_CONTINUE<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           facesContext<span class="token punctuation">.</span><span class="token function">responseComplete</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>status<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>SEND_FAILURE<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           <span class="token function">addError</span><span class="token punctuation">(</span>facesContext<span class="token punctuation">,</span> <span class="token string">"Authentication failed"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+
+   <span class="token punctuation">}</span>
+   <span class="token comment" spellcheck="true">// Some methods omitted for brevity</span>
+<span class="token punctuation">}</span></code></pre>
+<h1 id="编写自定义-HttpAuthenticationMechanism"><a href="#编写自定义-HttpAuthenticationMechanism" class="headerlink" title="编写自定义 HttpAuthenticationMechanism"></a>编写自定义 HttpAuthenticationMechanism</h1><p>在许多情况下，您会发现这 3 种内置实现就足以满足您的需求。在某些情况下，您可能更喜欢编写自己的 HttpAuthenticationMechanism 接口实现。在本节，我将介绍编写一个自定义 HttpAuthenticationMechanism 接口的流程。</p>
+<p>为了确保它可用于您的 Java 应用程序，您需要通过 @ApplicationScope 将 HttpAuthenticationMechanism 接口实现为一个 CDI bean。该接口定义了以下 3 个方法：</p>
+<ul>
+<li>validateRequest() 验证一个 HTTP 请求。</li>
+<li>secureResponse() 获取 HTTP 响 应消息。</li>
+<li>cleanSubject() 清除所提供的主体和凭证的主题。</li>
+</ul>
+<p>所有方法都接受相同的参数类型，它们是：HttpServletRequest、HttpServletResponse 和 HttpMessageContext。这些参数对应于容器所提供的 <a href="https://github.com/trajano/server-auth-modules" target="_blank" rel="noopener">JASPIC Server Auth Module</a> 接口上定义的相应方法。当在 Server Auth 上调用一个 JASPIC 方法时，它会委托给您的自定义 HttpAuthenticationMechanism 的相应方法。</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@ApplicationScoped</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CustomAuthenticationMechanism</span> <span class="token keyword">implements</span> <span class="token class-name">HttpAuthenticationMechanism</span> <span class="token punctuation">{</span>
+
+   <span class="token annotation punctuation">@Inject</span>
+   <span class="token keyword">private</span> IdentityStoreHandler idStoreHandler<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">public</span> AuthenticationStatus <span class="token function">validateRequest</span><span class="token punctuation">(</span>HttpServletRequest req<span class="token punctuation">,</span> 
+                                               HttpServletResponse res<span class="token punctuation">,</span> 
+                                               HttpMessageContext msg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token comment" spellcheck="true">// use idStoreHandler to authenticate and authorize access</span>
+       <span class="token keyword">return</span> msg<span class="token punctuation">.</span><span class="token function">responseUnauthorized</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// other responses available</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h1 id="HTTP-请求期间的方法执行"><a href="#HTTP-请求期间的方法执行" class="headerlink" title="HTTP 请求期间的方法执行"></a>HTTP 请求期间的方法执行</h1><p>在一个 HTTP 请求期间，会在固定的时刻调用 HttpAuthenticationMechanism 实现上的方法。图 1 展示了何时调用与 Filter 和 HttpServlet 实例上的方法相关的每个方法。</p>
+<p>图 1. 方法调用顺序<br><img src="https://www.ibm.com/developerworks/cn/java/j-javaee8-security-api-2/MethodCallSequence.png" alt=""></p>
+<p>validateRequest() 方法在 doFilter() 或 service() 方法之前调用，而且会响应在 HttpServletResponse 实例上调用的 authenticate()。此方法的目的是允许调用方执行身份验证。为了帮助完成此操作，该方法可以访问调用方的 HttpRequest 和 HttpResponse 实例。它可以使用这些实例来提取请求的身份验证信息。它还可以写入到 HTTP 响应中，以便将调用方重定向到 OAuth 提供程序。执行身份验证后，它可以使用 HttpMessageContext 实例来通知身份验证状态。</p>
+<p>secureResponse() 方法在 doFilter() 或 service() 之后调用。它在一个 servlet 或过滤器生成的响应上提供后处理功能。加密是此方法的一种潜在用途。</p>
+<p>cleanSubject() 方法在 HttpServletRequest 实例上调用 logout() 方法之后调用。此方法也可用于在发生注销事件后清除与用户相关的状态。</p>
+<p>HttpAuthenticationMechanism 实例可以使用 HttpMessageContext 接口的一些方法来与调用它的 JASPIC ServerAuthModule 通信。</p>
+<h1 id="自定义示例：使用-cookie-的身份验证"><a href="#自定义示例：使用-cookie-的身份验证" class="headerlink" title="自定义示例：使用 cookie 的身份验证"></a>自定义示例：使用 cookie 的身份验证</h1><p>前面已经提到过，您通常会编写一个自定义实现来提供内置选项所没有的功能。一个示例是在您的身份验证流中使用 cookie。</p>
+<p>在类级别上，您可以使用可选的 @RememberMe 注解来有效地“记住”一次用户身份验证，并在每个请求中自动应用它。</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RememberMe</span><span class="token punctuation">(</span>
+       cookieMaxAgeSeconds <span class="token operator">=</span> <span class="token number">3600</span>
+<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@ApplicationScoped</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CustomAuthenticationMechanism</span> <span class="token keyword">implements</span> <span class="token class-name">HttpAuthenticationMechanism</span> <span class="token punctuation">{</span> … <span class="token punctuation">}</span></code></pre>
+<p>此注解有 8 个配置选项，所有这些选项都包含合理的默认值，所以您不需要手动实现它们：</p>
+<ul>
+<li>cookieMaxAgeSeconds 设置 “remember me” cookie 的寿命。</li>
+<li>cookieMaxAgeSecondsExpression 是 cookieMaxAgeSeconds 的 EL 版本。</li>
+<li>cookieSecureOnly 指定该 cookie 仅应通过安全方式 (HTTPS) 进行访问。</li>
+<li>cookieSecureOnlyExpression 是 cookieSecureOnly 的 EL 版本。</li>
+<li>cookieHttpOnly 表示该 cookie 应该仅通过 HTTP 请求进行发送。</li>
+<li>cookieHttpOnlyExpression 是  cookieHttpOnly 的 EL 版本。</li>
+<li>cookieName 设置 cookie 的名称。</li>
+<li>isRememberMe 打开或关闭“remember me”。</li>
+<li>isRememberMeExpression 是 isRememberMe 的 EL 版本。</li>
+</ul>
+<p>RememberMe 功能被实现为拦截器绑定。该容器将拦截对 validateRequest() 和 cleanSubject() 方法的调用。在一个包含 RememberMe cookie 的实现上调用 validateRequest() 方法时，会尝试验证调用方。如果成功，则会告知 HttpMessageConext 发生了一个登录事件；否则会删除该 cookie。拦截 cleanSubject() 方法会删除该 cookie 并完成注销请求。</p>
+<h1 id="第-2-部分小结"><a href="#第-2-部分小结" class="headerlink" title="第 2 部分小结"></a>第 2 部分小结</h1><p>新 HttpAuthenticationMechanism 接口是 Java EE 8 中的 Web 身份验证的核心。它的内置身份验证机制支持 Servlet 4.0 中指定的 3 种经典身份验证方法，而且它也很容易针对自定义实现来扩展该接口。在本教程中，您学习了如何使用注解来调用和配置 HttpAuthenticationMechanism 的内置机制，以及如何为特殊用例编写自定义机制。您可以通过下面的测验问题来测试所学的知识。</p>
+<p>本文是 3 篇介绍新 Java EE 8 Security API 的主要组件的深度剖析文章中的第一篇。接下来的两篇文章将结合实践来介绍 IdentityStore 和 SecurityContext API。</p>
+<h1 id="测试您的知识"><a href="#测试您的知识" class="headerlink" title="测试您的知识"></a>测试您的知识</h1><ol>
+<li>3 种默认的 HttpAuthenticationMechanism 实现是哪些？<ol>
+<li>@BasicFormAuthenticationMechanismDefinition</li>
+<li>@FormAuthenticationMechanismDefinition</li>
+<li>@LoginFormAuthenticationMechanismDefinition</li>
+<li>@CustomFormAuthenticationMechanismDefinition</li>
+<li>@BasicAuthenticationMechanismDefinition</li>
+</ol>
+</li>
+<li>以下哪两种注解会触发基于表单的身份验证？<ol>
+<li>@BasicAuthenticationMechanismDefinition</li>
+<li>@BasicFormAuthenticationMechanismDefinition</li>
+<li>@FormAuthenticationMechanismDefinition</li>
+<li>@FormBasedAuthenticationMechanismDefinition</li>
+<li>@CustomFormAuthenticationMechanismDefinition</li>
+</ol>
+</li>
+<li>以下哪两种配置是基本身份验证的有效配置？<ol>
+<li>@BasicAuthenticationMechanismDefinition(realmName=”user-realm”)</li>
+<li>@BasicAuthenticationMechanismDefinition(userRealm=”user-realm”)</li>
+<li>@BasicAuthenticationMechanismDefinition(loginToContinue = @LoginToContinue)</li>
+<li>@BasicAuthenticationMechanismDefinition</li>
+<li>@BasicAuthenticationMechanismDefinition(realm=”user-realm”)</li>
+</ol>
+</li>
+<li>以下哪三种配置是基于表单的身份验证的有效配置？<ol>
+<li>@FormAuthenticationMechanismDefinition(loginToContinue = @LoginToContinue)</li>
+<li>@FormAuthenticationMechanismDefinition</li>
+<li>@FormBasedAuthenticationMechanismDefinition</li>
+<li>@FormAuthenticationMechanismDefinition(loginToContinue = 1. @LoginToContinue(useForwardToLoginExpression = “${appConfigs.forward}”))</li>
+<li>@FormBasedAuthenticationMechanismDefinition(loginToContinue = @LoginToContinue)</li>
+</ol>
+</li>
+<li>在 HTTP 请求期间，应在 HttpAuthenticationMechanism、Filter 和 HttpServlet 实现上按何种顺序调用方法？<ol>
+<li>doFilter()、validateRequest()、service()、secureResponse()</li>
+<li>validateRequest()、doFilter()、secureResponse()、service()</li>
+<li>validateRequest()、service()、doFilter()、secureResponse()</li>
+<li>validateRequest()、doFilter()、service()、secureResponse()</li>
+<li>service()、secureResponse()、doFilter()、validateRequest()</li>
+</ol>
+</li>
+<li>您如何设置 RememberMe cookie 的最大寿命？<ol>
+<li>@RememberMe(cookieMaxAge = (units = SECONDS, value = 3600)</li>
+<li>@RememberMe(maxAgeSeconds = 3600)</li>
+<li>@RememberMe(cookieMaxAgeSeconds = 3600)</li>
+<li>@RememberMe(cookieMaxAgeMilliseconds = 3600000)</li>
+<li>@RememberMe(cookieMaxAgeSeconds = “3600”)</li>
+</ol>
+</li>
+</ol>
+<p>核对您的答案：</p>
+<table>
+<thead>
+<tr>
+<th align="center">问题</th>
+<th align="center">答案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">235</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">35</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">14</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">124</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">3</td>
+</tr>
+</tbody></table>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/Java-EE/" rel="tag"># Java EE</a>
+              <a href="/tags/Security/" rel="tag"># Security</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%201%20%E9%83%A8%E5%88%86/" rel="prev" title="针对云和微服务平台的 Java 企业安全性">
+                  <i class="fa fa-chevron-left"></i> 针对云和微服务平台的 Java 企业安全性
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%203%20%E9%83%A8%E5%88%86/" rel="next" title="通过 IdentityStore 安全地访问用户凭证">
+                  通过 IdentityStore 安全地访问用户凭证 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">米薏</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">244k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:42</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><script defer src="/lib/three.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.8.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'dark',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

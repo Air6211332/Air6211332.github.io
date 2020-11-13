@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"air6211332.github.io","root":"/","scheme":"Pisces","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="以一个简单的电商系统，看看这个系统如何一步步演变。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈 web 网站架构演变过程">
+<meta property="og:url" content="https://air6211332.github.io/2018/09/10/%E6%9E%B6%E6%9E%84/%E6%B5%85%E8%B0%88web%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E6%BC%94%E5%8F%98%E8%BF%87%E7%A8%8B/index.html">
+<meta property="og:site_name" content="米薏小天地">
+<meta property="og:description" content="以一个简单的电商系统，看看这个系统如何一步步演变。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ot0en8caw.bkt.clouddn.com/20180331123508.png">
+<meta property="og:image" content="http://ot0en8caw.bkt.clouddn.com/20180331123552.png">
+<meta property="og:image" content="http://ot0en8caw.bkt.clouddn.com/20180331123712.png">
+<meta property="og:image" content="http://ot0en8caw.bkt.clouddn.com/20180331123750.png">
+<meta property="og:image" content="http://ot0en8caw.bkt.clouddn.com/20180331123812.png">
+<meta property="og:image" content="http://ot0en8caw.bkt.clouddn.com/20180331123824.png">
+<meta property="og:image" content="http://ot0en8caw.bkt.clouddn.com/20180331123903.png">
+<meta property="og:image" content="http://ot0en8caw.bkt.clouddn.com/20180331123918.png">
+<meta property="og:image" content="http://ot0en8caw.bkt.clouddn.com/20180331123928.png">
+<meta property="og:image" content="http://ot0en8caw.bkt.clouddn.com/20180331123946.png">
+<meta property="og:image" content="http://ot0en8caw.bkt.clouddn.com/20180331123955.png">
+<meta property="og:image" content="http://ot0en8caw.bkt.clouddn.com/20180331124003.png">
+<meta property="article:published_time" content="2018-09-10T04:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-20T09:05:35.004Z">
+<meta property="article:author" content="米薏">
+<meta property="article:tag" content="随笔">
+<meta property="article:tag" content="web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ot0en8caw.bkt.clouddn.com/20180331123508.png">
+
+
+<link rel="canonical" href="https://air6211332.github.io/2018/09/10/%E6%9E%B6%E6%9E%84/%E6%B5%85%E8%B0%88web%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E6%BC%94%E5%8F%98%E8%BF%87%E7%A8%8B/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>浅谈 web 网站架构演变过程 | 米薏小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="米薏小天地" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">米薏小天地</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#阶段一、单机构建网站"><span class="nav-number">2.</span> <span class="nav-text">阶段一、单机构建网站</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#阶段二、应用服务器与数据库分离"><span class="nav-number">3.</span> <span class="nav-text">阶段二、应用服务器与数据库分离</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#阶段三、应用服务器集群"><span class="nav-number">4.</span> <span class="nav-text">阶段三、应用服务器集群</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">4.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方案"><span class="nav-number">4.2.</span> <span class="nav-text">方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#负载均衡"><span class="nav-number">4.2.1.</span> <span class="nav-text">负载均衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集群调度算法"><span class="nav-number">4.2.2.</span> <span class="nav-text">集群调度算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集群模式"><span class="nav-number">4.2.3.</span> <span class="nav-text">集群模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#session"><span class="nav-number">4.2.4.</span> <span class="nav-text">session</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#阶段四、数据库读写分离化"><span class="nav-number">5.</span> <span class="nav-text">阶段四、数据库读写分离化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#阶段五、用搜索引擎缓解读库的压力"><span class="nav-number">6.</span> <span class="nav-text">阶段五、用搜索引擎缓解读库的压力</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#阶段六、用缓存缓解读库的压力"><span class="nav-number">7.</span> <span class="nav-text">阶段六、用缓存缓解读库的压力</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#阶段七、数据库水平拆分与垂直拆分"><span class="nav-number">8.</span> <span class="nav-text">阶段七、数据库水平拆分与垂直拆分</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据垂直拆分"><span class="nav-number">8.1.</span> <span class="nav-text">数据垂直拆分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据水平拆分"><span class="nav-number">8.2.</span> <span class="nav-text">数据水平拆分</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#阶段八、应用的拆分"><span class="nav-number">9.</span> <span class="nav-text">阶段八、应用的拆分</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#拆分应用"><span class="nav-number">9.1.</span> <span class="nav-text">拆分应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#走服务化的道路"><span class="nav-number">9.2.</span> <span class="nav-text">走服务化的道路</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#阶段九、引入消息中间件"><span class="nav-number">10.</span> <span class="nav-text">阶段九、引入消息中间件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#十、总结"><span class="nav-number">11.</span> <span class="nav-text">十、总结</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">米薏</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/air6211332" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;air6211332" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:744471805" title="E-Mail → mailto:744471805" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://iamli.net/" title="https:&#x2F;&#x2F;iamli.net&#x2F;" rel="noopener" target="_blank">木子</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mmpmmmp.github.io/" title="https:&#x2F;&#x2F;mmpmmmp.github.io&#x2F;" rel="noopener" target="_blank">啧啧</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.hoofungson.cn/index.html" title="https:&#x2F;&#x2F;blog.hoofungson.cn&#x2F;index.html" rel="noopener" target="_blank">凤松轩</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xu-shuai.github.io/" title="https:&#x2F;&#x2F;xu-shuai.github.io&#x2F;" rel="noopener" target="_blank">水星很热</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.didispace.com/" title="http:&#x2F;&#x2F;blog.didispace.com&#x2F;" rel="noopener" target="_blank">程序猿DD</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://vincentxin-scott.github.io/" title="https:&#x2F;&#x2F;vincentxin-scott.github.io&#x2F;" rel="noopener" target="_blank">Vincent Xin</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://air6211332.github.io/2018/09/10/%E6%9E%B6%E6%9E%84/%E6%B5%85%E8%B0%88web%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E6%BC%94%E5%8F%98%E8%BF%87%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="米薏">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米薏小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          浅谈 web 网站架构演变过程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-09-10 12:00:00" itemprop="dateCreated datePublished" datetime="2018-09-10T12:00:00+08:00">2018-09-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-10-20 17:05:35" itemprop="dateModified" datetime="2020-10-20T17:05:35+08:00">2020-10-20</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9A%8F%E7%AC%94/" itemprop="url" rel="index"><span itemprop="name">随笔</span></a>
+        </span>
+    </span>
+
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">以一个简单的电商系统，看看这个系统如何一步步演变。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我们以 javaweb 为例，来搭建一个简单的电商系统，看看这个系统可以如何一步步演变。</p>
+<p>该系统具备的功能： </p>
+<ul>
+<li>用户模块：用户注册和管理</li>
+<li>商品模块：商品展示和管理</li>
+<li>交易模块：创建交易和管理</li>
+</ul>
+<h1 id="阶段一、单机构建网站"><a href="#阶段一、单机构建网站" class="headerlink" title="阶段一、单机构建网站"></a>阶段一、单机构建网站</h1><p>网站的初期，我们经常会在单机上跑我们所有的程序和软件。此时我们使用一个容器，如 tomcat 、 jetty 、 jboos ，然后直接使用 JSP / servlet 技术，或者使用一些开源的框架如 maven + spring + struct + hibernate 、 maven + spring + springmvc + mybatis ；最后再选择一个数据库管理系统来存储数据，如 mysql 、 sqlserver 、 oracle ，然后通过 JDBC 进行数据库的连接和操作。</p>
+<p>把以上的所有软件都装载同一台机器上，应用跑起来了，也算是一个小系统了。此时系统结果如下：<br><img src="http://ot0en8caw.bkt.clouddn.com/20180331123508.png" alt="单机构建网站"></p>
+<h1 id="阶段二、应用服务器与数据库分离"><a href="#阶段二、应用服务器与数据库分离" class="headerlink" title="阶段二、应用服务器与数据库分离"></a>阶段二、应用服务器与数据库分离</h1><p>随着网站的上线，访问量逐步上升，服务器的负载慢慢提高，在服务器还没有超载的时候，我们应该就要做好准备，提升网站的负载能力。假如我们代码层面已难以优化，在不提高单台机器的性能的情况下，增加机器是一个不错的方式，不仅可以有效地提高系统的负载能力，而且性价比高。</p>
+<p>增加的机器用来做什么呢？此时我们可以把数据库， web 服务器拆分开来，这样不仅提高了单台机器的负载能力，也提高了容灾能力。</p>
+<p>应用服务器与数据库分开后的架构如下图所示：</p>
+<p><img src="http://ot0en8caw.bkt.clouddn.com/20180331123552.png" alt="应用服务器与数据库分离"></p>
+<h1 id="阶段三、应用服务器集群"><a href="#阶段三、应用服务器集群" class="headerlink" title="阶段三、应用服务器集群"></a>阶段三、应用服务器集群</h1><p>随着访问量继续增加，单台应用服务器已经无法满足需求了。在假设数据库服务器没有压力的情况下，我们可以把应用服务器从一台变成了两台甚至多台，把用户的请求分散到不同的服务器中，从而提高负载能力。多台应用服务器之间没有直接的交互，他们都是依赖数据库各自对外提供服务。著名的做故障切换的软件有 keepalived ， keepalived 是一个类似于 layer3、4、7 交换机制的软件，他不是某个具体软件故障切换的专属品，而是可以适用于各种软件的一款产品。 keepalived 配合上 ipvsadm 又可以做负载均衡，可谓是神器。</p>
+<p>我们以增加了一台应用服务器为例，增加后的系统结构图如下：</p>
+<p><img src="http://ot0en8caw.bkt.clouddn.com/20180331123712.png" alt="应用服务器集群 01"></p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>系统演变到这里，将会出现下面四个问题：</p>
+<ol>
+<li>用户的请求由谁来转发到到具体的应用服务器</li>
+<li>有什么转发的算法</li>
+<li>应用服务器如何返回用户的请求</li>
+<li>用户如果每次访问到的服务器不一样，那么如何维护 session 的一致性</li>
+</ol>
+<h2 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h2><p>我们来看看解决问题的方案：</p>
+<h3 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h3><p>第一个问题即是负载均衡的问题，一般有 5 种解决方案：</p>
+<ol>
+<li><p>*<em>http 重定向 *</em>。 HTTP 重定向就是应用层的请求转发。用户的请求其实已经到了 HTTP 重定向负载均衡服务器，服务器根据算法要求用户重定向，用户收到重定向请求后，再次请求真正的集群</p>
+<ul>
+<li><strong>优点</strong>：简单。</li>
+<li><strong>缺点</strong>：性能较差。</li>
+</ul>
+</li>
+<li><p>*<em>DNS 域名解析负载均衡 *</em>。 DNS 域名解析负载均衡就是在用户请求 DNS 服务器，获取域名对应的 IP 地址时， DNS 服务器直接给出负载均衡后的服务器 IP 。</p>
+<ul>
+<li><strong>优点</strong>：交给 DNS ，不用我们去维护负载均衡服务器。</li>
+<li><strong>缺点</strong>：当一个应用服务器挂了，不能及时通知 DNS ，而且 DNS 负载均衡的控制权在域名服务商那里，网站无法做更多的改善和更强大的管理。</li>
+</ul>
+</li>
+<li><p><strong>反向代理服务器</strong>。在用户的请求到达反向代理服务器时（已经到达网站机房），由反向代理服务器根据算法转发到具体的服务器。常用的 apache ， nginx 都可以充当反向代理服务器。</p>
+<ul>
+<li><strong>优点</strong>：部署简单。</li>
+<li><strong>缺点</strong>：代理服务器可能成为性能的瓶颈，特别是一次上传大文件。</li>
+</ul>
+</li>
+<li><p><strong>IP 层负载均衡</strong>。在请求到达负载均衡器后，负载均衡器通过修改请求的目的 IP 地址，从而实现请求的转发，做到负载均衡。</p>
+<ul>
+<li><strong>优点</strong>：性能更好。</li>
+<li><strong>缺点</strong>：负载均衡器的宽带成为瓶颈。</li>
+</ul>
+</li>
+<li><p><strong>数据链路层负载均衡</strong>。在请求到达负载均衡器后，负载均衡器通过修改请求的 mac 地址，从而做到负载均衡，与 IP 负载均衡不一样的是，当请求访问完服务器之后，直接返回客户。而无需再经过负载均衡器。</p>
+</li>
+</ol>
+<h3 id="集群调度算法"><a href="#集群调度算法" class="headerlink" title="集群调度算法"></a>集群调度算法</h3><p>第二个问题即是集群调度算法问题，常见的调度算法有 10 种。</p>
+<ol>
+<li><p><strong>rr 轮询调度算法</strong>。顾名思义，轮询分发请求。</p>
+<ul>
+<li>优点：实现简单</li>
+<li>缺点：不考虑每台服务器的处理能力</li>
+</ul>
+</li>
+<li><p><strong>wrr 加权调度算法</strong>。我们给每个服务器设置权值 weight ，负载均衡调度器根据权值调度服务器，服务器被调用的次数跟权值成正比。</p>
+<ul>
+<li>优点：考虑了服务器处理能力的不同</li>
+</ul>
+</li>
+<li><p><strong>sh 原地址散列</strong>：提取用户 IP ，根据散列函数得出一个 key ，再根据静态映射表，查处对应的 value ，即目标服务器 IP 。过目标机器超负荷，则返回空。</p>
+</li>
+<li><p><strong>dh 目标地址散列</strong>：同上，只是现在提取的是目标地址的 IP 来做哈希。</p>
+<ul>
+<li>优点：以上两种算法的都能实现同一个用户访问同一个服务器。</li>
+</ul>
+</li>
+<li><p><strong>lc 最少连接</strong>。优先把请求转发给连接数少的服务器。</p>
+<ul>
+<li>优点：使得集群中各个服务器的负载更加均匀。</li>
+</ul>
+</li>
+<li><p><strong>wlc 加权最少连接</strong>。在 lc 的基础上，为每台服务器加上权值。算法为：（ 活动连接数 * 256 + 非活动连接数 ）÷ 权重 ，计算出来的值小的服务器优先被选择。</p>
+<ul>
+<li>优点：可以根据服务器的能力分配请求。</li>
+</ul>
+</li>
+<li><p><strong>sed 最短期望延迟</strong>。其实 sed 跟 wlc 类似，区别是不考虑非活动连接数。算法为：（ 活动连接数 + 1 ) * 256 ÷ 权重，同样计算出来的值小的服务器优先被选择。</p>
+</li>
+<li><p><strong>nq 永不排队</strong>。改进的 sed 算法。我们想一下什么情况下才能“永不排队”，那就是服务器的连接数为 0 的时候，那么假如有服务器连接数为 0 ，均衡器直接把请求转发给它，无需经过 sed 的计算。</p>
+</li>
+<li><p><strong>LBLC 基于局部性的最少连接</strong>。均衡器根据请求的目的 IP 地址，找出该 IP 地址最近被使用的服务器，把请求转发之，若该服务器超载，最采用最少连接数算法。</p>
+</li>
+<li><p><strong>LBLCR 带复制的基于局部性的最少连接</strong>。均衡器根据请求的目的 IP 地址，找出该 IP 地址最近使用的“服务器组”，注意，并不是具体某个服务器，然后采用最少连接数从该组中挑出具体的某台服务器出来，把请求转发之。若该服务器超载，那么根据最少连接数算法，在集群的非本服务器组的服务器中，找出一台服务器出来，加入本服务器组，然后把请求转发之。</p>
+</li>
+</ol>
+<h3 id="集群模式"><a href="#集群模式" class="headerlink" title="集群模式"></a>集群模式</h3><p>第三个问题是集群模式问题，一般 3 种解决方案：</p>
+<ol>
+<li><p><strong>NAT</strong>：负载均衡器接收用户的请求，转发给具体服务器，服务器处理完请求返回给均衡器，均衡器再重新返回给用户。</p>
+</li>
+<li><p><strong>DR</strong>：负载均衡器接收用户的请求，转发给具体服务器，服务器出来玩请求后直接返回给用户。需要系统支持 IP Tunneling 协议，难以跨平台。</p>
+</li>
+<li><p><strong>TUN</strong>：同上，但无需 IP Tunneling 协议，跨平台性好，大部分系统都可以支持。</p>
+</li>
+</ol>
+<h3 id="session"><a href="#session" class="headerlink" title="session"></a>session</h3><p>第四个问题是 <strong>session</strong> 问题，一般有 4 种解决方案：</p>
+<ol>
+<li><p><strong>Session Sticky</strong>。 session sticky 就是把同一个用户在某一个会话中的请求，都分配到固定的某一台服务器中，这样我们就不需要解决跨服务器的 session 问题了，常见的算法有 ip_hash 法，即上面提到的两种散列算法。</p>
+<ul>
+<li>优点：实现简单。</li>
+<li>缺点：应用服务器重启则 session 消失。</li>
+</ul>
+</li>
+<li><p><strong>Session Replication</strong>。 session replication 就是在集群中复制 session ，使得每个服务器都保存有全部用户的 session 数据。</p>
+<ul>
+<li>优点：减轻负载均衡服务器的压力，不需要要实现 ip_hasp 算法来转发请求。</li>
+<li>缺点：复制时宽带开销大，访问量大的话 session 占用内存大且浪费。</li>
+</ul>
+</li>
+<li><p>*<em>Session 数据集中存储 *</em>： session 数据集中存储就是利用数据库来存储 session 数据，实现了 session 和应用服务器的解耦。</p>
+<ul>
+<li>优点：相比 session replication 的方案，集群间对于宽带和内存的压力减少了很多。</li>
+<li>缺点：需要维护存储 session 的数据库。</li>
+</ul>
+</li>
+<li><p><strong>Cookie Base</strong>： cookie base 就是把 session 存在 cookie 中，有浏览器来告诉应用服务器我的 session 是什么，同样实现了 session 和应用服务器的解耦。</p>
+<ul>
+<li>优点：实现简单，基本免维护。</li>
+<li>缺点： cookie 长度限制，安全性低，宽带消耗。</li>
+</ul>
+</li>
+</ol>
+<p><strong>值得一提的是</strong>：</p>
+<p>nginx 目前支持的负载均衡算法有 wrr 、 sh （支持一致性哈希）、 fair （本人觉得可以归结为 lc ）。但 nginx 作为均衡器的话，还可以一同作为静态资源服务器。</p>
+<p>keepalived + ipvsadm 比较强大，目前支持的算法有： rr 、 wrr 、 lc 、 wlc 、 lblc 、 sh 、 dh</p>
+<p>keepalived 支持集群模式有： NAT 、 DR 、 TUN</p>
+<p>nginx 本身并没有提供 session 同步的解决方案，而 apache 则提供了 session 共享的支持。</p>
+<p>好了，解决了以上的问题之后，系统的结构如下：</p>
+<p><img src="http://ot0en8caw.bkt.clouddn.com/20180331123750.png" alt="应用服务器集群 02"></p>
+<h1 id="阶段四、数据库读写分离化"><a href="#阶段四、数据库读写分离化" class="headerlink" title="阶段四、数据库读写分离化"></a>阶段四、数据库读写分离化</h1><p>上面我们总是假设数据库负载正常，但随着访问量的的提高，数据库的负载也在慢慢增大。那么可能有人马上就想到跟应用服务器一样，把数据库一份为二再负载均衡即可。但对于数据库来说，并没有那么简单。假如我们简单的把数据库一分为二，然后对于数据库的请求，分别负载到 A 机器和 B 机器，那么显而易见会造成两台数据库数据不统一的问题。那么对于这种情况，我们可以先考虑使用读写分离的方式。</p>
+<p>读写分离后的数据库系统结构如下：</p>
+<p><img src="http://ot0en8caw.bkt.clouddn.com/20180331123812.png" alt="数据库读写分离化"></p>
+<p>** 这个结构变化后也会带来两个问题 **：</p>
+<ol>
+<li>主从数据库之间数据同步问题</li>
+<li>应用对于数据源的选择问题
+　</li>
+</ol>
+<p>** 解决问题方案 **：</p>
+<ol>
+<li>我们可以使用 MYSQL 自带的 master + slave 的方式实现主从复制。</li>
+<li>采用第三方数据库中间件，例如 mycat 。 mycat 是从 cobar 发展而来的，而 cobar 是阿里开源的数据库中间件，后来停止开发。 mycat 是国内比较好的 mysql 开源数据库分库分表中间件。</li>
+</ol>
+<h1 id="阶段五、用搜索引擎缓解读库的压力"><a href="#阶段五、用搜索引擎缓解读库的压力" class="headerlink" title="阶段五、用搜索引擎缓解读库的压力"></a>阶段五、用搜索引擎缓解读库的压力</h1><p>数据库做读库的话，常常对模糊查找力不从心，即使做了读写分离，这个问题还未能解决。以我们所举的交易网站为例，发布的商品存储在数据库中，用户最常使用的功能就是查找商品，尤其是根据商品的标题来查找对应的商品。对于这种需求，一般我们都是通过 like 功能来实现的，但是这种方式的代价非常大。此时我们可以使用搜索引擎的倒排索引来完成。<br>** 搜索引擎具有以下优点 **：</p>
+<ul>
+<li>它能够大大提高查询速度。</li>
+</ul>
+<p>** 引入搜索引擎后也会带来以下的开销 **：</p>
+<ul>
+<li><p>带来大量的维护工作，我们需要自己实现索引的构建过程，设计全量 / 增加的构建方式来应对非实时与实时的查询需求。</p>
+</li>
+<li><p>需要维护搜索引擎集群</p>
+<p>搜索引擎并不能替代数据库，他解决了某些场景下的 “读” 的问题，是否引入搜索引擎，需要综合考虑整个系统的需求。引入搜索引擎后的系统结构如下：</p>
+</li>
+</ul>
+<p><img src="http://ot0en8caw.bkt.clouddn.com/20180331123824.png" alt="用搜索引擎缓解读库的压力"></p>
+<h1 id="阶段六、用缓存缓解读库的压力"><a href="#阶段六、用缓存缓解读库的压力" class="headerlink" title="阶段六、用缓存缓解读库的压力"></a>阶段六、用缓存缓解读库的压力</h1><ol>
+<li><p>后台应用层和数据库层的缓存</p>
+<p> 随着访问量的增加，逐渐出现了许多用户访问同一部分内容的情况，对于这些比较热门的内容，没必要每次都从数据库读取。我们可以使用缓存技术，例如可以使用 google 的开源缓存技术 guava 或者使用 memcacahe 作为应用层的缓存，也可以使用 redis 作为数据库层的缓存。</p>
+<p> 另外，在某些场景下，关系型数据库并不是很适合，例如我想做一个 “每日输入密码错误次数限制” 的功能，思路大概是在用户登录时，如果登录错误，则记录下该用户的 IP 和错误次数，那么这个数据要放在哪里呢？假如放在内存中，那么显然会占用太大的内容；假如放在关系型数据库中，那么既要建立数据库表，还要简历对应的 java bean ，还要写 SQL 等等。而分析一下我们要存储的数据，无非就是类似 {ip:errorNumber} 这样的 key : value 数据。对于这种数据，我们可以用 NOSQL 数据库来代替传统的关系型数据库。</p>
+</li>
+<li><p>页面缓存</p>
+<p> 除了数据缓存，还有页面缓存。比如使用 HTML5 的 localstroage 或者 cookie。</p>
+</li>
+</ol>
+<ul>
+<li><strong>优点</strong>：<ul>
+<li>减轻数据库的压力</li>
+<li>大幅度提高访问速度</li>
+</ul>
+</li>
+<li><strong>缺点</strong>：<ul>
+<li>需要维护缓存服务器</li>
+<li>提高了编码的复杂性</li>
+</ul>
+</li>
+</ul>
+<p><strong>值得一提的是</strong>：<br>缓存集群的调度算法不同与上面提到的应用服务器和数据库。最好采用“一致性哈希算法”，这样才能提高命中率。这个就不展开讲了，有兴趣的可以查阅相关资料。</p>
+<p><strong>加入缓存后的结构</strong>：</p>
+<p><img src="http://ot0en8caw.bkt.clouddn.com/20180331123903.png" alt="加入缓存后的结构"></p>
+<h1 id="阶段七、数据库水平拆分与垂直拆分"><a href="#阶段七、数据库水平拆分与垂直拆分" class="headerlink" title="阶段七、数据库水平拆分与垂直拆分"></a>阶段七、数据库水平拆分与垂直拆分</h1><p>我们的网站演进到现在，交易、商品、用户的数据都还在同一个数据库中。尽管采取了增加缓存，读写分离的方式，但随着数据库的压力继续增加，数据库的瓶颈越来越突出，此时，我们可以有数据垂直拆分和水平拆分两种选择。</p>
+<h2 id="数据垂直拆分"><a href="#数据垂直拆分" class="headerlink" title="数据垂直拆分"></a>数据垂直拆分</h2><p>垂直拆分的意思是把数据库中不同的业务数据拆分道不同的数据库中，结合现在的例子，就是把交易、商品、用户的数据分开。</p>
+<ul>
+<li><p><strong>优点</strong>：<br>解决了原来把所有业务放在一个数据库中的压力问题。<br>可以根据业务的特点进行更多的优化</p>
+</li>
+<li><p><strong>缺点</strong>：<br>需要维护多个数据库</p>
+</li>
+<li><p><strong>问题</strong>：<br>需要考虑原来跨业务的事务<br>跨数据库的 join</p>
+</li>
+<li><p><strong>解决问题方案</strong>：<br>我们应该在应用层尽量避免跨数据库的事物，如果非要跨数据库，尽量在代码中控制。<br>我们可以通过第三方应用来解决，如上面提到的 mycat ， mycat 提供了丰富的跨库 join 方案，详情可参考 mycat 官方文档。</p>
+</li>
+</ul>
+<p>垂直拆分后的结构如下：<br><img src="http://ot0en8caw.bkt.clouddn.com/20180331123918.png" alt="垂直拆分后"></p>
+<h2 id="数据水平拆分"><a href="#数据水平拆分" class="headerlink" title="数据水平拆分"></a>数据水平拆分</h2><p>数据水平拆分就是把同一个表中的数据拆分到两个甚至多个数据库中。产生数据水平拆分的原因是某个业务的数据量或者更新量到达了单个数据库的瓶颈，这时就可以把这个表拆分到两个或更多个数据库中。</p>
+<ul>
+<li><p><strong>优点</strong>：<br>如果我们能客服以上问题，那么我们将能够很好地对数据量及写入量增长的情况。</p>
+</li>
+<li><p><strong>问题</strong>：<br>访问用户信息的应用系统需要解决 SQL 路由的问题，因为现在用户信息分在了两个数据库中，需要在进行数据操作时了解需要操作的数据在哪里。<br>主键的处理也变得不同，例如原来自增字段，现在不能简单地继续使用了。<br>如果需要分页，就麻烦了。</p>
+</li>
+<li><p><strong>解决问题方案</strong>：<br>我们还是可以通过可以解决第三方中间件，如 mycat。mycat 可以通过 SQL 解析模块对我们的 SQL 进行解析，再根据我们的配置，把请求转发到具体的某个数据库。<br>我们可以通过 UUID 保证唯一或自定义 ID 方案来解决。<br>mycat 也提供了丰富的分页查询方案，比如先从每个数据库做分页查询，再合并数据做一次分页查询等等。<br>数据水平拆分后的结构：</p>
+</li>
+</ul>
+<p><img src="http://ot0en8caw.bkt.clouddn.com/20180331123928.png" alt="水平拆分后"></p>
+<h1 id="阶段八、应用的拆分"><a href="#阶段八、应用的拆分" class="headerlink" title="阶段八、应用的拆分"></a>阶段八、应用的拆分</h1><h2 id="拆分应用"><a href="#拆分应用" class="headerlink" title="拆分应用"></a>拆分应用</h2><p>随着业务的发展，业务越来越多，应用越来越大。我们需要考虑如何避免让应用越来越臃肿。这就需要把应用拆开，从一个应用变为俩个甚至更多。还是以我们上面的例子，我们可以把用户、商品、交易拆分开。变成 “用户、商品” 和“用户，交易”两个子系统。　　</p>
+<p>拆分后的结构：<br><img src="http://ot0en8caw.bkt.clouddn.com/20180331123946.png" alt=""></p>
+<ul>
+<li><p><strong>问题</strong>：<br>这样拆分后，可能会有一些相同的代码，如用户相关的代码，商品和交易都需要用户信息，所以在两个系统中都保留差不多的操作用户信息的代码。如何保证这些代码可以复用是一个需要解决的问题。</p>
+</li>
+<li><p><strong>解决问题</strong>：<br>通过走服务化的路线来解决</p>
+</li>
+</ul>
+<h2 id="走服务化的道路"><a href="#走服务化的道路" class="headerlink" title="走服务化的道路"></a>走服务化的道路</h2><p>为了解决上面拆分应用后所出现的问题，我们把公共的服务拆分出来，形成一种服务化的模式，简称 SOA。</p>
+<p>采用服务化之后的系统结构：<br><img src="http://ot0en8caw.bkt.clouddn.com/20180331123955.png" alt=""></p>
+<ul>
+<li><p><strong>优点</strong>：<br>相同的代码不会散落在不同的应用中了，这些实现放在了各个服务中心，使代码得到更好的维护。<br>我们把对数据库的交互放在了各个服务中心，让”前端“的 web 应用更注重与浏览器交互的工作。</p>
+</li>
+<li><p><strong>问题</strong>：<br>如何进行远程的服务调用</p>
+</li>
+<li><p><strong>解决方法</strong>：<br>我们可以通过下面的引入消息中间件来解决</p>
+</li>
+</ul>
+<h1 id="阶段九、引入消息中间件"><a href="#阶段九、引入消息中间件" class="headerlink" title="阶段九、引入消息中间件"></a>阶段九、引入消息中间件</h1><p>随着网站的继续发展，我们的系统中可能出现不同语言开发的子模块和部署在不同平台的子系统。此时我们需要一个平台来传递可靠的，与平台和语言无关的数据，并且能够把负载均衡透明化，能在调用过程中收集调用数据并分析之，推测出网站的访问增长率等等一系列需求，对于网站应该如何成长做出预测。开源消息中间件有阿里的 dubbo，可以搭配 Google 开源的分布式程序协调服务 zookeeper 实现服务器的注册与发现。</p>
+<p>引入消息中间件后的结构：</p>
+<p><img src="http://ot0en8caw.bkt.clouddn.com/20180331124003.png" alt=""></p>
+<h1 id="十、总结"><a href="#十、总结" class="headerlink" title="十、总结"></a>十、总结</h1><p>以上的演变过程只是一个例子，并不适合所有的网站，实际中网站演进过程与自身业务和不同遇到的问题有密切的关系，没有固定的模式。只有认真的分析和不断地探究，才能发现适合自己网站的架构。</p>
+<p>本文有什么说错的地方，希望大家指出，让我好改正过来，多谢。<br>本文转载自</p>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag"># 随笔</a>
+              <a href="/tags/web/" rel="tag"># web</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/08/10/Java/spring/Spring%20Data%20Jpa%E6%9C%80%E5%A4%A7%E5%88%86%E9%A1%B5size/" rel="prev" title="Spring Data Jpa 最大分页 size --原创 彭应智">
+                  <i class="fa fa-chevron-left"></i> Spring Data Jpa 最大分页 size --原创 彭应智
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/09/13/%E6%94%B6%E9%9B%86/api/tumblr%20Api/" rel="next" title="tumblr Api -- 小米规整">
+                  tumblr Api -- 小米规整 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">米薏</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">244k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:42</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><script defer src="/lib/three.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.8.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'dark',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>米薏小天地</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://air6211332.github.io/"/>
+  <updated>2020-11-13T06:57:17.918Z</updated>
+  <id>https://air6211332.github.io/</id>
+  
+  <author>
+    <name>米薏</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>在Docker环境中备份MySQL并发送邮件</title>
+    <link href="https://air6211332.github.io/2020/11/12/%E6%9D%82%E8%AE%B0/docker_bakup_mysql/"/>
+    <id>https://air6211332.github.io/2020/11/12/%E6%9D%82%E8%AE%B0/docker_bakup_mysql/</id>
+    <published>2020-11-12T02:05:54.974Z</published>
+    <updated>2020-11-13T06:57:17.918Z</updated>
+    
+    <summary type="html">
+    
+      在Centos 8 中看小米与 Docker 环境中如何备份 MySQL 并将备份文件发送到邮件中 归档
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>JetBrains Plugins -- 小米收纳和整理</title>
+    <link href="https://air6211332.github.io/2020/10/21/%E6%9D%82%E8%AE%B0/JetBrains/"/>
+    <id>https://air6211332.github.io/2020/10/21/%E6%9D%82%E8%AE%B0/JetBrains/</id>
+    <published>2020-10-21T07:15:34.000Z</published>
+    <updated>2020-10-21T07:22:23.746Z</updated>
+    
+    <summary type="html">
+    
+      小米的插件备忘录
+    
+    </summary>
+    
+    
+      <category term="JetBrains" scheme="https://air6211332.github.io/categories/JetBrains/"/>
+    
+    
+      <category term="JetBrains" scheme="https://air6211332.github.io/tags/JetBrains/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>通过实例理解 JDK8 的 CompletableFuture</title>
+    <link href="https://air6211332.github.io/2020/10/20/Java/jdk8/%E9%80%9A%E8%BF%87%E5%AE%9E%E4%BE%8B%E7%90%86%E8%A7%A3%20JDK8%20%E7%9A%84%20CompletableFuture/"/>
+    <id>https://air6211332.github.io/2020/10/20/Java/jdk8/%E9%80%9A%E8%BF%87%E5%AE%9E%E4%BE%8B%E7%90%86%E8%A7%A3%20JDK8%20%E7%9A%84%20CompletableFuture/</id>
+    <published>2020-10-20T09:05:34.995Z</published>
+    <updated>2020-10-20T09:05:34.996Z</updated>
+    
+    <summary type="html">
+    
+      本文是针对 JDK8 的 CompletableFuture 类进行解读的示例文章，我们知道不是所有的问题都适合这种风格的并行处理，例如我们所需要处理的元素必须是独立的，数据集要足够大，并且在并行加速方面，每个元素的处理成本要足够高，这样才能补偿建立 fork/join 框架所消耗的成本。本文将通过对 Future 类的解释、对 CompletableFuture 类的解释，以及使用 CompletableFuture 类的若干示例代码完成解读。
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/categories/Java/"/>
+    
+      <category term="JDK8" scheme="https://air6211332.github.io/categories/Java/JDK8/"/>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/tags/Java/"/>
+    
+      <category term="JDK8" scheme="https://air6211332.github.io/tags/JDK8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Stream 使用指南</title>
+    <link href="https://air6211332.github.io/2020/10/20/Java/jdk8/steam/"/>
+    <id>https://air6211332.github.io/2020/10/20/Java/jdk8/steam/</id>
+    <published>2020-10-20T09:05:34.995Z</published>
+    <updated>2020-10-20T09:05:34.995Z</updated>
+    
+    <summary type="html">
+    
+      Stream 作为 Java 8 的一大亮点，它与 java.io 包里的 InputStream 和 OutputStream 是完全不同的概念。Java 8 中的 Stream 是对集合（Collection）对象功能的增强，它专注于对集合对象进行各种非常便利、高效的聚合操作（aggregate operation），或者大批量数据操作 (bulk data operation)。Stream API 借助于同样新出现的 Lambda 表达式，极大的提高编程效率和程序可读性。通常编写并行代码很难而且容易出错, 但使用 Stream API 无需编写一行多线程的代码，就可以很方便地写出高性能的并发程序。
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/categories/Java/"/>
+    
+      <category term="JDK8" scheme="https://air6211332.github.io/categories/Java/JDK8/"/>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/tags/Java/"/>
+    
+      <category term="JDK8" scheme="https://air6211332.github.io/tags/JDK8/"/>
+    
+      <category term="stream" scheme="https://air6211332.github.io/tags/stream/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Servlet 4.0 入门</title>
+    <link href="https://air6211332.github.io/2020/10/20/Java/javaEE/servlet4/"/>
+    <id>https://air6211332.github.io/2020/10/20/Java/javaEE/servlet4/</id>
+    <published>2020-10-20T09:05:34.994Z</published>
+    <updated>2020-10-20T09:05:34.994Z</updated>
+    
+    <summary type="html">
+    
+      如何在 Java servlet 应用程序中使用 HTTP/2 服务器推送和新型 HttpServletMapping 接口
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/categories/Java/"/>
+    
+      <category term="Java EE" scheme="https://air6211332.github.io/categories/Java/Java-EE/"/>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/tags/Java/"/>
+    
+      <category term="Java EE" scheme="https://air6211332.github.io/tags/Java-EE/"/>
+    
+      <category term="Servlet" scheme="https://air6211332.github.io/tags/Servlet/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Google Java编程风格指南</title>
+    <link href="https://air6211332.github.io/2020/10/20/Java/Google%20Java%E7%BC%96%E7%A8%8B%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97/"/>
+    <id>https://air6211332.github.io/2020/10/20/Java/Google%20Java%E7%BC%96%E7%A8%8B%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97/</id>
+    <published>2020-10-20T09:05:34.992Z</published>
+    <updated>2020-10-20T09:05:34.992Z</updated>
+    
+    <summary type="html">
+    
+      这份文档是Google Java编程风格规范的完整定义。当且仅当一个Java源文件符合此文档中的规则， 我们才认为它符合Google的Java编程风格。
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ics文件解析</title>
+    <link href="https://air6211332.github.io/2020/07/23/ics/"/>
+    <id>https://air6211332.github.io/2020/07/23/ics/</id>
+    <published>2020-07-23T02:03:39.000Z</published>
+    <updated>2020-07-23T03:16:04.250Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;本文，翻译并节选至 &lt;a href=&quot;https://tools.ietf.org/html/rfc2445&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;rfc2445
+        
+      
+    
+    </summary>
+    
+    
+      <category term="filetype" scheme="https://air6211332.github.io/categories/filetype/"/>
+    
+    
+      <category term="ics" scheme="https://air6211332.github.io/tags/ics/"/>
+    
+      <category term="filetype" scheme="https://air6211332.github.io/tags/filetype/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>面试题--Hibernate--小米归纳</title>
+    <link href="https://air6211332.github.io/2019/03/23/%E9%9D%A2%E8%AF%95%E9%A2%98/Hibernate/"/>
+    <id>https://air6211332.github.io/2019/03/23/%E9%9D%A2%E8%AF%95%E9%A2%98/Hibernate/</id>
+    <published>2019-03-23T04:00:00.000Z</published>
+    <updated>2020-10-20T09:05:35.005Z</updated>
+    
+    <summary type="html">
+    
+      收集规整的Hibernate的面试题
+    
+    </summary>
+    
+    
+      <category term="面试题" scheme="https://air6211332.github.io/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
+    
+    
+      <category term="面试题" scheme="https://air6211332.github.io/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>面试题--Java集合--小米归纳</title>
+    <link href="https://air6211332.github.io/2019/03/22/%E9%9D%A2%E8%AF%95%E9%A2%98/Java%E9%9B%86%E5%90%88/"/>
+    <id>https://air6211332.github.io/2019/03/22/%E9%9D%A2%E8%AF%95%E9%A2%98/Java%E9%9B%86%E5%90%88/</id>
+    <published>2019-03-22T04:00:00.000Z</published>
+    <updated>2020-10-20T09:05:35.005Z</updated>
+    
+    <summary type="html">
+    
+      收集规整的Java集合的面试题
+    
+    </summary>
+    
+    
+      <category term="面试题" scheme="https://air6211332.github.io/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
+    
+    
+      <category term="面试题" scheme="https://air6211332.github.io/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>面试题--Java基础--小米归纳</title>
+    <link href="https://air6211332.github.io/2019/03/21/%E9%9D%A2%E8%AF%95%E9%A2%98/Java%E5%9F%BA%E7%A1%80/"/>
+    <id>https://air6211332.github.io/2019/03/21/%E9%9D%A2%E8%AF%95%E9%A2%98/Java%E5%9F%BA%E7%A1%80/</id>
+    <published>2019-03-21T04:00:00.000Z</published>
+    <updated>2020-10-20T09:05:35.005Z</updated>
+    
+    <summary type="html">
+    
+      收集规整的Java基础的面试题
+    
+    </summary>
+    
+    
+      <category term="面试题" scheme="https://air6211332.github.io/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
+    
+    
+      <category term="面试题" scheme="https://air6211332.github.io/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>面试题--微服务--小米归纳</title>
+    <link href="https://air6211332.github.io/2019/03/19/%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
+    <id>https://air6211332.github.io/2019/03/19/%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</id>
+    <published>2019-03-19T04:00:00.000Z</published>
+    <updated>2020-10-20T09:05:35.006Z</updated>
+    
+    <summary type="html">
+    
+      收集规整的面试题
+    
+    </summary>
+    
+    
+      <category term="面试题" scheme="https://air6211332.github.io/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
+    
+    
+      <category term="面试题" scheme="https://air6211332.github.io/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>chrome flags -- 小米收纳整理</title>
+    <link href="https://air6211332.github.io/2019/03/12/%E6%9D%82%E8%AE%B0/chrome%20flag/"/>
+    <id>https://air6211332.github.io/2019/03/12/%E6%9D%82%E8%AE%B0/chrome%20flag/</id>
+    <published>2019-03-12T02:59:09.000Z</published>
+    <updated>2020-10-20T09:05:35.002Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;介绍&quot;&gt;&lt;a href=&quot;#介绍&quot; class=&quot;headerlink&quot; title=&quot;介绍&quot;&gt;&lt;/a&gt;介绍&lt;/h1&gt;&lt;p&gt;Chrome
+        
+      
+    
+    </summary>
+    
+    
+      <category term="杂记" scheme="https://air6211332.github.io/categories/%E6%9D%82%E8%AE%B0/"/>
+    
+    
+      <category term="chrome" scheme="https://air6211332.github.io/tags/chrome/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>通过 SecurityContext 询问调用方数据</title>
+    <link href="https://air6211332.github.io/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%204%20%E9%83%A8%E5%88%86/"/>
+    <id>https://air6211332.github.io/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%204%20%E9%83%A8%E5%88%86/</id>
+    <published>2019-02-06T12:00:00.000Z</published>
+    <updated>2020-10-20T09:05:34.994Z</updated>
+    
+    <summary type="html">
+    
+      跨 servlet 和 EJB 容器对用户访问进行身份验证和授权
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/categories/Java/"/>
+    
+      <category term="Java EE" scheme="https://air6211332.github.io/categories/Java/Java-EE/"/>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/tags/Java/"/>
+    
+      <category term="Java EE" scheme="https://air6211332.github.io/tags/Java-EE/"/>
+    
+      <category term="Security" scheme="https://air6211332.github.io/tags/Security/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>通过 IdentityStore 安全地访问用户凭证</title>
+    <link href="https://air6211332.github.io/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%203%20%E9%83%A8%E5%88%86/"/>
+    <id>https://air6211332.github.io/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%203%20%E9%83%A8%E5%88%86/</id>
+    <published>2019-02-06T11:00:00.000Z</published>
+    <updated>2020-10-20T09:05:34.994Z</updated>
+    
+    <summary type="html">
+    
+      通过新 IdentityStore API 对用户执行身份验证和授权
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/categories/Java/"/>
+    
+      <category term="Java EE" scheme="https://air6211332.github.io/categories/Java/Java-EE/"/>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/tags/Java/"/>
+    
+      <category term="Java EE" scheme="https://air6211332.github.io/tags/Java-EE/"/>
+    
+      <category term="Security" scheme="https://air6211332.github.io/tags/Security/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>通过 HttpAuthenticationMechanism 执行 Web 身份验证</title>
+    <link href="https://air6211332.github.io/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%202%20%E9%83%A8%E5%88%86/"/>
+    <id>https://air6211332.github.io/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%202%20%E9%83%A8%E5%88%86/</id>
+    <published>2019-02-06T10:00:00.000Z</published>
+    <updated>2020-10-20T09:05:34.994Z</updated>
+    
+    <summary type="html">
+    
+      通过 Java EE 8 中新的注解驱动的 HTTP 身份验证机制执行经典和自定义的 Servlet 身份验证
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/categories/Java/"/>
+    
+      <category term="Java EE" scheme="https://air6211332.github.io/categories/Java/Java-EE/"/>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/tags/Java/"/>
+    
+      <category term="Java EE" scheme="https://air6211332.github.io/tags/Java-EE/"/>
+    
+      <category term="Security" scheme="https://air6211332.github.io/tags/Security/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>针对云和微服务平台的 Java 企业安全性</title>
+    <link href="https://air6211332.github.io/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%201%20%E9%83%A8%E5%88%86/"/>
+    <id>https://air6211332.github.io/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%201%20%E9%83%A8%E5%88%86/</id>
+    <published>2019-02-06T09:00:00.000Z</published>
+    <updated>2020-10-20T09:05:34.993Z</updated>
+    
+    <summary type="html">
+    
+      新 HttpAuthenticationMechanism、IdentityStore 和 SecurityContext 接口概述
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/categories/Java/"/>
+    
+      <category term="Java EE" scheme="https://air6211332.github.io/categories/Java/Java-EE/"/>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/tags/Java/"/>
+    
+      <category term="Java EE" scheme="https://air6211332.github.io/tags/Java-EE/"/>
+    
+      <category term="Security" scheme="https://air6211332.github.io/tags/Security/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>win10 快捷键-- 小米亲写</title>
+    <link href="https://air6211332.github.io/2018/12/28/%E6%9D%82%E8%AE%B0/win10/"/>
+    <id>https://air6211332.github.io/2018/12/28/%E6%9D%82%E8%AE%B0/win10/</id>
+    <published>2018-12-28T04:00:00.000Z</published>
+    <updated>2020-10-20T09:05:35.002Z</updated>
+    
+    <summary type="html">
+    
+      本米的 win10 快捷键笔记
+    
+    </summary>
+    
+    
+      <category term="杂记" scheme="https://air6211332.github.io/categories/%E6%9D%82%E8%AE%B0/"/>
+    
+    
+      <category term="win10" scheme="https://air6211332.github.io/tags/win10/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>spring mvc valid</title>
+    <link href="https://air6211332.github.io/2018/12/10/Java/spring/spring%20mvc%20valid/"/>
+    <id>https://air6211332.github.io/2018/12/10/Java/spring/spring%20mvc%20valid/</id>
+    <published>2018-12-10T04:00:00.000Z</published>
+    <updated>2020-10-20T09:05:34.998Z</updated>
+    
+    <summary type="html">
+    
+      Spring MVC 校验
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/categories/Java/"/>
+    
+      <category term="Spring" scheme="https://air6211332.github.io/categories/Java/Spring/"/>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/tags/Java/"/>
+    
+      <category term="Spring" scheme="https://air6211332.github.io/tags/Spring/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Spring Framework 5 中的新特性</title>
+    <link href="https://air6211332.github.io/2018/12/10/Java/spring/Spring%20Framework%205%20%E4%B8%AD%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7/"/>
+    <id>https://air6211332.github.io/2018/12/10/Java/spring/Spring%20Framework%205%20%E4%B8%AD%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7/</id>
+    <published>2018-12-10T04:00:00.000Z</published>
+    <updated>2020-10-20T09:05:34.997Z</updated>
+    
+    <summary type="html">
+    
+      Spring 5 如何利用 Java 8 的函数式语法和一种新的反应式编程模型
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/categories/Java/"/>
+    
+      <category term="Spring" scheme="https://air6211332.github.io/categories/Java/Spring/"/>
+    
+    
+      <category term="Java" scheme="https://air6211332.github.io/tags/Java/"/>
+    
+      <category term="Spring" scheme="https://air6211332.github.io/tags/Spring/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>centos7.5 安装 thefuck -- 小米实战</title>
+    <link href="https://air6211332.github.io/2018/11/12/Linux/centos7.5%20%E5%AE%89%E8%A3%85thefuck/"/>
+    <id>https://air6211332.github.io/2018/11/12/Linux/centos7.5%20%E5%AE%89%E8%A3%85thefuck/</id>
+    <published>2018-11-12T04:00:00.000Z</published>
+    <updated>2020-10-20T09:05:34.998Z</updated>
+    
+    <summary type="html">
+    
+      centos7.5 安装 thefuck神器
+    
+    </summary>
+    
+    
+      <category term="Linux" scheme="https://air6211332.github.io/categories/Linux/"/>
+    
+      <category term="centos" scheme="https://air6211332.github.io/categories/Linux/centos/"/>
+    
+    
+      <category term="Linux" scheme="https://air6211332.github.io/tags/Linux/"/>
+    
+      <category term="centos" scheme="https://air6211332.github.io/tags/centos/"/>
+    
+      <category term="thefuck" scheme="https://air6211332.github.io/tags/thefuck/"/>
+    
+  </entry>
+  
+</feed>

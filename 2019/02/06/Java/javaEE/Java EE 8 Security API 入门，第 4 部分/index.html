@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"air6211332.github.io","root":"/","scheme":"Pisces","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="跨 servlet 和 EJB 容器对用户访问进行身份验证和授权">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过 SecurityContext 询问调用方数据">
+<meta property="og:url" content="https://air6211332.github.io/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%204%20%E9%83%A8%E5%88%86/index.html">
+<meta property="og:site_name" content="米薏小天地">
+<meta property="og:description" content="跨 servlet 和 EJB 容器对用户访问进行身份验证和授权">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-02-06T12:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-20T09:05:34.994Z">
+<meta property="article:author" content="米薏">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Java EE">
+<meta property="article:tag" content="Security">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://air6211332.github.io/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%204%20%E9%83%A8%E5%88%86/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>通过 SecurityContext 询问调用方数据 | 米薏小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="米薏小天地" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">米薏小天地</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概览"><span class="nav-number">1.</span> <span class="nav-text">概览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装-Soteria"><span class="nav-number">2.</span> <span class="nav-text">安装 Soteria</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-在-POM-中显式指定-Soteria"><span class="nav-number">2.1.</span> <span class="nav-text">1.在 POM 中显式指定 Soteria</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-使用内置的-Java-EE-8-坐标"><span class="nav-number">2.2.</span> <span class="nav-text">2.使用内置的 Java EE 8 坐标</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SecurityContext-的用途"><span class="nav-number">3.</span> <span class="nav-text">SecurityContext 的用途</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SecurityContext-的工作原理"><span class="nav-number">4.</span> <span class="nav-text">SecurityContext 的工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#调用方数据方法"><span class="nav-number">4.1.</span> <span class="nav-text">调用方数据方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他方法"><span class="nav-number">4.2.</span> <span class="nav-text">其他方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#示例-1：在-servlet-中测试调用方数据"><span class="nav-number">5.</span> <span class="nav-text">示例 1：在 servlet 中测试调用方数据</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SecurityContext-的-getCallerPrincipal-、getPrincipalsByType-和-isCallerInRole-方法"><span class="nav-number">5.1.</span> <span class="nav-text">SecurityContext 的 getCallerPrincipal()、getPrincipalsByType() 和 isCallerInRole() 方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#示例-2：测试调用方对-Web-资源的访问"><span class="nav-number">6.</span> <span class="nav-text">示例 2：测试调用方对 Web 资源的访问</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SecurityContext-的-hasAccessToWebResources-方法"><span class="nav-number">6.1.</span> <span class="nav-text">SecurityContext 的 hasAccessToWebResources() 方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#示例-3：身份验证调用方的访问"><span class="nav-number">7.</span> <span class="nav-text">示例 3：身份验证调用方的访问</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SecurityContext-的-authenticate-方法"><span class="nav-number">7.1.</span> <span class="nav-text">SecurityContext 的 authenticate() 方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结束语"><span class="nav-number">8.</span> <span class="nav-text">结束语</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#测试您的知识"><span class="nav-number">9.</span> <span class="nav-text">测试您的知识</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">米薏</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/air6211332" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;air6211332" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:744471805" title="E-Mail → mailto:744471805" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://iamli.net/" title="https:&#x2F;&#x2F;iamli.net&#x2F;" rel="noopener" target="_blank">木子</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mmpmmmp.github.io/" title="https:&#x2F;&#x2F;mmpmmmp.github.io&#x2F;" rel="noopener" target="_blank">啧啧</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.hoofungson.cn/index.html" title="https:&#x2F;&#x2F;blog.hoofungson.cn&#x2F;index.html" rel="noopener" target="_blank">凤松轩</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xu-shuai.github.io/" title="https:&#x2F;&#x2F;xu-shuai.github.io&#x2F;" rel="noopener" target="_blank">水星很热</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.didispace.com/" title="http:&#x2F;&#x2F;blog.didispace.com&#x2F;" rel="noopener" target="_blank">程序猿DD</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://vincentxin-scott.github.io/" title="https:&#x2F;&#x2F;vincentxin-scott.github.io&#x2F;" rel="noopener" target="_blank">Vincent Xin</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://air6211332.github.io/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%204%20%E9%83%A8%E5%88%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="米薏">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米薏小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          通过 SecurityContext 询问调用方数据
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-02-06 20:00:00" itemprop="dateCreated datePublished" datetime="2019-02-06T20:00:00+08:00">2019-02-06</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-10-20 17:05:34" itemprop="dateModified" datetime="2020-10-20T17:05:34+08:00">2020-10-20</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/Java-EE/" itemprop="url" rel="index"><span itemprop="name">Java EE</span></a>
+        </span>
+    </span>
+
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>8.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">跨 servlet 和 EJB 容器对用户访问进行身份验证和授权</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h1><p>Java EE 8 Security API 入门，第 4 部分</p>
+<blockquote>
+<p><strong>关于本系列</strong></p>
+<p>期盼已久的新 Java EE Security API (JSR 375) 推动 Java 企业安全性进入了云和微服务计算时代。本系列将展示新安全机制如何简化和标准化各种 Java EE 容器实现之间的安全处理，然后帮助您开始在受云支持的项目中使用它们。</p>
+</blockquote>
+<blockquote>
+<p>此内容是该系列 4 部分中的第 4 部分： Java EE 8 Security API 入门</p>
+<ul>
+<li><a href="/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%201%20%E9%83%A8%E5%88%86/">第 1 部分: 针对云和微服务平台的 Java 企业安全性</a></li>
+<li><a href="/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%202%20%E9%83%A8%E5%88%86/">第 2 部分: 通过 HttpAuthenticationMechanism 执行 Web 身份验证</a></li>
+<li><a href="/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%203%20%E9%83%A8%E5%88%86/">第 3 部分: 通过 IdentityStore 安全地访问用户凭证</a></li>
+<li><a href="http://localhost:4000/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%204%20%E9%83%A8%E5%88%86/" target="_blank" rel="noopener">第 4 部分: 通过 SecurityContext 询问调用方数据</a></li>
+</ul>
+</blockquote>
+<p>本系列的上一篇文章介绍了 IdentityStore，这是一个抽象，用于设置和配置对 Java™ Web 应用程序中的用户凭证数据的安全访问。尽管开发人员能结合使用 IdentityStore 和 HttpAuthenticationMechanism 来实现强大的内置身份验证和授权，但 HttpAuthenticationMechanism 的声明性安全模型无法满足某些安全需求。这时 SecurityContext API 就派上了用场。</p>
+<p>在本文中，您将了解如何使用 SecurityContext 以编程方式扩展 <a href="https://www.ibm.com/developerworks/cn/java/j-javaee8-security-api-2/index.html" target="_blank" rel="noopener">HttpAuthenticationMechanism</a>，从而使您的 Web 应用程序能拒绝或允许访问应用程序资源。请注意，本文中的示例基于一个 servlet 容器。</p>
+<p><a href="https://github.com/readlearncode/Java-EE-8-Sampler/tree/master/security-1-0" target="_blank" rel="noopener">获取代码</a></p>
+<h1 id="安装-Soteria"><a href="#安装-Soteria" class="headerlink" title="安装 Soteria"></a>安装 Soteria</h1><p>我们将使用 Java EE 8 Security API 参考实现 Soteria 来探索 IdentityStore。您可以通过两种方式之一获取 Soteria。</p>
+<h2 id="1-在-POM-中显式指定-Soteria"><a href="#1-在-POM-中显式指定-Soteria" class="headerlink" title="1.在 POM 中显式指定 Soteria"></a>1.在 POM 中显式指定 Soteria</h2><p>使用以下 Maven 坐标在 POM 中指定 Soteria：</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.glassfish.soteria<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>javax.security.enterprise<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span> 
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<h2 id="2-使用内置的-Java-EE-8-坐标"><a href="#2-使用内置的-Java-EE-8-坐标" class="headerlink" title="2.使用内置的 Java EE 8 坐标"></a>2.使用内置的 Java EE 8 坐标</h2><p>符合 Java EE 8 规范的服务器将拥有自己的新 Java EE 8 Security API 实现，否则它们会依靠 Sotoria 的实现。无论如何，您都只需要 Java EE 8 坐标：</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>javax<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>javaee-api<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>8.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>scope</span><span class="token punctuation">></span></span>provided<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>scope</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<p>SecurityContext 接口位于 javax.security.enterprise 包中。</p>
+<h1 id="SecurityContext-的用途"><a href="#SecurityContext-的用途" class="headerlink" title="SecurityContext 的用途"></a>SecurityContext 的用途</h1><p>创建 SecurityContext API 是为了跨 servlet 和 EJB 容器提供一致的应用程序安全保护方法。安全上下文可用于访问与目前已验证用户有关的安全相关信息，这可以通过编程方式触发一个基于 Web 的身份验证流程的启动。</p>
+<p>Servlet 和 EJB 容器实现安全上下文对象的方式类似，但存在差异。例如，要获取某个用户在 servlet 容器内的身份，将会使用一个 HttpServletRequest 实例并调用 getUserPrincipal() 方法来返回一个 <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/file/attribute/UserPrincipal.html" target="_blank" rel="noopener">UserPrincipal</a> 对象。在 EJB 容器中，会在一个 EJBContext 实例上调用一个同名的方法。类似地，如果您想要测试某个用户是否属于某个容器角色，则会在 servlet 容器中的 HttpServletRequest 实例上调用 isUserRole() 方法。在 EJB 容器中，会在 EJBContext 实例上调用 isCallerInRole() 方法。</p>
+<p>通过提供一种单一机制，以编程方式跨 servlet 和 EJB 容器获取身份验证和授权信息，新的 SecurityContext 解决了这些和其他差异。新的 Java EE 8 Security API 规范规定，servlet 中必须包含 SecurityContext，而且 EJB 容器应与 Java EE 8 兼容。一些服务器供应商也可能在其他容器中提供 SecurityContext。</p>
+<h1 id="SecurityContext-的工作原理"><a href="#SecurityContext-的工作原理" class="headerlink" title="SecurityContext 的工作原理"></a>SecurityContext 的工作原理</h1><p>SecurityContext 接口为编程性安全提供了一个入口点，而且是一种<a href="http://www.cdi-spec.org/" target="_blank" rel="noopener">可注入的类型</a>。它由以下 5 个方法组成，每个方法都没有默认实现。</p>
+<h2 id="调用方数据方法"><a href="#调用方数据方法" class="headerlink" title="调用方数据方法"></a>调用方数据方法</h2><ul>
+<li>getCallerPrincipal() 方法 获取表示当前已验证用户姓名的、特定于容器的主体。如果当前调用方未经身份验证，则返回 null。返回的主体类型可能与 HttpAuthenticationMechanism 最初建立的类型不同。这个 getCallerPrincipal() 方法与 EJBContext 接口上的同名方法之间的重要区别是，它返回一个 Principal 实例，其中包含未经身份验证的用户的 null 名称。</li>
+<li>getPrincipalsByType() 方法 从经身份验证的调用方的 Subject 返回所有指定类型的 Principal；如果未找到该类型或当前用户未经身份验证，则返回一个空集合。当容器的调用方主体与应用程序的调用方主体具有不同类型时，或者应用程序只需要其调用方主体所提供的信息时，可以使用此方法。</li>
+<li>isCallerInRole() 方法 确定调用方是否包含在以 String 形式传入的角色中。如果用户拥有该角色，则返回 true；否则返回 false。调用此方法所返回的结果，与执行特定于容器的调用时相同。如果 SecurityContext.isUserInRole() 返回 true，那么调用 HttpServletRequest.isUserInRole() 或 EJBContext.isCallerInRole() 将返回 true。</li>
+</ul>
+<h2 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h2><ul>
+<li>hasAccessToWebResource() 方法 确定调用方能否访问当前应用程序中的给定 HTTP 方法的给定 Web 资源。这是依据 Servlet 4.0 的安全约束规范在应用程序的安全约束中进行配置的。</li>
+<li>authenticate() 方法 以编程方式触发容器开始或继续与调用方进行基于 HTTP 的身份验证对话，就好像客户端执行了调用来访问该资源一样。此方法依赖于一个有效的 servlet 上下文，因为它需要一个 HttpServletRequest 和 HttpServletResponse 实例。此方法仅在 servlet 容器中有效。</li>
+</ul>
+<p>在大致了解这些方法和它们的功能后，我们将看一些代码示例。下面的所有示例都适用于 Servlet 4.0 Web 应用程序中的 SecurityContext 方法。</p>
+<h1 id="示例-1：在-servlet-中测试调用方数据"><a href="#示例-1：在-servlet-中测试调用方数据" class="headerlink" title="示例 1：在 servlet 中测试调用方数据"></a>示例 1：在 servlet 中测试调用方数据</h1><h2 id="SecurityContext-的-getCallerPrincipal-、getPrincipalsByType-和-isCallerInRole-方法"><a href="#SecurityContext-的-getCallerPrincipal-、getPrincipalsByType-和-isCallerInRole-方法" class="headerlink" title="SecurityContext 的 getCallerPrincipal()、getPrincipalsByType() 和 isCallerInRole() 方法"></a>SecurityContext 的 getCallerPrincipal()、getPrincipalsByType() 和 isCallerInRole() 方法</h2><p>清单 3 将 SecurityContext 的 3 个用于测试调用方数据的方法组合到一个 servlet 中，以便演示它们的用法。在下面的示例中，SecurityContext 可用作一个 CDI bean，所以可注入到任何上下文感知的实例中。</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/securityContextServlet"</span><span class="token punctuation">)</span> 
+<span class="token annotation punctuation">@ServletSecurity</span><span class="token punctuation">(</span><span class="token annotation punctuation">@HttpConstraint</span><span class="token punctuation">(</span>rolesAllowed <span class="token operator">=</span> <span class="token string">"admin"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> 
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SecurityContextServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Inject</span> 
+    <span class="token keyword">private</span> SecurityContext securityContext<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Override</span> 
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doGet</span><span class="token punctuation">(</span>HttpServletRequest request<span class="token punctuation">,</span> HttpServletResponse response<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// Example 1: Is the caller is one of the three roles: admin, user and demo </span>
+
+        PrintWriter pw <span class="token operator">=</span> response<span class="token punctuation">.</span><span class="token function">getWriter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        <span class="token keyword">boolean</span> role <span class="token operator">=</span> securityContext<span class="token punctuation">.</span><span class="token function">isCallerInRole</span><span class="token punctuation">(</span><span class="token string">"admin"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        pw<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"User has role 'admin': "</span> <span class="token operator">+</span> role <span class="token operator">+</span> <span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        role <span class="token operator">=</span> securityContext<span class="token punctuation">.</span><span class="token function">isCallerInRole</span><span class="token punctuation">(</span><span class="token string">"user"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        pw<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"User has role 'user': "</span> <span class="token operator">+</span> role <span class="token operator">+</span> <span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        role <span class="token operator">=</span> securityContext<span class="token punctuation">.</span><span class="token function">isCallerInRole</span><span class="token punctuation">(</span><span class="token string">"demo"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        pw<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"User has role 'demo': "</span> <span class="token operator">+</span> role <span class="token operator">+</span> <span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+
+        <span class="token comment" spellcheck="true">// Example 2: What is the caller principal name </span>
+        String contextName <span class="token operator">=</span> null<span class="token punctuation">;</span> 
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>securityContext<span class="token punctuation">.</span><span class="token function">getCallerPrincipal</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+            contextName <span class="token operator">=</span> securityContext<span class="token punctuation">.</span><span class="token function">getCallerPrincipal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        <span class="token punctuation">}</span> 
+        response<span class="token punctuation">.</span><span class="token function">getWriter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"context username: "</span> <span class="token operator">+</span> contextName <span class="token operator">+</span> <span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+
+        <span class="token comment" spellcheck="true">// Example 3: Retrieve all CustomPrincipal </span>
+        Set<span class="token operator">&lt;</span>CustomPrincipal<span class="token operator">></span> customPrincipals <span class="token operator">=</span> securityContext <span class="token punctuation">.</span><span class="token function">getPrincipalsByType</span><span class="token punctuation">(</span>CustomPrincipal<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>CustomPrincipal customPrincipal <span class="token operator">:</span> customPrincipals<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+            response<span class="token punctuation">.</span><span class="token function">getWriter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>customPrincipal<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        <span class="token punctuation">}</span> 
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span></code></pre>
+<p>在第一个示例中，安全上下文用于测试目前已经过身份验证的用户所参与的逻辑角色。测试的角色包括 admin、user 和 demo。</p>
+<p>在第二个示例中，将了解如何使用 getCallerPrincipal() 方法来检索表示已经过身份验证的调用方的名称的、特定于平台的调用方主体。如果当前用户未经过身份验证，此方法将会返回 null，所以必须执行适当的 null 检查。</p>
+<p>最后一个示例将展示如何使用 getPrincipalsByType() 方法按类型检索一组主体。</p>
+<p>接下来，在清单 4 中，您会看到一个实现 Principal 接口的自定义主体。对 getPrincipalsByType() 方法的调用将检索一组此类型的主体。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CustomPrincipal</span> <span class="token keyword">implements</span> <span class="token class-name">Principal</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String name<span class="token punctuation">;</span> 
+
+    <span class="token keyword">public</span> <span class="token function">CustomPrincipal</span><span class="token punctuation">(</span>String name<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span> 
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@Override</span> <span class="token keyword">public</span> String <span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> name<span class="token punctuation">;</span> 
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span></code></pre>
+<h1 id="示例-2：测试调用方对-Web-资源的访问"><a href="#示例-2：测试调用方对-Web-资源的访问" class="headerlink" title="示例 2：测试调用方对 Web 资源的访问"></a>示例 2：测试调用方对 Web 资源的访问</h1><h2 id="SecurityContext-的-hasAccessToWebResources-方法"><a href="#SecurityContext-的-hasAccessToWebResources-方法" class="headerlink" title="SecurityContext 的 hasAccessToWebResources() 方法"></a>SecurityContext 的 hasAccessToWebResources() 方法</h2><p>清单 5 将展示如何使用 hasAccessToWebResource() 来测试调用方使用指定的 HTTP 方法对给定 Web 资源的访问。在这里，我将 SecurityContext 实例注入到了 servlet 中，并调用了 hasAccessToWebResource()。我们想要测试调用方是否拥有位于 URI /secretServlet 上的资源的 GET 访问权（如清单 6 所示），所以我们将显示的参数传递给该方法。如果调用方拥有 admin 角色，该方法将返回 true；否则会返回 false。</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/hasAccessServlet"</span><span class="token punctuation">)</span> 
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HasAccessServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Inject</span> <span class="token keyword">private</span> SecurityContext securityContext<span class="token punctuation">;</span> 
+
+    <span class="token annotation punctuation">@Override</span> 
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doGet</span><span class="token punctuation">(</span>HttpServletRequest req<span class="token punctuation">,</span> HttpServletResponse res<span class="token punctuation">)</span> <span class="token keyword">throws</span> ServletException<span class="token punctuation">,</span> IOException <span class="token punctuation">{</span> 
+        <span class="token keyword">boolean</span> hasAccess <span class="token operator">=</span> securityContext<span class="token punctuation">.</span><span class="token function">hasAccessToWebResource</span><span class="token punctuation">(</span><span class="token string">"/secretServlet"</span><span class="token punctuation">,</span> <span class="token string">"GET"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span></code></pre>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/secretServlet"</span><span class="token punctuation">)</span> 
+<span class="token annotation punctuation">@ServletSecurity</span><span class="token punctuation">(</span><span class="token annotation punctuation">@HttpConstraint</span><span class="token punctuation">(</span>rolesAllowed <span class="token operator">=</span> <span class="token string">"admin"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> 
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SecretServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span></code></pre>
+<h1 id="示例-3：身份验证调用方的访问"><a href="#示例-3：身份验证调用方的访问" class="headerlink" title="示例 3：身份验证调用方的访问"></a>示例 3：身份验证调用方的访问</h1><h2 id="SecurityContext-的-authenticate-方法"><a href="#SecurityContext-的-authenticate-方法" class="headerlink" title="SecurityContext 的 authenticate() 方法"></a>SecurityContext 的 authenticate() 方法</h2><p>最后一个示例将展示如何使用 authenticate() 方法来验证用户输入的凭证。首先，用户将一个用户名和密码输入 JSF 中，如清单 7 所示。提交后，LoginBean 处理并验证凭证，如清单 8 所示。</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name"><span class="token namespace">jsf:</span>id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>form<span class="token punctuation">"</span></span><span class="token punctuation">></span></span> 
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span>Username <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span> 
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name"><span class="token namespace">jsf:</span>id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>username<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span> <span class="token attr-name"><span class="token namespace">jsf:</span>value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>#{loginBean.username}<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span> 
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span> 
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span> 
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span>Password <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span> 
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name"><span class="token namespace">jsf:</span>id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>password<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>password<span class="token punctuation">"</span></span> <span class="token attr-name"><span class="token namespace">jsf:</span>value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>#{loginBean.password}<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span> 
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span> 
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span> 
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>Login<span class="token punctuation">"</span></span> <span class="token attr-name"><span class="token namespace">jsf:</span>action</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>#{loginBean.login}<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span> 
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span> 
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span></code></pre>
+<p>输入的 username 和 password 是在 LoginBean 上设置的（清单 8），以便生成一个 Credential 实例。然后使用此凭证创建一个 AuthenticationParameters 实例。此实例与 HttpServletRequest 和 HttpServletResponse 实例一起传递给 authenticate() 方法，后两个实例是从 FacesContext 检索获得的。然后，AuthenticationParameters 实例返回 AuthenticationStatus 枚举的一个值。</p>
+<p>AuthenticationStatus 枚举表明了身份验证流程的状态，并且可以是以下值之一：</p>
+<ul>
+<li><strong>NOT_DONE</strong>：调用了身份验证机制，但它决定不执行身份验证。通常，在采用抢先安全保护时会返回此状态。</li>
+<li><strong>SEND_CONTINUE</strong>：调用了身份验证机制，而且发起了与调用方的多步骤身份验证对话。</li>
+<li><strong>SUCCESS</strong>：调用了身份验证机制，而且已成功对调用方进行身份验证。调用方主体可用。<br>SEND_FAILURE：调用了身份验证机制，但调用方未成功通过身份验证，因此调用方主体不可用。</li>
+</ul>
+<p>请注意，在 Java EE 8 中，JSF 2.3 已允许注入 FacesContext。</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Named</span> 
+<span class="token annotation punctuation">@RequestScoped</span> 
+<span class="token annotation punctuation">@FacesConfig</span><span class="token punctuation">(</span>version <span class="token operator">=</span> JSF_2_3<span class="token punctuation">)</span> 
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LoginBean</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Inject</span> 
+    <span class="token keyword">private</span> SecurityContext securityContext<span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Inject</span> 
+    <span class="token keyword">private</span> FacesContext facesContext<span class="token punctuation">;</span> 
+    <span class="token keyword">private</span> String username<span class="token punctuation">,</span> password<span class="token punctuation">;</span> 
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">login</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Credential credential <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">UsernamePasswordCredential</span><span class="token punctuation">(</span>username<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Password</span><span class="token punctuation">(</span>password<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        AuthenticationStatus status <span class="token operator">=</span> securityContext<span class="token punctuation">.</span><span class="token function">authenticate</span><span class="token punctuation">(</span> <span class="token function">getRequestFrom</span><span class="token punctuation">(</span>facesContext<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">getResponseFrom</span><span class="token punctuation">(</span>facesContext<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">withParams</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">credential</span><span class="token punctuation">(</span>credential<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>status<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>SEND_CONTINUE<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            facesContext<span class="token punctuation">.</span><span class="token function">responseComplete</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>status<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>SEND_FAILURE<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">addError</span><span class="token punctuation">(</span>facesContext<span class="token punctuation">,</span> <span class="token string">"Authentication failed"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        <span class="token punctuation">}</span> 
+    <span class="token punctuation">}</span> 
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> HttpServletResponse <span class="token function">getResponseFrom</span><span class="token punctuation">(</span>FacesContext context<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> <span class="token punctuation">(</span>HttpServletResponse<span class="token punctuation">)</span> context <span class="token punctuation">.</span><span class="token function">getExternalContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">.</span><span class="token function">getResponse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+    <span class="token punctuation">}</span> 
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> HttpServletRequest <span class="token function">getRequestFrom</span><span class="token punctuation">(</span>FacesContext context<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> <span class="token punctuation">(</span>HttpServletRequest<span class="token punctuation">)</span> context <span class="token punctuation">.</span><span class="token function">getExternalContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">.</span><span class="token function">getRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+    <span class="token punctuation">}</span> 
+
+    <span class="token comment" spellcheck="true">// Getter and setters omitted </span>
+<span class="token punctuation">}</span></code></pre>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>在本系列中，您了解了新 Java EE 8 Security API 如何将一些最受欢迎且值得信赖的 Java EE 技术集成到常见的企业身份验证和授权例程中。除了其他特性之外，Java 开发人员社区想要一种在 servlet 和 EJB 容器间保持一致的简化的安全模型，SecurityContext 恰好提供了此模型。</p>
+<p>尽管我的示例基于一个 servlet 容器，但 SecurityContext 使得跨 servlet 和 EJB 容器一致地询问调用方主体变得很简单。如果开发人员需要为最近的 Java EE 应用程序组合 XML 与基于注解的配置，他们会对迁移到纯注解框架感到高兴。新 Security API 也支持 XML 声明，这使得将旧项目迁移到 Java EE 8 变得相对简单和轻松，而没有任何更改安全性配置的迫切需求。</p>
+<p>希望您喜欢本系列，并能将新知识应用到实践中。一定要在下面的最终测验中测试您的理解情况。</p>
+<h1 id="测试您的知识"><a href="#测试您的知识" class="headerlink" title="测试您的知识"></a>测试您的知识</h1><ol>
+<li>以下哪些方法属于 SecurityContext 接口？<ol>
+<li>getCallerPrincipal()</li>
+<li>isUserRole()</li>
+<li>getPrincipalsByType()</li>
+<li>isCallerInRole()</li>
+<li>isCallerPrincipal()</li>
+</ol>
+</li>
+<li>hasAccessToWebResource() 方法对什么执行测试？<ol>
+<li>指定的用户能否访问给定的资源</li>
+<li>servlet 是否有权访问资源</li>
+<li>调用方能否访问指定的资源</li>
+<li>调用方能否访问远程 Web 资源</li>
+</ol>
+</li>
+<li>getPrincipalsByType() 方法会返回什么？<ol>
+<li>来自调用方 Subject 的一组给定类型的 Principal</li>
+<li>来自上下文的给定类型的 Principal</li>
+<li>一个给定类型的 Principal 列表</li>
+<li>如果调用方未经授权，则返回 Null</li>
+<li>如果调用方未经授权，则返回一个空集合</li>
+</ol>
+</li>
+<li>以下哪些是 getCallerPrincipal() 方法的行为？<ol>
+<li>返回经过验证的调用方的名称</li>
+<li>如果当前调用方未经过身份验证，则返回 null</li>
+<li>返回调用方的一组 Principal</li>
+<li>返回经过验证的调用方的特定于平台的 Principal</li>
+</ol>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">问题</th>
+<th align="center">答案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">134</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">15</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">24</td>
+</tr>
+</tbody></table>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/Java-EE/" rel="tag"># Java EE</a>
+              <a href="/tags/Security/" rel="tag"># Security</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/02/06/Java/javaEE/Java%20EE%208%20Security%20API%20%E5%85%A5%E9%97%A8%EF%BC%8C%E7%AC%AC%203%20%E9%83%A8%E5%88%86/" rel="prev" title="通过 IdentityStore 安全地访问用户凭证">
+                  <i class="fa fa-chevron-left"></i> 通过 IdentityStore 安全地访问用户凭证
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/03/12/%E6%9D%82%E8%AE%B0/chrome%20flag/" rel="next" title="chrome flags -- 小米收纳整理">
+                  chrome flags -- 小米收纳整理 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">米薏</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">244k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:42</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><script defer src="/lib/three.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.8.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'dark',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

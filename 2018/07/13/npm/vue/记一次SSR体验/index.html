@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"air6211332.github.io","root":"/","scheme":"Pisces","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="一次VUE的SSR体验，基于nuxtjs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次VUE的SSR体验 --小米原创">
+<meta property="og:url" content="https://air6211332.github.io/2018/07/13/npm/vue/%E8%AE%B0%E4%B8%80%E6%AC%A1SSR%E4%BD%93%E9%AA%8C/index.html">
+<meta property="og:site_name" content="米薏小天地">
+<meta property="og:description" content="一次VUE的SSR体验，基于nuxtjs">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-07-13T04:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-20T09:05:34.999Z">
+<meta property="article:author" content="米薏">
+<meta property="article:tag" content="随笔">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="SSR">
+<meta property="article:tag" content="nuxtjs">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://air6211332.github.io/2018/07/13/npm/vue/%E8%AE%B0%E4%B8%80%E6%AC%A1SSR%E4%BD%93%E9%AA%8C/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>记一次VUE的SSR体验 --小米原创 | 米薏小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="米薏小天地" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">米薏小天地</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#开始"><span class="nav-number">1.</span> <span class="nav-text">开始</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目录结构"><span class="nav-number">2.</span> <span class="nav-text">目录结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#目录"><span class="nav-number">2.1.</span> <span class="nav-text">目录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#资源目录"><span class="nav-number">2.1.1.</span> <span class="nav-text">资源目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组件目录"><span class="nav-number">2.1.2.</span> <span class="nav-text">组件目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#布局目录"><span class="nav-number">2.1.3.</span> <span class="nav-text">布局目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中间件目录"><span class="nav-number">2.1.4.</span> <span class="nav-text">中间件目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#页面目录"><span class="nav-number">2.1.5.</span> <span class="nav-text">页面目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插件目录"><span class="nav-number">2.1.6.</span> <span class="nav-text">插件目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态文件目录"><span class="nav-number">2.1.7.</span> <span class="nav-text">静态文件目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Store-目录"><span class="nav-number">2.1.8.</span> <span class="nav-text">Store 目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nuxt-config-js-文件"><span class="nav-number">2.1.9.</span> <span class="nav-text">nuxt.config.js 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#package-json-文件"><span class="nav-number">2.1.10.</span> <span class="nav-text">package.json 文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#别名"><span class="nav-number">2.2.</span> <span class="nav-text">别名</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置"><span class="nav-number">3.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#build"><span class="nav-number">3.1.</span> <span class="nav-text">build</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cache"><span class="nav-number">3.2.</span> <span class="nav-text">cache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#css"><span class="nav-number">3.3.</span> <span class="nav-text">css</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dev"><span class="nav-number">3.4.</span> <span class="nav-text">dev</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#env"><span class="nav-number">3.5.</span> <span class="nav-text">env</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#generate"><span class="nav-number">3.6.</span> <span class="nav-text">generate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#head"><span class="nav-number">3.7.</span> <span class="nav-text">head</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#loading"><span class="nav-number">3.8.</span> <span class="nav-text">loading</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#plugins"><span class="nav-number">3.9.</span> <span class="nav-text">plugins</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rootDir"><span class="nav-number">3.10.</span> <span class="nav-text">rootDir</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#router"><span class="nav-number">3.11.</span> <span class="nav-text">router</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#srcDir"><span class="nav-number">3.12.</span> <span class="nav-text">srcDir</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#transition"><span class="nav-number">3.13.</span> <span class="nav-text">transition</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#路由"><span class="nav-number">4.</span> <span class="nav-text">路由</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础路由"><span class="nav-number">4.1.</span> <span class="nav-text">基础路由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态路由"><span class="nav-number">4.2.</span> <span class="nav-text">动态路由</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#路由参数校验"><span class="nav-number">4.2.1.</span> <span class="nav-text">路由参数校验</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌套路由"><span class="nav-number">4.3.</span> <span class="nav-text">嵌套路由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态嵌套路由"><span class="nav-number">4.4.</span> <span class="nav-text">动态嵌套路由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过渡动效"><span class="nav-number">4.5.</span> <span class="nav-text">过渡动效</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#全局过渡动效设置"><span class="nav-number">4.5.1.</span> <span class="nav-text">全局过渡动效设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#页面过渡动效设置"><span class="nav-number">4.5.2.</span> <span class="nav-text">页面过渡动效设置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中间件"><span class="nav-number">4.6.</span> <span class="nav-text">中间件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#视图"><span class="nav-number">5.</span> <span class="nav-text">视图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模板"><span class="nav-number">5.1.</span> <span class="nav-text">模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#布局"><span class="nav-number">5.2.</span> <span class="nav-text">布局</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#默认布局"><span class="nav-number">5.2.1.</span> <span class="nav-text">默认布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误页面"><span class="nav-number">5.2.2.</span> <span class="nav-text">错误页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#个性化布局"><span class="nav-number">5.2.3.</span> <span class="nav-text">个性化布局</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#页面"><span class="nav-number">5.3.</span> <span class="nav-text">页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTML-头部"><span class="nav-number">5.4.</span> <span class="nav-text">HTML 头部</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#默认-Meta-标签"><span class="nav-number">5.4.1.</span> <span class="nav-text">默认 Meta 标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#个性化特定页面的-Meta-标签"><span class="nav-number">5.4.2.</span> <span class="nav-text">个性化特定页面的 Meta 标签</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#资源文件"><span class="nav-number">6.</span> <span class="nav-text">资源文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#资源文件-1"><span class="nav-number">6.1.</span> <span class="nav-text">资源文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Webpack-构建"><span class="nav-number">6.2.</span> <span class="nav-text">Webpack 构建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#静态文件"><span class="nav-number">6.3.</span> <span class="nav-text">静态文件</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">米薏</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/air6211332" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;air6211332" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:744471805" title="E-Mail → mailto:744471805" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://iamli.net/" title="https:&#x2F;&#x2F;iamli.net&#x2F;" rel="noopener" target="_blank">木子</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mmpmmmp.github.io/" title="https:&#x2F;&#x2F;mmpmmmp.github.io&#x2F;" rel="noopener" target="_blank">啧啧</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.hoofungson.cn/index.html" title="https:&#x2F;&#x2F;blog.hoofungson.cn&#x2F;index.html" rel="noopener" target="_blank">凤松轩</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xu-shuai.github.io/" title="https:&#x2F;&#x2F;xu-shuai.github.io&#x2F;" rel="noopener" target="_blank">水星很热</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.didispace.com/" title="http:&#x2F;&#x2F;blog.didispace.com&#x2F;" rel="noopener" target="_blank">程序猿DD</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://vincentxin-scott.github.io/" title="https:&#x2F;&#x2F;vincentxin-scott.github.io&#x2F;" rel="noopener" target="_blank">Vincent Xin</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://air6211332.github.io/2018/07/13/npm/vue/%E8%AE%B0%E4%B8%80%E6%AC%A1SSR%E4%BD%93%E9%AA%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="米薏">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米薏小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记一次VUE的SSR体验 --小米原创
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-07-13 12:00:00" itemprop="dateCreated datePublished" datetime="2018-07-13T12:00:00+08:00">2018-07-13</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-10-20 17:05:34" itemprop="dateModified" datetime="2020-10-20T17:05:34+08:00">2020-10-20</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9A%8F%E7%AC%94/" itemprop="url" rel="index"><span itemprop="name">随笔</span></a>
+        </span>
+    </span>
+
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>10k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">一次VUE的SSR体验，基于nuxtjs</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h1><blockquote>
+<p>nuxtjs是vue官网推荐的SSR框架</p>
+</blockquote>
+<pre class=" language-cmd"><code class="language-cmd"> vue init nuxt-community/starter-template <project-name></code></pre>
+<h1 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h1><p>Nuxt.js 的应用目录架构提供了良好的代码分层结构，适用于开发或大或小的应用。 当然，你也可以根据自己的偏好组织应用代码。</p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><h3 id="资源目录"><a href="#资源目录" class="headerlink" title="资源目录"></a>资源目录</h3><p>资源目录 assets 用于组织未编译的静态资源如 LESS、SASS 或 JavaScript。</p>
+<h3 id="组件目录"><a href="#组件目录" class="headerlink" title="组件目录"></a>组件目录</h3><p>组件目录 components 用于组织应用的 Vue.js 组件。Nuxt.js 不会扩展增强该目录下 Vue.js 组件，即这些组件不会像页面组件那样有 asyncData 方法的特性。</p>
+<h3 id="布局目录"><a href="#布局目录" class="headerlink" title="布局目录"></a>布局目录</h3><p>布局目录 layouts 用于组织应用的布局组件。</p>
+<p>该目录名为Nuxt.js保留的，不可更改。</p>
+<h3 id="中间件目录"><a href="#中间件目录" class="headerlink" title="中间件目录"></a>中间件目录</h3><p>middleware 目录用于存放应用的中间件。</p>
+<h3 id="页面目录"><a href="#页面目录" class="headerlink" title="页面目录"></a>页面目录</h3><p>页面目录 pages 用于组织应用的路由及视图。Nuxt.js 框架读取该目录下所有的 .vue 文件并自动生成对应的路由配置。</p>
+<p>该目录名为Nuxt.js保留的，不可更改。</p>
+<h3 id="插件目录"><a href="#插件目录" class="headerlink" title="插件目录"></a>插件目录</h3><p>插件目录 plugins 用于组织那些需要在 根vue.js应用 实例化之前需要运行的 Javascript 插件。</p>
+<h3 id="静态文件目录"><a href="#静态文件目录" class="headerlink" title="静态文件目录"></a>静态文件目录</h3><p>静态文件目录 static 用于存放应用的静态文件，此类文件不会被 Nuxt.js 调用 Webpack 进行构建编译处理。 服务器启动的时候，该目录下的文件会映射至应用的根路径 / 下。</p>
+<p>举个例子: /static/robots.txt 映射至 /robots.txt</p>
+<p>该目录名为Nuxt.js保留的，不可更改。</p>
+<h3 id="Store-目录"><a href="#Store-目录" class="headerlink" title="Store 目录"></a>Store 目录</h3><p>store 目录用于组织应用的 Vuex 状态树 文件。 Nuxt.js 框架集成了 Vuex 状态树 的相关功能配置，在 store 目录下创建一个 index.js 文件可激活这些配置。</p>
+<p>该目录名为Nuxt.js保留的，不可更改。</p>
+<h3 id="nuxt-config-js-文件"><a href="#nuxt-config-js-文件" class="headerlink" title="nuxt.config.js 文件"></a>nuxt.config.js 文件</h3><p>nuxt.config.js 文件用于组织Nuxt.js 应用的个性化配置，以便覆盖默认配置。</p>
+<p>该文件名为Nuxt.js保留的，不可更改。</p>
+<h3 id="package-json-文件"><a href="#package-json-文件" class="headerlink" title="package.json 文件"></a>package.json 文件</h3><p>package.json 文件用于描述应用的依赖关系和对外暴露的脚本接口。</p>
+<p>该文件名为Nuxt.js保留的，不可更改。</p>
+<h2 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h2><table>
+<thead>
+<tr>
+<th align="center">别名</th>
+<th align="center">目录</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">~</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center">~assets</td>
+<td align="center">/assets</td>
+</tr>
+<tr>
+<td align="center">~components</td>
+<td align="center">/components</td>
+</tr>
+<tr>
+<td align="center">~pages</td>
+<td align="center">/pages</td>
+</tr>
+<tr>
+<td align="center">~plugins</td>
+<td align="center">/plugins</td>
+</tr>
+<tr>
+<td align="center">~static</td>
+<td align="center">/static</td>
+</tr>
+<tr>
+<td align="center">~store</td>
+<td align="center">/store</td>
+</tr>
+<tr>
+<td align="center">## 文件别名：</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>|别名|    使用方法|    描述|<br>|:-:|:-:|<br>|<del>store|    const store = require(‘</del>store’)|    导入 vuex 状态树实例。|<br>|<del>router|    const router = require(‘</del>router’)    |导入 vue-router 实例。|</p>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><blockquote>
+<p>Nuxt.js 默认的配置涵盖了大部分使用情形，可通过 nuxt.config.js 来覆盖默认的配置。</p>
+</blockquote>
+<h2 id="build"><a href="#build" class="headerlink" title="build"></a>build</h2><blockquote>
+<p>Nuxt.js 允许你在自动生成的 vendor.bundle.js 文件中添加一些模块，以减少应用 bundle 的体积。如果你的应用依赖第三方模块，这个配置项是十分实用的。</p>
+</blockquote>
+<h2 id="cache"><a href="#cache" class="headerlink" title="cache"></a>cache</h2><blockquote>
+<p>该配置项让你开启组件缓存策略以提升渲染性能。</p>
+</blockquote>
+<h2 id="css"><a href="#css" class="headerlink" title="css"></a>css</h2><blockquote>
+<p>该配置项用于定义应用的全局（所有页面均需引用的）样式文件、模块或第三方库。</p>
+</blockquote>
+<h2 id="dev"><a href="#dev" class="headerlink" title="dev"></a>dev</h2><blockquote>
+<p>该配置项用于配置 Nuxt.js 应用是开发还是生产模式。</p>
+</blockquote>
+<h2 id="env"><a href="#env" class="headerlink" title="env"></a>env</h2><blockquote>
+<p>该配置项用于定义应用客户端和服务端的环境变量。</p>
+</blockquote>
+<h2 id="generate"><a href="#generate" class="headerlink" title="generate"></a>generate</h2><blockquote>
+<p>该配置项用于定义每个动态路由的参数，Nuxt.js 依据这些路由配置生成对应目录结构的静态文件。</p>
+</blockquote>
+<h2 id="head"><a href="#head" class="headerlink" title="head"></a>head</h2><blockquote>
+<p>该配置项用于配置应用默认的meta标签。</p>
+</blockquote>
+<h2 id="loading"><a href="#loading" class="headerlink" title="loading"></a>loading</h2><blockquote>
+<p>该配置项用于个性化定制 Nuxt.js 使用的加载组件。</p>
+</blockquote>
+<h2 id="plugins"><a href="#plugins" class="headerlink" title="plugins"></a>plugins</h2><blockquote>
+<p>该配置项用于配置那些需要在 根vue.js应用 实例化之前需要运行的 Javascript 插件。</p>
+</blockquote>
+<h2 id="rootDir"><a href="#rootDir" class="headerlink" title="rootDir"></a>rootDir</h2><blockquote>
+<p>该配置项用于配置 Nuxt.js 应用的根目录。</p>
+</blockquote>
+<h2 id="router"><a href="#router" class="headerlink" title="router"></a>router</h2><blockquote>
+<p>该配置项可用于覆盖 Nuxt.js 默认的 vue-router 配置。</p>
+</blockquote>
+<h2 id="srcDir"><a href="#srcDir" class="headerlink" title="srcDir"></a>srcDir</h2><blockquote>
+<p>该配置项用于配置应用的源码目录路径。</p>
+</blockquote>
+<h2 id="transition"><a href="#transition" class="headerlink" title="transition"></a>transition</h2><blockquote>
+<p>该配置项用于个性化配置应用过渡效果属性的默认值。</p>
+</blockquote>
+<h1 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h1><p>Nuxt.js 依据 pages 目录结构自动生成 vue-router 模块的路由配置。</p>
+<h2 id="基础路由"><a href="#基础路由" class="headerlink" title="基础路由"></a>基础路由</h2><p>假设 pages 的目录结构如下：</p>
+<pre><code>pages/
+--| user/
+-----| index.vue
+-----| one.vue
+--| index.vue</code></pre><p>那么，Nuxt.js 自动生成的路由配置如下：</p>
+<pre><code>router: {
+  routes: [
+    {
+      name: 'index',
+      path: '/',
+      component: 'pages/index.vue'
+    },
+    {
+      name: 'user',
+      path: '/user',
+      component: 'pages/user/index.vue'
+    },
+    {
+      name: 'user-one',
+      path: '/user/one',
+      component: 'pages/user/one.vue'
+    }
+  ]
+}</code></pre><h2 id="动态路由"><a href="#动态路由" class="headerlink" title="动态路由"></a>动态路由</h2><p>在 Nuxt.js 里面定义带参数的动态路由，需要创建对应的以下划线作为前缀的 Vue 文件 或 目录。</p>
+<p>以下目录结构：</p>
+<pre><code>pages/
+--| _slug/
+-----| comments.vue
+-----| index.vue
+--| users/
+-----| _id.vue
+--| index.vue</code></pre><p>Nuxt.js 生成对应的路由配置表为：</p>
+<pre class=" language-js"><code class="language-js">router<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+  routes<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      name<span class="token punctuation">:</span> <span class="token string">'index'</span><span class="token punctuation">,</span>
+      path<span class="token punctuation">:</span> <span class="token string">'/'</span><span class="token punctuation">,</span>
+      component<span class="token punctuation">:</span> <span class="token string">'pages/index.vue'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+      name<span class="token punctuation">:</span> <span class="token string">'users-id'</span><span class="token punctuation">,</span>
+      path<span class="token punctuation">:</span> <span class="token string">'/users/:id?'</span><span class="token punctuation">,</span>
+      component<span class="token punctuation">:</span> <span class="token string">'pages/users/_id.vue'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+      name<span class="token punctuation">:</span> <span class="token string">'slug'</span><span class="token punctuation">,</span>
+      path<span class="token punctuation">:</span> <span class="token string">'/:slug'</span><span class="token punctuation">,</span>
+      component<span class="token punctuation">:</span> <span class="token string">'pages/_slug/index.vue'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+      name<span class="token punctuation">:</span> <span class="token string">'slug-comments'</span><span class="token punctuation">,</span>
+      path<span class="token punctuation">:</span> <span class="token string">'/:slug/comments'</span><span class="token punctuation">,</span>
+      component<span class="token punctuation">:</span> <span class="token string">'pages/_slug/comments.vue'</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span></code></pre>
+<p>你会发现名称为 users-id 的路由路径带有 :id? 参数，表示该路由是可选的。如果你想将它设置为必选的路由，需要在 users/_id 目录内创建一个 index.vue 文件。</p>
+<h3 id="路由参数校验"><a href="#路由参数校验" class="headerlink" title="路由参数校验"></a>路由参数校验</h3><p>Nuxt.js 可以让你在动态路由组件中定义参数校验方法。</p>
+<p>举个例子： pages/users/_id.vue</p>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
+  validate <span class="token punctuation">(</span><span class="token punctuation">{</span> params <span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// Must be a number</span>
+    <span class="token keyword">return</span> <span class="token regex">/^\d+$/</span><span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>params<span class="token punctuation">.</span>id<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>如果校验方法返回的值不为 true， Nuxt.js 将自动加载显示 404 错误页面。</p>
+<h2 id="嵌套路由"><a href="#嵌套路由" class="headerlink" title="嵌套路由"></a>嵌套路由</h2><p>你可以通过 vue-router 的子路由创建 Nuxt.js 应用的嵌套路由。</p>
+<p>创建内嵌子路由，你需要添加一个 Vue 文件，同时添加一个与该文件同名的目录用来存放子视图组件。</p>
+<p>别忘了在父级 Vue 文件内增加 <nuxt-child> 用于显示子视图内容。</nuxt-child></p>
+<p>假设文件结构如：</p>
+<pre><code>pages/
+--| users/
+-----| _id.vue
+-----| index.vue
+--| users.vue</code></pre><p>Nuxt.js 自动生成的路由配置如下：</p>
+<pre class=" language-js"><code class="language-js">router<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+  routes<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      path<span class="token punctuation">:</span> <span class="token string">'/users'</span><span class="token punctuation">,</span>
+      component<span class="token punctuation">:</span> <span class="token string">'pages/users.vue'</span><span class="token punctuation">,</span>
+      children<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+          path<span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+          component<span class="token punctuation">:</span> <span class="token string">'pages/users/index.vue'</span><span class="token punctuation">,</span>
+          name<span class="token punctuation">:</span> <span class="token string">'users'</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span>
+          path<span class="token punctuation">:</span> <span class="token string">':id'</span><span class="token punctuation">,</span>
+          component<span class="token punctuation">:</span> <span class="token string">'pages/users/_id.vue'</span><span class="token punctuation">,</span>
+          name<span class="token punctuation">:</span> <span class="token string">'users-id'</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="动态嵌套路由"><a href="#动态嵌套路由" class="headerlink" title="动态嵌套路由"></a>动态嵌套路由</h2><p>这个应用场景比较少见，但是 Nuxt.js 仍然支持：在动态路由下配置动态子路由。</p>
+<p>假设文件结构如下：</p>
+<pre><code>pages/
+--| _category/
+-----| _subCategory/
+--------| _id.vue
+--------| index.vue
+-----| _subCategory.vue
+-----| index.vue
+--| _category.vue
+--| index.vue</code></pre><p>Nuxt.js 自动生成的路由配置如下：</p>
+<pre class=" language-js"><code class="language-js">router<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+  routes<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      path<span class="token punctuation">:</span> <span class="token string">'/'</span><span class="token punctuation">,</span>
+      component<span class="token punctuation">:</span> <span class="token string">'pages/index.vue'</span><span class="token punctuation">,</span>
+      name<span class="token punctuation">:</span> <span class="token string">'index'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+      path<span class="token punctuation">:</span> <span class="token string">'/:category'</span><span class="token punctuation">,</span>
+      component<span class="token punctuation">:</span> <span class="token string">'pages/_category.vue'</span><span class="token punctuation">,</span>
+      children<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+          path<span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+          component<span class="token punctuation">:</span> <span class="token string">'pages/_category/index.vue'</span><span class="token punctuation">,</span>
+          name<span class="token punctuation">:</span> <span class="token string">'category'</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span>
+          path<span class="token punctuation">:</span> <span class="token string">':subCategory'</span><span class="token punctuation">,</span>
+          component<span class="token punctuation">:</span> <span class="token string">'pages/_category/_subCategory.vue'</span><span class="token punctuation">,</span>
+          children<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+            <span class="token punctuation">{</span>
+              path<span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+              component<span class="token punctuation">:</span> <span class="token string">'pages/_category/_subCategory/index.vue'</span><span class="token punctuation">,</span>
+              name<span class="token punctuation">:</span> <span class="token string">'category-subCategory'</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token punctuation">{</span>
+              path<span class="token punctuation">:</span> <span class="token string">':id'</span><span class="token punctuation">,</span>
+              component<span class="token punctuation">:</span> <span class="token string">'pages/_category/_subCategory/_id.vue'</span><span class="token punctuation">,</span>
+              name<span class="token punctuation">:</span> <span class="token string">'category-subCategory-id'</span>
+            <span class="token punctuation">}</span>
+          <span class="token punctuation">]</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="过渡动效"><a href="#过渡动效" class="headerlink" title="过渡动效"></a>过渡动效</h2><p>Nuxt.js 使用 Vue.js 的<transition>组件来实现路由切换时的过渡动效。</transition></p>
+<h3 id="全局过渡动效设置"><a href="#全局过渡动效设置" class="headerlink" title="全局过渡动效设置"></a>全局过渡动效设置</h3><p>Nuxt.js 默认使用的过渡效果名称为 page</p>
+<p>如果想让每一个页面的切换都有淡出 (fade) 效果，我们需要创建一个所有路由共用的 CSS 文件。所以我们可以在 assets/ 目录下创建这个文件：</p>
+<p>在全局样式文件 assets/main.css 里添加一下样式：</p>
+<pre class=" language-css"><code class="language-css"><span class="token selector"><span class="token class">.page-enter-active</span>, <span class="token class">.page-leave-active</span> </span><span class="token punctuation">{</span>
+  <span class="token property">transition</span><span class="token punctuation">:</span> opacity <span class="token number">.5</span>s<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token selector"><span class="token class">.page-enter</span>, <span class="token class">.page-leave-active</span> </span><span class="token punctuation">{</span>
+  <span class="token property">opacity</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>然后添加到 nuxt.config.js 文件中：</p>
+<pre class=" language-js"><code class="language-js">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
+  css<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token string">'assets/main.css'</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span></code></pre>
+<h3 id="页面过渡动效设置"><a href="#页面过渡动效设置" class="headerlink" title="页面过渡动效设置"></a>页面过渡动效设置</h3><p>如果想给某个页面自定义过渡特效的话，只要在该页面组件中配置 transition 字段即可：</p>
+<p>在全局样式 assets/main.css 中添加一下内容：</p>
+<pre class=" language-css"><code class="language-css"><span class="token selector"><span class="token class">.test-enter-active</span>, <span class="token class">.test-leave-active</span> </span><span class="token punctuation">{</span>
+  <span class="token property">transition</span><span class="token punctuation">:</span> opacity <span class="token number">.5</span>s<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token selector"><span class="token class">.test-enter</span>, <span class="token class">.test-leave-active</span> </span><span class="token punctuation">{</span>
+  <span class="token property">opacity</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>然后我们将页面组件中的 transition 属性的值设置为 test 即可：</p>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
+  transition<span class="token punctuation">:</span> <span class="token string">'test'</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h2><p>中间件允许您定义一个自定义函数运行在一个页面或一组页面渲染之前。</p>
+<p>每一个中间件应放置在 middleware/ 目录。文件名的名称将成为中间件名称(middleware/auth.js将成为 auth 中间件)。</p>
+<p>一个中间件接收 context 作为第一个参数：</p>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  context<span class="token punctuation">.</span>userAgent <span class="token operator">=</span> context<span class="token punctuation">.</span>isServer <span class="token operator">?</span> context<span class="token punctuation">.</span>req<span class="token punctuation">.</span>headers<span class="token punctuation">[</span><span class="token string">'user-agent'</span><span class="token punctuation">]</span> <span class="token punctuation">:</span> navigator<span class="token punctuation">.</span>userAgent
+<span class="token punctuation">}</span></code></pre>
+<p>中间件执行流程顺序：</p>
+<ul>
+<li>nuxt.config.js</li>
+<li>匹配布局</li>
+<li>匹配页面</li>
+<li>中间件可以异步执行,只需要返回一个 Promise 或使用第2个 callback 作为第一个参数：</li>
+</ul>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">import</span> axios <span class="token keyword">from</span> <span class="token string">'axios'</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">{</span> route <span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> axios<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">'http://my-stats-api.com'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    url<span class="token punctuation">:</span> route<span class="token punctuation">.</span>fullPath
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span></code></pre>
+<p>然后在你的 nuxt.config.js 、 layouts 或者 pages 中使用中间件:</p>
+<pre class=" language-js"><code class="language-js">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
+  router<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    middleware<span class="token punctuation">:</span> <span class="token string">'stats'</span>
+  <span class="token punctuation">}</span>  
+<span class="token punctuation">}</span></code></pre>
+<p>stats 中间件将在每个路由改变时被调用。</p>
+<h1 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h1><p>本章节的内容阐述了如何在 Nuxt.js 应用中为指定的路由配置数据和视图，包括应用模板、页面、布局和HTML头部等内容。</p>
+<h2 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h2><p>你可以定制化 Nuxt.js 默认的应用模板。</p>
+<p>定制化默认的 html 模板，只需要在应用根目录下创建一个 app.html 的文件。</p>
+<p>默认模板为：</p>
+<pre class=" language-html"><code class="language-html"><span class="token doctype">&lt;!DOCTYPE html></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span> <span class="token attr-name">{{</span> <span class="token attr-name">HTML_ATTRS</span> <span class="token attr-name">}}</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    {{ HEAD }}
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span> <span class="token attr-name">{{</span> <span class="token attr-name">BODY_ATTRS</span> <span class="token attr-name">}}</span><span class="token punctuation">></span></span>
+    {{ APP }}
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
+<p>举个例子，你可以修改模板添加 IE 的条件表达式：</p>
+<pre class=" language-html"><code class="language-html"><span class="token doctype">&lt;!DOCTYPE html></span>
+<span class="token comment" spellcheck="true">&lt;!--[if IE 9]>&lt;html lang="en-US" class="lt-ie9 ie9" {{ HTML_ATTRS }}>&lt;![endif]--></span>
+<span class="token comment" spellcheck="true">&lt;!--[if (gt IE 9)|!(IE)]>&lt;!--></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span> <span class="token attr-name">{{</span> <span class="token attr-name">HTML_ATTRS</span> <span class="token attr-name">}}</span><span class="token punctuation">></span></span><span class="token comment" spellcheck="true">&lt;!--&lt;![endif]--></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    {{ HEAD }}
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span> <span class="token attr-name">{{</span> <span class="token attr-name">BODY_ATTRS</span> <span class="token attr-name">}}</span><span class="token punctuation">></span></span>
+    {{ APP }}
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
+<h2 id="布局"><a href="#布局" class="headerlink" title="布局"></a>布局</h2><p>Nuxt.js 允许你扩展默认的布局，或在 layout 目录下创建自定义的布局。</p>
+<h3 id="默认布局"><a href="#默认布局" class="headerlink" title="默认布局"></a>默认布局</h3><p>可通过添加 layouts/default.vue 文件来扩展应用的默认布局。</p>
+<p>别忘了在布局文件中添加 <nuxt> 组件用于显示页面的主体内容。</nuxt></p>
+<p>默认布局的源码如下：</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>nuxt</span><span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span></code></pre>
+<h3 id="错误页面"><a href="#错误页面" class="headerlink" title="错误页面"></a>错误页面</h3><p>你可以通过编辑 layouts/error.vue 文件来定制化错误页面.</p>
+<p>这个布局文件不需要包含 <nuxt> 标签。你可以把这个布局文件当成是显示应用错误（404，500等）的组件。</nuxt></p>
+<p>默认的错误页面源码在 这里.</p>
+<p>举一个个性化错误页面的例子 layouts/error.vue:</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>container<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span> <span class="token attr-name">v-if</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>error.statusCode <span class="token punctuation">=</span><span class="token punctuation">=</span><span class="token punctuation">=</span> 404<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>页面不存在<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span> <span class="token attr-name">v-else</span><span class="token punctuation">></span></span>应用发生错误异常<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>nuxt-link</span> <span class="token attr-name">to</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>首 页<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>nuxt-link</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script language-javascript">
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
+  props<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'error'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  layout<span class="token punctuation">:</span> <span class="token string">'blog'</span> <span class="token comment" spellcheck="true">// 你可以为错误页面指定自定义的布局</span>
+<span class="token punctuation">}</span>
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span></code></pre>
+<h3 id="个性化布局"><a href="#个性化布局" class="headerlink" title="个性化布局"></a>个性化布局</h3><p>layouts 根目录下的所有文件都属于个性化布局文件，可以在页面组件中利用 layout 属性来引用。</p>
+<p>请确保在布局文件里面增加 <code>&lt;nuxt/&gt;</code> 组件用于显示页面非布局内容。</p>
+<p>举个例子 layouts/blog.vue:</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>这里是博客导航<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>nuxt</span><span class="token punctuation">/></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span></code></pre>
+<p>在 pages/posts.vue 里， 可以指定页面组件使用 blog 布局。</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script language-javascript">
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
+  layout<span class="token punctuation">:</span> <span class="token string">'blog'</span>
+<span class="token punctuation">}</span>
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span></code></pre>
+<h2 id="页面"><a href="#页面" class="headerlink" title="页面"></a>页面</h2><p>页面组件实际上是 Vue 组件，只不过 Nuxt.js 为这些组件添加了一些特殊的配置项（对应 Nuxt.js 提供的功能特性）以便你能快速开发通用应用。</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>red<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Hello {{ name }}!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script language-javascript">
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
+  asyncData <span class="token punctuation">(</span>context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// called every time before loading the component</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span> name<span class="token punctuation">:</span> <span class="token string">'World'</span> <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  fetch <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// The fetch method is used to fill the store before rendering the page</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  head <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// Set Meta Tags for this Page</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment" spellcheck="true">// and more functionality to discover</span>
+  <span class="token operator">...</span>
+<span class="token punctuation">}</span>
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">></span></span><span class="token style language-css">
+<span class="token selector"><span class="token class">.red</span> </span><span class="token punctuation">{</span>
+  <span class="token property">color</span><span class="token punctuation">:</span> red<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">></span></span></code></pre>
+<p>Nuxt.js 为页面提供的特殊配置项：</p>
+<table>
+<thead>
+<tr>
+<th align="center">属性名</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">asyncData</td>
+<td align="center">最重要的一个键, 支持 异步数据处理，另外该方法的第一个参数为当前页面组件的 上下文对象。</td>
+</tr>
+<tr>
+<td align="center">fetch</td>
+<td align="center">与 asyncData 方法类似，用于在渲染页面之前获取数据填充应用的状态树（store）。不同的是 fetch 方法不会设置组件的数据。</td>
+</tr>
+<tr>
+<td align="center">head</td>
+<td align="center">配置当前页面的 Meta 标签, 详情参考 页面头部配置API。</td>
+</tr>
+<tr>
+<td align="center">layout</td>
+<td align="center">指定当前页面使用的布局（layouts 根目录下的布局文件）。</td>
+</tr>
+<tr>
+<td align="center">transition</td>
+<td align="center">指定页面切换的过渡动效, 详情请参考 页面过渡动效。</td>
+</tr>
+<tr>
+<td align="center">scrollToTop</td>
+<td align="center">布尔值，默认: false。 用于判定渲染页面前是否需要将当前页面滚动至顶部。这个配置用于 嵌套路由的应用场景。</td>
+</tr>
+<tr>
+<td align="center">validate</td>
+<td align="center">校验方法用于校验 动态路由的参数。</td>
+</tr>
+<tr>
+<td align="center">middleware</td>
+<td align="center">指定页面的中间件，中间件会在页面渲染之前被调用</td>
+</tr>
+</tbody></table>
+<h2 id="HTML-头部"><a href="#HTML-头部" class="headerlink" title="HTML 头部"></a>HTML 头部</h2><p>Nuxt.js 使用了 vue-meta 更新应用的 头部标签(Head) and html 属性。</p>
+<p>Nuxt.js 使用以下参数配置 vue-meta:</p>
+<pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>
+  keyName<span class="token operator">:</span> 'head'<span class="token punctuation">,</span> // 设置 meta 信息的组件对象的字段，vue-meta 会根据这 key 值获取 meta 信息
+  attribute<span class="token operator">:</span> 'n-head'<span class="token punctuation">,</span> // vue-meta 在监听标签时所添加的属性名
+  ssrAttribute<span class="token operator">:</span> 'n-head-ssr'<span class="token punctuation">,</span> // 让 vue-meta 获知 meta 信息已完成服务端渲染的属性名
+  tagIDKeyName<span class="token operator">:</span> 'hid' // 让 vue-meta 用来决定是否覆盖还是追加 tag 的属性名
+<span class="token punctuation">}</span></code></pre>
+<h3 id="默认-Meta-标签"><a href="#默认-Meta-标签" class="headerlink" title="默认 Meta 标签"></a>默认 Meta 标签</h3><p>Nuxt.js 允许你在 nuxt.config.js 里定义应用所需的所有默认 meta 标签，在 head 字段里配置就可以了：</p>
+<p>一个使用自定义 viewport 和 谷歌字体 的配置示例：</p>
+<pre class=" language-json"><code class="language-json">head<span class="token operator">:</span> <span class="token punctuation">{</span>
+  meta<span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span> charset<span class="token operator">:</span> 'utf<span class="token number">-8</span>' <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span> name<span class="token operator">:</span> 'viewport'<span class="token punctuation">,</span> content<span class="token operator">:</span> 'width=device-width<span class="token punctuation">,</span> initial-scale=<span class="token number">1</span>' <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  link<span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span> rel<span class="token operator">:</span> 'stylesheet'<span class="token punctuation">,</span> href<span class="token operator">:</span> 'https<span class="token operator">:</span>//fonts.googleapis.com/css?family=Roboto' <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span></code></pre>
+<h3 id="个性化特定页面的-Meta-标签"><a href="#个性化特定页面的-Meta-标签" class="headerlink" title="个性化特定页面的 Meta 标签"></a>个性化特定页面的 Meta 标签</h3><blockquote>
+<p>注意：为了避免子组件中的meta标签不能正确覆盖父组件中相同的标签而产生重复的现象，建议利用 hid 键为meta标签配一个唯一的标识编号。请阅读关于 vue-meta 的更多信息。</p>
+</blockquote>
+<h1 id="资源文件"><a href="#资源文件" class="headerlink" title="资源文件"></a>资源文件</h1><h2 id="资源文件-1"><a href="#资源文件-1" class="headerlink" title="资源文件"></a>资源文件</h2><p>默认情况下 <code>Nuxt</code> 使用 <code>vue-loader</code>、<code>file-loader</code> 以及 <code>url-loader</code> 这几个 <code>Webpack</code> 加载器来处理文件的加载和引用。对于不需要通过 <code>Webpack</code> 处理的静态资源文件，可以放置在 <code>static</code> 目录中。</p>
+<h2 id="Webpack-构建"><a href="#Webpack-构建" class="headerlink" title="Webpack 构建"></a>Webpack 构建</h2><p>默认情况下, vue-loader自动使用 <code>css-loader</code> 和Vue模板编译器来编译处理vue文件中的样式和模板。在此编译过程中，所有的资源URL例如 <code>&lt;img src="..."&gt;</code>、 <code>background: url(...)</code> 和 CSS中的 <code>@import</code> 均会被解析成模块通过 <code>require</code> 引用。</p>
+<p>举个例子, 假设我们有以下文件目录结构：</p>
+<pre><code>-| assets/
+----| image.png
+-| pages/
+----| index.vue</code></pre><p>如果我们在CSS代码中使用 <code>url('~assets/image.png')</code>, 那么编译后它将被转换成 <code>require('~assets/image.png')</code>。</p>
+<p>又或者如果我们在 <code>pages/index.vue</code> 中使用以下代码引用图片资源：</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>img</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>~assets/image.png<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span></code></pre>
+<p>那么编译后会被转换成：</p>
+<pre class=" language-js"><code class="language-js"><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'img'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> attrs<span class="token punctuation">:</span> <span class="token punctuation">{</span> src<span class="token punctuation">:</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'~assets/image.png'</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre>
+<p><code>.png</code> 并非 <code>JavaScript</code> 文件, 因此 <code>Nuxt.js</code> 通过配置<code>Webpack</code>使用<code>file-loader</code> 和 <code>url-loader</code> 这两个加载器来处理此类引用。</p>
+<p>这样做的好处有：</p>
+<p><code>file-loader</code> 能让你指定从什么地方拷贝资源文件以及发布后放到哪个目录去，并能让你使用版本哈希码来重命名发布后的文件来实现增量更新和更好的缓存策略。<br><code>url-loader</code> 能根据你指定的文件大小阈值，来判断一个文件是转换成内联的base-64码（如果该文件尺寸小于该阈值）还是使用file-loader来降级处理。小文件base-64化能有效减少HTTP请求数。<br>实际上, Nuxt.js 默认的加载器配置如下：</p>
+<pre class=" language-js"><code class="language-js"><span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    test<span class="token punctuation">:</span> <span class="token regex">/\.(png|jpe?g|gif|svg)$/</span><span class="token punctuation">,</span>
+    loader<span class="token punctuation">:</span> <span class="token string">'url-loader'</span><span class="token punctuation">,</span>
+    query<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      limit<span class="token punctuation">:</span> <span class="token number">1000</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 1KB</span>
+      name<span class="token punctuation">:</span> <span class="token string">'img/[name].[hash:7].[ext]'</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    test<span class="token punctuation">:</span> <span class="token regex">/\.(woff2?|eot|ttf|otf)(\?.*)?$/</span><span class="token punctuation">,</span>
+    loader<span class="token punctuation">:</span> <span class="token string">'url-loader'</span><span class="token punctuation">,</span>
+    query<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      limit<span class="token punctuation">:</span> <span class="token number">1000</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 1 KB</span>
+      name<span class="token punctuation">:</span> <span class="token string">'fonts/[name].[hash:7].[ext]'</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">]</span></code></pre>
+<p>也即文件（图片或字体）的尺寸小于1K的时候，它将会被转换成 Base-64 data URL 来内联引用；否则它将被拷贝至指定的子目录（在 .nuxt 目录下），并被重命名（加上7位的哈希码作为版本标识）以实现更好的缓存策略。</p>
+<p>当用 nuxt 命令运行我们的应用时，pages/index.vue 中的模板代码：</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>img</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>~assets/image.png<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span></code></pre>
+<p>将被编译生成：</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>img</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/_nuxt/img/image.0c61159.png<span class="token punctuation">"</span></span><span class="token punctuation">></span></span></code></pre>
+<h2 id="静态文件"><a href="#静态文件" class="headerlink" title="静态文件"></a>静态文件</h2><p>如果你的静态资源文件需要 Webpack 做构建编译处理，可以放到 <code>assets</code> 目录，否则可以放到 <code>static</code> 目录中去。</p>
+<p>Nuxt 服务器启动的时候，该目录下的文件会映射至应用的根路径 <code>/</code> 下，像 <code>robots.txt</code> 或 <code>sitemap.xml</code> 这种类型的文件就很适合放到 <code>static</code> 目录中。</p>
+<p>你可以在代码中使用根路径 <code>/</code> 结合资源相对路径来引用静态资源：</p>
+<pre class=" language-html"><code class="language-html"><span class="token comment" spellcheck="true">&lt;!-- 引用 static 目录下的图片 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>img</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/my-image.png<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+
+<span class="token comment" spellcheck="true">&lt;!-- 引用 assets 目录下经过 webpack 构建处理后的图片 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>img</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/assets/my-image-2.png<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span></code></pre>
+<p>为完待续—-</p>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag"># 随笔</a>
+              <a href="/tags/Vue/" rel="tag"># Vue</a>
+              <a href="/tags/SSR/" rel="tag"># SSR</a>
+              <a href="/tags/nuxtjs/" rel="tag"># nuxtjs</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/07/10/%E6%9E%B6%E6%9E%84/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E7%9A%84%203%20%E4%B8%AA%E5%8E%9F%E5%88%99/" rel="prev" title="架构设计的 3 个原则">
+                  <i class="fa fa-chevron-left"></i> 架构设计的 3 个原则
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/07/13/npm/%E5%88%9B%E5%BB%BAnpm%E7%A7%81%E4%BB%93/" rel="next" title="npm私有仓库搭建">
+                  npm私有仓库搭建 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">米薏</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">244k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:42</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><script defer src="/lib/three.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.8.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'dark',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

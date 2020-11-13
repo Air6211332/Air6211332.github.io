@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"air6211332.github.io","root":"/","scheme":"Pisces","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="本文是针对 JDK8 的 CompletableFuture 类进行解读的示例文章，我们知道不是所有的问题都适合这种风格的并行处理，例如我们所需要处理的元素必须是独立的，数据集要足够大，并且在并行加速方面，每个元素的处理成本要足够高，这样才能补偿建立 fork&#x2F;join 框架所消耗的成本。本文将通过对 Future 类的解释、对 CompletableFuture 类的解释，以及使用 Comple">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过实例理解 JDK8 的 CompletableFuture">
+<meta property="og:url" content="https://air6211332.github.io/2020/10/20/Java/jdk8/%E9%80%9A%E8%BF%87%E5%AE%9E%E4%BE%8B%E7%90%86%E8%A7%A3%20JDK8%20%E7%9A%84%20CompletableFuture/index.html">
+<meta property="og:site_name" content="米薏小天地">
+<meta property="og:description" content="本文是针对 JDK8 的 CompletableFuture 类进行解读的示例文章，我们知道不是所有的问题都适合这种风格的并行处理，例如我们所需要处理的元素必须是独立的，数据集要足够大，并且在并行加速方面，每个元素的处理成本要足够高，这样才能补偿建立 fork&#x2F;join 框架所消耗的成本。本文将通过对 Future 类的解释、对 CompletableFuture 类的解释，以及使用 Comple">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.ibm.com/developerworks/cn/java/j-cf-of-jdk8/image001.png">
+<meta property="article:published_time" content="2020-10-20T09:05:34.995Z">
+<meta property="article:modified_time" content="2020-10-20T09:05:34.996Z">
+<meta property="article:author" content="米薏">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="JDK8">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.ibm.com/developerworks/cn/java/j-cf-of-jdk8/image001.png">
+
+
+<link rel="canonical" href="https://air6211332.github.io/2020/10/20/Java/jdk8/%E9%80%9A%E8%BF%87%E5%AE%9E%E4%BE%8B%E7%90%86%E8%A7%A3%20JDK8%20%E7%9A%84%20CompletableFuture/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>通过实例理解 JDK8 的 CompletableFuture | 米薏小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="米薏小天地" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">米薏小天地</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#准备知识"><span class="nav-number">2.</span> <span class="nav-text">准备知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#异步计算"><span class="nav-number">2.1.</span> <span class="nav-text">异步计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回调函数"><span class="nav-number">2.2.</span> <span class="nav-text">回调函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Future-接口介绍"><span class="nav-number">2.3.</span> <span class="nav-text">Future 接口介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CompletableFuture-类介绍"><span class="nav-number">2.4.</span> <span class="nav-text">CompletableFuture 类介绍</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CompletableFuture-类使用示例"><span class="nav-number">3.</span> <span class="nav-text">CompletableFuture 类使用示例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建完整的-CompletableFuture"><span class="nav-number">3.1.</span> <span class="nav-text">创建完整的 CompletableFuture</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行简单的异步场景"><span class="nav-number">3.2.</span> <span class="nav-text">运行简单的异步场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#同步执行动作示例"><span class="nav-number">3.3.</span> <span class="nav-text">同步执行动作示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步执行动作示例"><span class="nav-number">3.4.</span> <span class="nav-text">异步执行动作示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用固定的线程池完成异步执行动作示例"><span class="nav-number">3.5.</span> <span class="nav-text">使用固定的线程池完成异步执行动作示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作为消费者消费计算结果示例"><span class="nav-number">3.6.</span> <span class="nav-text">作为消费者消费计算结果示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步消费示例"><span class="nav-number">3.7.</span> <span class="nav-text">异步消费示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算过程中的异常示例"><span class="nav-number">3.8.</span> <span class="nav-text">计算过程中的异常示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取消计算任务"><span class="nav-number">3.9.</span> <span class="nav-text">取消计算任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个-CompletableFuture-VS-两个异步计算"><span class="nav-number">3.10.</span> <span class="nav-text">一个 CompletableFuture VS 两个异步计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行两个阶段后执行"><span class="nav-number">3.11.</span> <span class="nav-text">运行两个阶段后执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#整合两个计算结果"><span class="nav-number">3.12.</span> <span class="nav-text">整合两个计算结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anyOf-方法"><span class="nav-number">3.13.</span> <span class="nav-text">anyOf() 方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#当所有的-CompletableFuture-完成后创建-CompletableFuture"><span class="nav-number">3.14.</span> <span class="nav-text">当所有的 CompletableFuture 完成后创建 CompletableFuture</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实际案例"><span class="nav-number">3.15.</span> <span class="nav-text">实际案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结束语"><span class="nav-number">4.</span> <span class="nav-text">结束语</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资源"><span class="nav-number">5.</span> <span class="nav-text">参考资源</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">米薏</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/air6211332" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;air6211332" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:744471805" title="E-Mail → mailto:744471805" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://iamli.net/" title="https:&#x2F;&#x2F;iamli.net&#x2F;" rel="noopener" target="_blank">木子</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mmpmmmp.github.io/" title="https:&#x2F;&#x2F;mmpmmmp.github.io&#x2F;" rel="noopener" target="_blank">啧啧</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.hoofungson.cn/index.html" title="https:&#x2F;&#x2F;blog.hoofungson.cn&#x2F;index.html" rel="noopener" target="_blank">凤松轩</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xu-shuai.github.io/" title="https:&#x2F;&#x2F;xu-shuai.github.io&#x2F;" rel="noopener" target="_blank">水星很热</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.didispace.com/" title="http:&#x2F;&#x2F;blog.didispace.com&#x2F;" rel="noopener" target="_blank">程序猿DD</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://vincentxin-scott.github.io/" title="https:&#x2F;&#x2F;vincentxin-scott.github.io&#x2F;" rel="noopener" target="_blank">Vincent Xin</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://air6211332.github.io/2020/10/20/Java/jdk8/%E9%80%9A%E8%BF%87%E5%AE%9E%E4%BE%8B%E7%90%86%E8%A7%A3%20JDK8%20%E7%9A%84%20CompletableFuture/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="米薏">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米薏小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          通过实例理解 JDK8 的 CompletableFuture
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-20 17:05:34" itemprop="dateCreated datePublished" datetime="2020-10-20T17:05:34+08:00">2020-10-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/JDK8/" itemprop="url" rel="index"><span itemprop="name">JDK8</span></a>
+        </span>
+    </span>
+
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>15k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>14 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">本文是针对 JDK8 的 CompletableFuture 类进行解读的示例文章，我们知道不是所有的问题都适合这种风格的并行处理，例如我们所需要处理的元素必须是独立的，数据集要足够大，并且在并行加速方面，每个元素的处理成本要足够高，这样才能补偿建立 fork/join 框架所消耗的成本。本文将通过对 Future 类的解释、对 CompletableFuture 类的解释，以及使用 CompletableFuture 类的若干示例代码完成解读。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Java 5 并发库主要关注于异步任务的处理，它采用了这样一种模式，producer 线程创建任务并且利用阻塞队列将其传递给任务的 consumer。这种模型在 Java 7 和 8 中进一步发展，并且开始支持另外一种风格的任务执行，那就是将任务的数据集分解为子集，每个子集都可以由独立且同质的子任务来负责处理。</p>
+<p>这种风格的基础库也就是 fork/join 框架，它允许程序员规定数据集该如何进行分割，并且支持将子任务提交到默认的标准线程池中，也就是 “通用的”ForkJoinPool。Java 8 中，fork/join 并行功能借助并行流的机制变得更加具有可用性。但是，不是所有的问题都适合这种风格的并行处理：所处理的元素必须是独立的，数据集要足够大，并且在并行加速方面，每个元素的处理成本要足够高，这样才能补偿建立 fork/join 框架所消耗的成本。CompletableFuture 类则是 Java 8 在并行流方面的创新。</p>
+<h1 id="准备知识"><a href="#准备知识" class="headerlink" title="准备知识"></a>准备知识</h1><h2 id="异步计算"><a href="#异步计算" class="headerlink" title="异步计算"></a>异步计算</h2><p>所谓异步调用其实就是实现一个可无需等待被调用函数的返回值而让操作继续运行的方法。在 Java 语言中，简单的讲就是另启一个线程来完成调用中的部分计算，使调用继续运行或返回，而不需要等待计算结果。但调用者仍需要取线程的计算结果。</p>
+<h2 id="回调函数"><a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h2><p>回调函数比较通用的解释是，它是一个通过函数指针调用的函数。如果你把函数的指针（地址）作为参数传递给另一个函数，当这个指针被用为调用它所指向的函数时，我们就说这是回调函数。回调函数不是由该函数的实现方直接调用，而是在特定的事件或条件发生时由另外一方调用的，用于对该事件或条件进行响应。</p>
+<p>回调函数的机制：</p>
+<ol>
+<li><p>定义一个回调函数；</p>
+</li>
+<li><p>提供函数实现的一方在初始化时候，将回调函数的函数指针注册给调用者；</p>
+</li>
+<li><p>当特定的事件或条件发生的时候，调用者使用函数指针调用回调函数对事件进行处理。</p>
+</li>
+</ol>
+<p>回调函数通常与原始调用者处于同一层次，如图 1 所示：</p>
+<p>图 1 回调函数示例图<br><img src="https://www.ibm.com/developerworks/cn/java/j-cf-of-jdk8/image001.png" alt=""></p>
+<h2 id="Future-接口介绍"><a href="#Future-接口介绍" class="headerlink" title="Future 接口介绍"></a>Future 接口介绍</h2><p>JDK5 新增了 Future 接口，用于描述一个异步计算的结果。虽然 Future 以及相关使用方法提供了异步执行任务的能力，但是对于结果的获取却是很不方便，只能通过阻塞或者轮询的方式得到任务的结果。阻塞的方式显然和我们的异步编程的初衷相违背，轮询的方式又会耗费无谓的 CPU 资源，而且也不能及时地得到计算结果，为什么不能用观察者设计模式呢？即当计算结果完成及时通知监听者。</p>
+<p>有一些开源框架实现了我们的设想，例如 Netty 的 ChannelFuture 类扩展了 Future 接口，通过提供 addListener 方法实现支持回调方式的异步编程。Netty 中所有的 I/O 操作都是异步的, 这意味着任何的 I/O 调用都将立即返回，而不保证这些被请求的 I/O 操作在调用结束的时候已经完成。取而代之地，你会得到一个返回的 ChannelFuture 实例，这个实例将给你一些关于 I/O 操作结果或者状态的信息。当一个 I/O 操作开始的时候，一个新的 Future 对象就会被创建。在开始的时候，新的 Future 是未完成的状态－－它既非成功、失败，也非被取消，因为 I/O 操作还没有结束。如果 I/O 操作以成功、失败或者被取消中的任何一种状态结束了，那么这个 Future 将会被标记为已完成，并包含更多详细的信息（例如：失败的原因）。请注意，即使是失败和被取消的状态，也是属于已完成的状态。阻塞方式的示例代码如代码 1 所示。</p>
+<p>代码 1 阻塞方式示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// Start the connection attempt.</span>
+ChannelFuture Future <span class="token operator">=</span> bootstrap<span class="token punctuation">.</span><span class="token function">connect</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InetSocketAddress</span><span class="token punctuation">(</span>host<span class="token punctuation">,</span> port<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// Wait until the connection is closed or the connection attempt fails.</span>
+Future<span class="token punctuation">.</span><span class="token function">getChannel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getCloseFuture</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">awaitUninterruptibly</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// Shut down thread pools to exit.</span>
+bootstrap<span class="token punctuation">.</span><span class="token function">releaseExternalResources</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>上面代码使用的是 awaitUninterruptibly 方法，源代码如代码 2 所示。</p>
+<p>代码 2 awaitUninterruptibly 源代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token function">publicChannelFutureawaitUninterruptibly</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">boolean</span> interrupted <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 循环等待到完成</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>done<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">checkDeadLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            waiters<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token function">wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// 不允许中断</span>
+            interrupted <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+            waiters<span class="token operator">--</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>interrupted<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">interrupt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>代码 3 异步非阻塞方式示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// Start the connection attempt.</span>
+ChannelFuture Future <span class="token operator">=</span> bootstrap<span class="token punctuation">.</span><span class="token function">connect</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InetSocketAddress</span><span class="token punctuation">(</span>host<span class="token punctuation">,</span> port<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+Future<span class="token punctuation">.</span><span class="token function">addListener</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">ChannelFutureListener</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">operationComplete</span><span class="token punctuation">(</span><span class="token keyword">final</span> ChannelFuture Future<span class="token punctuation">)</span>
+        <span class="token keyword">throws</span> Exception
+        <span class="token punctuation">{</span>           
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// Shut down thread pools to exit. </span>
+bootstrap<span class="token punctuation">.</span><span class="token function">releaseExternalResources</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>可以明显的看出，在异步模式下，上面这段代码没有阻塞，在执行 connect 操作后直接执行到 printTime(“异步时间：”)，随后 connect 完成，Future 的监听函数输出 connect 操作完成。</p>
+<p>非阻塞则是添加监听类 ChannelFutureListener，通过覆盖 ChannelFutureListener 的 operationComplete 执行业务逻辑。</p>
+<p>代码 4 异步非阻塞方式示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">addListener</span><span class="token punctuation">(</span><span class="token keyword">final</span> ChannelFutureListener listener<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>listener <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">NullPointerException</span><span class="token punctuation">(</span><span class="token string">"listener"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+    booleannotifyNow <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>done<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        notifyNow <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>firstListener <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//listener 链表头</span>
+        firstListener <span class="token operator">=</span> listener<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>otherListeners <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        otherListeners <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>ChannelFutureListener<span class="token operator">></span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment" spellcheck="true">// 添加到 listener 链表中，以便操作完成后遍历操作</span>
+        otherListeners<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>listener<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>notifyNow<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 通知 listener 进行处理</span>
+        <span class="token function">notifyListener</span><span class="token punctuation">(</span>listener<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这部分代码的逻辑很简单，就是注册回调函数，当操作完成后自动调用回调函数，就达到了异步的效果。</p>
+<h2 id="CompletableFuture-类介绍"><a href="#CompletableFuture-类介绍" class="headerlink" title="CompletableFuture 类介绍"></a>CompletableFuture 类介绍</h2><p>Java 8 中, 新增加了一个包含 50 个方法左右的类 –CompletableFuture，它提供了非常强大的 Future 的扩展功能，可以帮助我们简化异步编程的复杂性，并且提供了函数式编程的能力，可以通过回调的方式处理计算结果，也提供了转换和组合 CompletableFuture 的方法。</p>
+<p>对于阻塞或者轮询方式，依然可以通过 CompletableFuture 类的 CompletionStage 和 Future 接口方式支持。</p>
+<p>CompletableFuture 类声明了 CompletionStage 接口，CompletionStage 接口实际上提供了同步或异步运行计算的舞台，所以我们可以通过实现多个 CompletionStage 命令，并且将这些命令串联在一起的方式实现多个命令之间的触发。</p>
+<p>我们可以通过 CompletableFuture.supplyAsync(this::sendMsg); 这么一行代码创建一个简单的异步计算。在这行代码中，supplyAsync 支持异步地执行我们指定的方法，这个例子中的异步执行方法是 sendMsg。当然，我们也可以使用 Executor 执行异步程序，默认是 ForkJoinPool.commonPool()。</p>
+<p>我们也可以在异步计算结束之后指定回调函数，例如 CompletableFuture.supplyAsync(this::sendMsg) .thenAccept(this::notify); 这行代码中的 thenAccept 被用于增加回调函数，在我们的示例中 notify 就成了异步计算的消费者，它会处理计算结果。</p>
+<h1 id="CompletableFuture-类使用示例"><a href="#CompletableFuture-类使用示例" class="headerlink" title="CompletableFuture 类使用示例"></a>CompletableFuture 类使用示例</h1><p>接下来我们通过 20 个示例看看 CompletableFuture 类具体怎么用。</p>
+<h2 id="创建完整的-CompletableFuture"><a href="#创建完整的-CompletableFuture" class="headerlink" title="创建完整的 CompletableFuture"></a>创建完整的 CompletableFuture</h2><p>代码 5 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">completedFutureExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    CompletableFuture<span class="token operator">&lt;</span>String<span class="token operator">></span>cf <span class="token operator">=</span> CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span><span class="token string">"message"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertTrue</span><span class="token punctuation">(</span>cf<span class="token punctuation">.</span><span class="token function">isDone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"message"</span><span class="token punctuation">,</span> cf<span class="token punctuation">.</span><span class="token function">getNow</span><span class="token punctuation">(</span>null<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>以上代码一般来说被用于启动异步计算，getNow(null) 返回计算结果或者 null。</p>
+<h2 id="运行简单的异步场景"><a href="#运行简单的异步场景" class="headerlink" title="运行简单的异步场景"></a>运行简单的异步场景</h2><p>代码 6 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">runAsyncExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    CompletableFuture<span class="token operator">&lt;</span>Void<span class="token operator">></span>cf <span class="token operator">=</span> CompletableFuture<span class="token punctuation">.</span><span class="token function">runAsync</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+        <span class="token function">assertTrue</span><span class="token punctuation">(</span>Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isDaemon</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">randomSleep</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertFalse</span><span class="token punctuation">(</span>cf<span class="token punctuation">.</span><span class="token function">isDone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">sleepEnough</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertTrue</span><span class="token punctuation">(</span>cf<span class="token punctuation">.</span><span class="token function">isDone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>以上代码的关键点有两点：</p>
+<ol>
+<li>CompletableFuture 是异步执行方式；</li>
+<li>使用 ForkJoinPool 实现异步执行，这种方式使用了 daemon 线程执行 Runnable 任务。</li>
+</ol>
+<h2 id="同步执行动作示例"><a href="#同步执行动作示例" class="headerlink" title="同步执行动作示例"></a>同步执行动作示例</h2><p>代码 7 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">thenApplyExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    CompletableFuture<span class="token operator">&lt;</span>String<span class="token operator">></span>cf <span class="token operator">=</span> CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span><span class="token string">"message"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token function">assertFalse</span><span class="token punctuation">(</span>Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isDaemon</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    returns<span class="token punctuation">.</span><span class="token function">toUpperCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"MESSAGE"</span><span class="token punctuation">,</span> cf<span class="token punctuation">.</span><span class="token function">getNow</span><span class="token punctuation">(</span>null<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>以上代码在异步计算正常完成的前提下将执行动作（此处为转换成大写字母）。</p>
+<h2 id="异步执行动作示例"><a href="#异步执行动作示例" class="headerlink" title="异步执行动作示例"></a>异步执行动作示例</h2><p>相较前一个示例的同步方式，以下代码实现了异步方式，仅仅是在上面的代码里的多个方法增加 “Async” 这样的关键字。</p>
+<p>代码 8 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">thenApplyAsyncExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    CompletableFuture<span class="token operator">&lt;</span>String<span class="token operator">></span>cf <span class="token operator">=</span> CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span><span class="token string">"message"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApplyAsync</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token function">assertTrue</span><span class="token punctuation">(</span>Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isDaemon</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">randomSleep</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    returns<span class="token punctuation">.</span><span class="token function">toUpperCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertNull</span><span class="token punctuation">(</span>cf<span class="token punctuation">.</span><span class="token function">getNow</span><span class="token punctuation">(</span>null<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"MESSAGE"</span><span class="token punctuation">,</span> cf<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="使用固定的线程池完成异步执行动作示例"><a href="#使用固定的线程池完成异步执行动作示例" class="headerlink" title="使用固定的线程池完成异步执行动作示例"></a>使用固定的线程池完成异步执行动作示例</h2><p>我们可以通过使用线程池方式来管理异步动作申请，以下代码基于固定的线程池，也是做一个大写字母转换动作，代码如代码 9 所示。</p>
+<p>代码 9 示例代码</p>
+<pre class=" language-java"><code class="language-java">staticExecutorService executor <span class="token operator">=</span> Executors<span class="token punctuation">.</span><span class="token function">newFixedThreadPool</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">ThreadFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> count <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> Thread <span class="token function">newThread</span><span class="token punctuation">(</span>Runnable runnable<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span>runnable<span class="token punctuation">,</span> <span class="token string">"custom-executor-"</span> <span class="token operator">+</span> count<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">thenApplyAsyncWithExecutorExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            CompletableFuture<span class="token operator">&lt;</span>String<span class="token operator">></span>cf <span class="token operator">=</span> CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span><span class="token string">"message"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApplyAsync</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+            <span class="token function">assertTrue</span><span class="token punctuation">(</span>Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">startsWith</span><span class="token punctuation">(</span><span class="token string">"custom-executor-"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">assertFalse</span><span class="token punctuation">(</span>Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isDaemon</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">randomSleep</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            returns<span class="token punctuation">.</span><span class="token function">toUpperCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span> executor<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assertNull</span><span class="token punctuation">(</span>cf<span class="token punctuation">.</span><span class="token function">getNow</span><span class="token punctuation">(</span>null<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"MESSAGE"</span><span class="token punctuation">,</span> cf<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="作为消费者消费计算结果示例"><a href="#作为消费者消费计算结果示例" class="headerlink" title="作为消费者消费计算结果示例"></a>作为消费者消费计算结果示例</h2><p>假设我们本次计算只需要前一次的计算结果，而不需要返回本次计算结果，那就有点类似于生产者（前一次计算）- 消费者（本次计算）模式了，示例代码如代码 10 所示。</p>
+<p>代码 10 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">thenAcceptExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    StringBuilder result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span><span class="token string">"thenAccept message"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">thenAccept</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span>result<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertTrue</span><span class="token punctuation">(</span><span class="token string">"Result was empty"</span><span class="token punctuation">,</span> result<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>消费者是同步执行的，所以不需要在 CompletableFuture 里对结果进行合并。</p>
+<h2 id="异步消费示例"><a href="#异步消费示例" class="headerlink" title="异步消费示例"></a>异步消费示例</h2><p>相较于前一个示例的同步方式，我们也对应有异步方式，代码如代码 11 所示。</p>
+<p>代码 11 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">thenAcceptAsyncExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    StringBuilder result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    CompletableFuture<span class="token operator">&lt;</span>Void<span class="token operator">></span>cf <span class="token operator">=</span> CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span><span class="token string">"thenAcceptAsync message"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">thenAcceptAsync</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span>result<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    cf<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertTrue</span><span class="token punctuation">(</span><span class="token string">"Result was empty"</span><span class="token punctuation">,</span> result<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="计算过程中的异常示例"><a href="#计算过程中的异常示例" class="headerlink" title="计算过程中的异常示例"></a>计算过程中的异常示例</h2><p>接下来介绍异步操作过程中的异常情况处理。下面这个示例中我们会在字符转换异步请求中刻意延迟 1 秒钟，然后才会提交到 ForkJoinPool 里面去执行。</p>
+<p>代码 12 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">completeExceptionallyExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        CompletableFuture<span class="token operator">&lt;</span>String<span class="token operator">></span>cf <span class="token operator">=</span> CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span><span class="token string">"message"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApplyAsync</span><span class="token punctuation">(</span>String<span class="token operator">:</span><span class="token operator">:</span>toUpperCase<span class="token punctuation">,</span>
+        CompletableFuture<span class="token punctuation">.</span><span class="token function">delayedExecutor</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> TimeUnit<span class="token punctuation">.</span>SECONDS<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        CompletableFuture<span class="token operator">&lt;</span>String<span class="token operator">></span>exceptionHandler <span class="token operator">=</span> cf<span class="token punctuation">.</span><span class="token function">handle</span><span class="token punctuation">(</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> th<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span> <span class="token keyword">return</span> <span class="token punctuation">(</span>th <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token string">"message upon cancel"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">;</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        cf<span class="token punctuation">.</span><span class="token function">completeExceptionally</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"completed exceptionally"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assertTrue</span><span class="token punctuation">(</span><span class="token string">"Was not completed exceptionally"</span><span class="token punctuation">,</span> cf<span class="token punctuation">.</span><span class="token function">isCompletedExceptionally</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+        cf<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">fail</span><span class="token punctuation">(</span><span class="token string">"Should have thrown an exception"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>CompletionException ex<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// just for testing</span>
+            <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"completed exceptionally"</span><span class="token punctuation">,</span> ex<span class="token punctuation">.</span><span class="token function">getCause</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+     <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"message upon cancel"</span><span class="token punctuation">,</span> exceptionHandler<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>示例代码中，首先我们创建一个 CompletableFuture（计算完毕），然后调用 thenApplyAsync 返回一个新的 CompletableFuture，接着通过使用 delayedExecutor(timeout, timeUnit) 方法延迟 1 秒钟执行。然后我们创建一个 handler（exceptionHandler），它会处理异常，返回另一个字符串 “message upon cancel”。接下来进入 join() 方法，执行大写转换操作，并且抛出 CompletionException 异常。</p>
+<h2 id="取消计算任务"><a href="#取消计算任务" class="headerlink" title="取消计算任务"></a>取消计算任务</h2><p>与前面一个异常处理的示例类似，我们可以通过调用 cancel(boolean mayInterruptIfRunning) 方法取消计算任务。此外，cancel() 方法与 completeExceptionally(new CancellationException()) 等价。</p>
+<p>代码 13 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">cancelExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    CompletableFuture cf <span class="token operator">=</span> CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span><span class="token string">"message"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApplyAsync</span><span class="token punctuation">(</span>String<span class="token operator">:</span><span class="token operator">:</span>toUpperCase<span class="token punctuation">,</span>
+    CompletableFuture<span class="token punctuation">.</span><span class="token function">delayedExecutor</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> TimeUnit<span class="token punctuation">.</span>SECONDS<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    CompletableFuture cf2 <span class="token operator">=</span> cf<span class="token punctuation">.</span><span class="token function">exceptionally</span><span class="token punctuation">(</span>throwable <span class="token operator">-</span><span class="token operator">></span> <span class="token string">"canceled message"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertTrue</span><span class="token punctuation">(</span><span class="token string">"Was not canceled"</span><span class="token punctuation">,</span> cf<span class="token punctuation">.</span><span class="token function">cancel</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertTrue</span><span class="token punctuation">(</span><span class="token string">"Was not completed exceptionally"</span><span class="token punctuation">,</span> cf<span class="token punctuation">.</span><span class="token function">isCompletedExceptionally</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"canceled message"</span><span class="token punctuation">,</span> cf2<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="一个-CompletableFuture-VS-两个异步计算"><a href="#一个-CompletableFuture-VS-两个异步计算" class="headerlink" title="一个 CompletableFuture VS 两个异步计算"></a>一个 CompletableFuture VS 两个异步计算</h2><p>我们可以创建一个 CompletableFuture 接收两个异步计算的结果，下面代码首先创建了一个 String 对象，接下来分别创建了两个 CompletableFuture 对象 cf1 和 cf2，cf2 通过调用 applyToEither 方法实现我们的需求。</p>
+<p>代码 14 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">applyToEitherExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    String original <span class="token operator">=</span> <span class="token string">"Message"</span><span class="token punctuation">;</span>
+    CompletableFuture cf1 <span class="token operator">=</span> CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>original<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">thenApplyAsync</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> <span class="token function">delayedUpperCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    CompletableFuture cf2 <span class="token operator">=</span> cf1<span class="token punctuation">.</span><span class="token function">applyToEither</span><span class="token punctuation">(</span>
+    CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>original<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApplyAsync</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> <span class="token function">delayedLowerCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    s <span class="token operator">-</span><span class="token operator">></span> s <span class="token operator">+</span> <span class="token string">"from applyToEither"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertTrue</span><span class="token punctuation">(</span>cf2<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">endsWith</span><span class="token punctuation">(</span><span class="token string">"from applyToEither"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>如果我们想要使用消费者替换代码 14 的方法方式用于处理异步计算结果，代码如代码 15 所示。</p>
+<p>代码 15 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">acceptEitherExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    String original <span class="token operator">=</span> <span class="token string">"Message"</span><span class="token punctuation">;</span>
+    StringBuilder result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    CompletableFuture cf <span class="token operator">=</span> CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>original<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">thenApplyAsync</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> <span class="token function">delayedUpperCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">acceptEither</span><span class="token punctuation">(</span>CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>original<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApplyAsync</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> <span class="token function">delayedLowerCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    s <span class="token operator">-</span><span class="token operator">></span> result<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"acceptEither"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    cf<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertTrue</span><span class="token punctuation">(</span><span class="token string">"Result was empty"</span><span class="token punctuation">,</span> result<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">endsWith</span><span class="token punctuation">(</span><span class="token string">"acceptEither"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="运行两个阶段后执行"><a href="#运行两个阶段后执行" class="headerlink" title="运行两个阶段后执行"></a>运行两个阶段后执行</h2><p>下面这个示例程序两个阶段执行完毕后返回结果，首先将字符转为大写，然后将字符转为小写，在两个计算阶段都结束之后触发 CompletableFuture。</p>
+<p>代码 16 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">runAfterBothExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    String original <span class="token operator">=</span> <span class="token string">"Message"</span><span class="token punctuation">;</span>
+    StringBuilder result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>original<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span>String<span class="token operator">:</span><span class="token operator">:</span>toUpperCase<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">runAfterBoth</span><span class="token punctuation">(</span>
+    CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>original<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span>String<span class="token operator">:</span><span class="token operator">:</span>toLowerCase<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> result<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"done"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertTrue</span><span class="token punctuation">(</span><span class="token string">"Result was empty"</span><span class="token punctuation">,</span> result<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>也可以通过以下方式处理异步计算结果，</p>
+<p>代码 17 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">thenAcceptBothExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    String original <span class="token operator">=</span> <span class="token string">"Message"</span><span class="token punctuation">;</span>
+    StringBuilder result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>original<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span>String<span class="token operator">:</span><span class="token operator">:</span>toUpperCase<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenAcceptBoth</span><span class="token punctuation">(</span>
+    CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>original<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span>String<span class="token operator">:</span><span class="token operator">:</span>toLowerCase<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span>s1<span class="token punctuation">,</span> s2<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> result<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>s1 <span class="token operator">+</span> s2<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"MESSAGEmessage"</span><span class="token punctuation">,</span> result<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="整合两个计算结果"><a href="#整合两个计算结果" class="headerlink" title="整合两个计算结果"></a>整合两个计算结果</h2><p>我们可以通过 thenCombine() 方法整合两个异步计算的结果，注意，以下代码的整个程序过程是同步的，getNow() 方法最终会输出整合后的结果，也就是说大写字符和小写字符的串联值。</p>
+<p>代码 18 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">thenCombineExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    String original <span class="token operator">=</span> <span class="token string">"Message"</span><span class="token punctuation">;</span>
+    CompletableFuture cf <span class="token operator">=</span> CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>original<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> <span class="token function">delayedUpperCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">thenCombine</span><span class="token punctuation">(</span>CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>original<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> <span class="token function">delayedLowerCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span>s1<span class="token punctuation">,</span> s2<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> s1 <span class="token operator">+</span> s2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"MESSAGEmessage"</span><span class="token punctuation">,</span> cf<span class="token punctuation">.</span><span class="token function">getNow</span><span class="token punctuation">(</span>null<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>上面这个示例是按照同步方式执行两个方法后再合成字符串，以下代码采用异步方式同步执行两个方法，由于异步方式情况下不能够确定哪一个方法最终执行完毕，所以我们需要调用 join() 方法等待后一个方法结束后再合成字符串，这一点和线程的 join() 方法是一致的，主线程生成并起动了子线程，如果子线程里要进行大量的耗时的运算，主线程往往将于子线程之前结束，但是如果主线程处理完其他的事务后，需要用到子线程的处理结果，也就是主线程需要等待子线程执行完成之后再结束，这个时候就要用到 join() 方法了，即 join() 的作用是：”等待该线程终止”。</p>
+<p>代码 19 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">thenCombineAsyncExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    String original <span class="token operator">=</span> <span class="token string">"Message"</span><span class="token punctuation">;</span>
+    CompletableFuture cf <span class="token operator">=</span> CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>original<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">thenApplyAsync</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> <span class="token function">delayedUpperCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">thenCombine</span><span class="token punctuation">(</span>CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>original<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApplyAsync</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> <span class="token function">delayedLowerCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"MESSAGEmessage"</span><span class="token punctuation">,</span> cf<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">(</span>s1<span class="token punctuation">,</span> s2<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> s1 <span class="token operator">+</span> s2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>除了 thenCombine() 方法以外，还有另外一种方法 - thenCompose()，这个方法也会实现两个方法执行后的返回结果的连接。</p>
+<p>代码 20 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">thenComposeExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    String original <span class="token operator">=</span> <span class="token string">"Message"</span><span class="token punctuation">;</span>
+    CompletableFuture cf <span class="token operator">=</span> CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>original<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> <span class="token function">delayedUpperCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">thenCompose</span><span class="token punctuation">(</span>upper <span class="token operator">-</span><span class="token operator">></span> CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>original<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> <span class="token function">delayedLowerCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> upper <span class="token operator">+</span> s<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"MESSAGEmessage"</span><span class="token punctuation">,</span> cf<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="anyOf-方法"><a href="#anyOf-方法" class="headerlink" title="anyOf() 方法"></a>anyOf() 方法</h2><p>以下代码模拟了如何在几个计算过程中任意一个完成后创建 CompletableFuture，在这个例子中，我们创建了几个计算过程，然后转换字符串到大写字符。由于这些 CompletableFuture 是同步执行的（下面这个例子使用的是 thenApply() 方法，而不是 thenApplyAsync() 方法），使用 anyOf() 方法后返回的任何一个值都会立即触发 CompletableFuture。然后我们使用 whenComplete(BiConsumer&lt;? super Object, ? super Throwable&gt; action) 方法处理结果。</p>
+<p>代码 21 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">anyOfExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    StringBuilder result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    List messages <span class="token operator">=</span> Arrays<span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span><span class="token string">"a"</span><span class="token punctuation">,</span> <span class="token string">"b"</span><span class="token punctuation">,</span> <span class="token string">"c"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    List<span class="token operator">&lt;</span>CompletableFuture<span class="token operator">></span> futures <span class="token operator">=</span> messages<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>msg <span class="token operator">-</span><span class="token operator">></span> CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> <span class="token function">delayedUpperCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span>Collectors<span class="token punctuation">.</span><span class="token function">toList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    CompletableFuture<span class="token punctuation">.</span><span class="token function">anyOf</span><span class="token punctuation">(</span>futures<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">CompletableFuture</span><span class="token punctuation">[</span>futures<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">whenComplete</span><span class="token punctuation">(</span><span class="token punctuation">(</span>res<span class="token punctuation">,</span> th<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>th <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">assertTrue</span><span class="token punctuation">(</span><span class="token function">isUpperCase</span><span class="token punctuation">(</span><span class="token punctuation">(</span>String<span class="token punctuation">)</span> res<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        result<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertTrue</span><span class="token punctuation">(</span><span class="token string">"Result was empty"</span><span class="token punctuation">,</span> result<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="当所有的-CompletableFuture-完成后创建-CompletableFuture"><a href="#当所有的-CompletableFuture-完成后创建-CompletableFuture" class="headerlink" title="当所有的 CompletableFuture 完成后创建 CompletableFuture"></a>当所有的 CompletableFuture 完成后创建 CompletableFuture</h2><p>代码 22 所示我们会以同步方式执行多个异步计算过程，在所有计算过程都完成后，创建一个 CompletableFuture。</p>
+<p>代码 22 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">allOfExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    StringBuilder result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    List messages <span class="token operator">=</span> Arrays<span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span><span class="token string">"a"</span><span class="token punctuation">,</span> <span class="token string">"b"</span><span class="token punctuation">,</span> <span class="token string">"c"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    List<span class="token operator">&lt;</span>CompletableFuture<span class="token operator">></span> futures <span class="token operator">=</span> messages<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>msg <span class="token operator">-</span><span class="token operator">></span> CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> <span class="token function">delayedUpperCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span>Collectors<span class="token punctuation">.</span><span class="token function">toList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    CompletableFuture<span class="token punctuation">.</span><span class="token function">allOf</span><span class="token punctuation">(</span>futures<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">CompletableFuture</span><span class="token punctuation">[</span>futures<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">whenComplete</span><span class="token punctuation">(</span><span class="token punctuation">(</span>v<span class="token punctuation">,</span> th<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+        futures<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>cf <span class="token operator">-</span><span class="token operator">></span> <span class="token function">assertTrue</span><span class="token punctuation">(</span><span class="token function">isUpperCase</span><span class="token punctuation">(</span>cf<span class="token punctuation">.</span><span class="token function">getNow</span><span class="token punctuation">(</span>null<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        result<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"done"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertTrue</span><span class="token punctuation">(</span><span class="token string">"Result was empty"</span><span class="token punctuation">,</span> result<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>相较于前一个同步示例，我们也可以异步执行，如代码 23 所示。</p>
+<p>代码 23 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">allOfAsyncExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    StringBuilder result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    List messages <span class="token operator">=</span> Arrays<span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span><span class="token string">"a"</span><span class="token punctuation">,</span> <span class="token string">"b"</span><span class="token punctuation">,</span> <span class="token string">"c"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    List<span class="token operator">&lt;</span>CompletableFuture<span class="token operator">></span> futures <span class="token operator">=</span> messages<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>msg <span class="token operator">-</span><span class="token operator">></span> CompletableFuture<span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApplyAsync</span><span class="token punctuation">(</span>s <span class="token operator">-</span><span class="token operator">></span> <span class="token function">delayedUpperCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span>Collectors<span class="token punctuation">.</span><span class="token function">toList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    CompletableFuture allOf <span class="token operator">=</span> CompletableFuture<span class="token punctuation">.</span><span class="token function">allOf</span><span class="token punctuation">(</span>futures<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">CompletableFuture</span><span class="token punctuation">[</span>futures<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token function">whenComplete</span><span class="token punctuation">(</span><span class="token punctuation">(</span>v<span class="token punctuation">,</span> th<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    futures<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>cf <span class="token operator">-</span><span class="token operator">></span> <span class="token function">assertTrue</span><span class="token punctuation">(</span><span class="token function">isUpperCase</span><span class="token punctuation">(</span>cf<span class="token punctuation">.</span><span class="token function">getNow</span><span class="token punctuation">(</span>null<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    result<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"done"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    allOf<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertTrue</span><span class="token punctuation">(</span><span class="token string">"Result was empty"</span><span class="token punctuation">,</span> result<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="实际案例"><a href="#实际案例" class="headerlink" title="实际案例"></a>实际案例</h2><p>以下代码完成的操作包括：</p>
+<ol>
+<li>首先异步地通过调用 cars() 方法获取 Car 对象，返回一个 CompletionStage<list> 实例。Cars() 方法可以在内部使用调用远端服务器上的 REST 服务等类似场景。</list></li>
+<li>然后和其他的 CompletionStage<list> 组合，通过调用 rating(manufacturerId) 方法异步地返回 CompletionStage 实例。</list></li>
+<li>当所有的 Car 对象都被填充了 rating 后，调用 allOf() 方法获取最终值。</li>
+<li>调用 whenComplete() 方法打印最终的评分（rating）。</li>
+</ol>
+<p>代码 24 示例代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token function">cars</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenCompose</span><span class="token punctuation">(</span>cars <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    List<span class="token operator">&lt;</span>CompletionStage<span class="token operator">></span> updatedCars <span class="token operator">=</span> cars<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>car <span class="token operator">-</span><span class="token operator">></span> <span class="token function">rating</span><span class="token punctuation">(</span>car<span class="token punctuation">.</span>manufacturerId<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span>r <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    car<span class="token punctuation">.</span><span class="token function">setRating</span><span class="token punctuation">(</span>r<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> car<span class="token punctuation">;</span>
+     <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span>Collectors<span class="token punctuation">.</span><span class="token function">toList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    CompletableFuture done <span class="token operator">=</span> CompletableFuture
+    <span class="token punctuation">.</span><span class="token function">allOf</span><span class="token punctuation">(</span>updatedCars<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">CompletableFuture</span><span class="token punctuation">[</span>updatedCars<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> done<span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span>v <span class="token operator">-</span><span class="token operator">></span> updatedCars<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>CompletionStage<span class="token operator">:</span><span class="token operator">:</span>toCompletableFuture<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>CompletableFuture<span class="token operator">:</span><span class="token operator">:</span>join<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span>Collectors<span class="token punctuation">.</span><span class="token function">toList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">whenComplete</span><span class="token punctuation">(</span><span class="token punctuation">(</span>cars<span class="token punctuation">,</span> th<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>th <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    cars<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>System<span class="token punctuation">.</span>out<span class="token operator">:</span><span class="token operator">:</span>println<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span>th<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toCompletableFuture</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>Completable 类为我们提供了丰富的异步计算调用方式，我们可以通过上述基本操作描述及 20 个示例程序进一步了解如果使用 CompletableFuture 类实现我们的需求，期待 JDK10 会有持续更新。</p>
+<h1 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h1><p>参考 developerWorks 上的 Java 8 文章，了解更多 Java 8 知识。</p>
+<p>参考书籍 Java 8 in Action Raoul-Gabriel Urma</p>
+<p>参考书籍 Mastering Lambdas: Java Programming in a Multicore World Maurice Naftalin</p>
+<p>参考文章 <a href="http://codingjunkie.net/completable-futures-part1/" target="_blank" rel="noopener">Java 8 CompletableFutures</a>，这篇文章从基础介绍了 CompletableFuture 类的使用方式。</p>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/JDK8/" rel="tag"># JDK8</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/10/20/Java/jdk8/steam/" rel="prev" title="Stream 使用指南">
+                  <i class="fa fa-chevron-left"></i> Stream 使用指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/10/21/%E6%9D%82%E8%AE%B0/JetBrains/" rel="next" title="JetBrains Plugins -- 小米收纳和整理">
+                  JetBrains Plugins -- 小米收纳和整理 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">米薏</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">244k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:42</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><script defer src="/lib/three.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.8.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'dark',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

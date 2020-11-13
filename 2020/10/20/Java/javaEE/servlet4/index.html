@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"air6211332.github.io","root":"/","scheme":"Pisces","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="如何在 Java servlet 应用程序中使用 HTTP&#x2F;2 服务器推送和新型 HttpServletMapping 接口">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Servlet 4.0 入门">
+<meta property="og:url" content="https://air6211332.github.io/2020/10/20/Java/javaEE/servlet4/index.html">
+<meta property="og:site_name" content="米薏小天地">
+<meta property="og:description" content="如何在 Java servlet 应用程序中使用 HTTP&#x2F;2 服务器推送和新型 HttpServletMapping 接口">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-20T09:05:34.994Z">
+<meta property="article:modified_time" content="2020-10-20T09:05:34.994Z">
+<meta property="article:author" content="米薏">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Java EE">
+<meta property="article:tag" content="Servlet">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://air6211332.github.io/2020/10/20/Java/javaEE/servlet4/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Servlet 4.0 入门 | 米薏小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="米薏小天地" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">米薏小天地</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Servlet-简介"><span class="nav-number">1.</span> <span class="nav-text">Servlet 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Servlet-4-0-的主要新功能"><span class="nav-number">2.</span> <span class="nav-text">Servlet 4.0 的主要新功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Servlet-4-0-中的服务器推送"><span class="nav-number">3.</span> <span class="nav-text">Servlet 4.0 中的服务器推送</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PushBuilder"><span class="nav-number">3.1.</span> <span class="nav-text">PushBuilder</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-设置推送资源"><span class="nav-number">3.2.</span> <span class="nav-text">1.设置推送资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-推送资源"><span class="nav-number">3.3.</span> <span class="nav-text">2.推送资源</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#将服务器推送与-JSF-结合使用"><span class="nav-number">4.</span> <span class="nav-text">将服务器推送与 JSF 结合使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HttpServletMapping-接口"><span class="nav-number">5.</span> <span class="nav-text">HttpServletMapping 接口</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Servlet-4-0-的细微变化"><span class="nav-number">6.</span> <span class="nav-text">Servlet 4.0 的细微变化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结束语"><span class="nav-number">7.</span> <span class="nav-text">结束语</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">米薏</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/air6211332" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;air6211332" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:744471805" title="E-Mail → mailto:744471805" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://iamli.net/" title="https:&#x2F;&#x2F;iamli.net&#x2F;" rel="noopener" target="_blank">木子</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mmpmmmp.github.io/" title="https:&#x2F;&#x2F;mmpmmmp.github.io&#x2F;" rel="noopener" target="_blank">啧啧</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.hoofungson.cn/index.html" title="https:&#x2F;&#x2F;blog.hoofungson.cn&#x2F;index.html" rel="noopener" target="_blank">凤松轩</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xu-shuai.github.io/" title="https:&#x2F;&#x2F;xu-shuai.github.io&#x2F;" rel="noopener" target="_blank">水星很热</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.didispace.com/" title="http:&#x2F;&#x2F;blog.didispace.com&#x2F;" rel="noopener" target="_blank">程序猿DD</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://vincentxin-scott.github.io/" title="https:&#x2F;&#x2F;vincentxin-scott.github.io&#x2F;" rel="noopener" target="_blank">Vincent Xin</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://air6211332.github.io/2020/10/20/Java/javaEE/servlet4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="米薏">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米薏小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Servlet 4.0 入门
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-20 17:05:34" itemprop="dateCreated datePublished" datetime="2020-10-20T17:05:34+08:00">2020-10-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/Java-EE/" itemprop="url" rel="index"><span itemprop="name">Java EE</span></a>
+        </span>
+    </span>
+
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">如何在 Java servlet 应用程序中使用 HTTP/2 服务器推送和新型 HttpServletMapping 接口</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote><p>Servlet 4.0 入门</p>
+<footer><strong>Alex Theedom</strong><cite><a href="https://www.ibm.com/developerworks/cn/java/j-javaee8-servlet4/index.html?ca=drs-" target="_blank" rel="noopener">Servlet 4.0 入门</a></cite></footer></blockquote>
+
+<p>Java™ Servlet API 是主流服务器端 Java 的基本构建块，也是 Java EE 技术的一部分，例如，用于 Web 服务的 JAX - RS、JSF (JavaServer Faces) 和 JSP (JavaServer Pages)。Java servlet 也独立存在，提供一系列支持动态 Web 内容的功能。其中包括过滤器、Web 安全性以及用于处理 HTTP 请求和响应的功能。</p>
+<p>Servlet 4.0 是 API 的最新版本，也是 <a href="https://www.ibm.com/developerworks/cn/java/j-whats-new-in-javaee-8/index.html" target="_blank" rel="noopener">Java EE 8</a> 规范的核心更新。正如您将在本教程中了解到的，Servlet 4.0 已为 HTTP/2 准备就绪，完全包含服务器推送，同时还将其扩展到基于 servlet 的技术，如 JSF 2.3。本教程还介绍了新型 HttpServletMapping 接口, 它支持运行时发现 servlet 的映射 URL。</p>
+<blockquote>
+<p>HTTP/2 是什么？<br>HTTP/2 的首要目标是改善 Web 应用程序用户的体验。HTTP 1.1 是一个二进制协议，它拥有包括轻量型、安全和快速在内的所有优势。HTTP/2 保持了原始 HTTP 协议的语义，但更改了在系统之间传输数据的方式。请查看我的文章“HTTP/2 幕后原理”（developerWorks，2017 年 7 月），深入了解 HTTP/2。</p>
+</blockquote>
+<p>获取代码</p>
+<h1 id="Servlet-简介"><a href="#Servlet-简介" class="headerlink" title="Servlet 简介"></a>Servlet 简介</h1><p>Java servlet 是一项基于 HTTP 协议运行的服务器端技术。Servlet 等待客户端向服务器发送请求消息，然后向客户端返回响应消息。请求和响应消息由两部分组成：</p>
+<ul>
+<li>标头包含消息相关信息。</li>
+<li>主体包含消息的有效载荷，即其内容。</li>
+</ul>
+<p>在传统交换中，客户端通过从浏览器或 curl 等另一个 HTTP 客户端请求特定的 URL 来调用 servlet。</p>
+<p>在清单 1 中，请求 servlet 路径时，会激活该 servlet 。请求会被委派给相应的方法，这由 HTTP 方法来确定。在这种情况下，由于请求是 GET 方法请求，因此通过 Java servlet 的 doGet() 方法来处理该请求。</p>
+<p>以下交换的 servlet 路径是：<a href="http://hostname/applicationroot/showlogoservlet" target="_blank" rel="noopener">http://hostname/applicationroot/showlogoservlet</a>.</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/showlogoservlet"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SimpleServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
+
+   <span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doGet</span><span class="token punctuation">(</span>HttpServletRequest request<span class="token punctuation">,</span>
+                        HttpServletResponse response<span class="token punctuation">)</span> 
+                        <span class="token keyword">throws</span> ServletException<span class="token punctuation">,</span> IOException <span class="token punctuation">{</span>
+
+       <span class="token function">getServletContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+         <span class="token punctuation">.</span><span class="token function">getRequestDispatcher</span><span class="token punctuation">(</span><span class="token string">"/showlogo.jsp"</span><span class="token punctuation">)</span>
+         <span class="token punctuation">.</span><span class="token function">forward</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> response<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h1 id="Servlet-4-0-的主要新功能"><a href="#Servlet-4-0-的主要新功能" class="headerlink" title="Servlet 4.0 的主要新功能"></a>Servlet 4.0 的主要新功能</h1><p>Servlet 4.0 的主要新功能为服务器推送和全新 API，该 API 可在运行时发现 servlet 的 URL 映射。</p>
+<p>服务器推送是最直观的 HTTP/2 强化功能，通过 PushBuilder 接口在 servlet 中公开。服务器推送功能还在 JavaServer Faces API 中实现，并在 RenderResponsePhase 生命周期内调用，以便 JSF 页面可以利用其增强性能。</p>
+<p>全新 servlet 映射发现接口 HttpServletMapping 使框架能够获取有关激活给定 servlet 请求的 URL 信息。这可能对框架尤为有用，这些框架需要这一信息来运行内部工作。</p>
+<p>在接下来的部分，我将概述服务器推送及其如何在 Java servlet 中运行，包括 JSF 2.3 中的服务器推送。我还将展示一个交换示例，重点介绍全新 servlet 映射发现功能。</p>
+<h1 id="Servlet-4-0-中的服务器推送"><a href="#Servlet-4-0-中的服务器推送" class="headerlink" title="Servlet 4.0 中的服务器推送"></a>Servlet 4.0 中的服务器推送</h1><p>服务器推送使服务器能预测客户端请求的资源需求。然后，在完成请求处理之前，它可以将这些资源发送到客户端。</p>
+<p>要了解服务器推送的好处，可以考虑一个包含图像和其他依赖项（比如 CSS 和 JavaScript 文件）的网页。客户端发出一个针对该网页的请求。服务器然后分析所请求的页面，确定呈现它所需的资源，并主动将这些资源发送到客户端的缓存。</p>
+<p>在执行所有这些操作的同时，服务器仍在处理原始网页请求。客户端收到响应时，它需要的资源已经位于缓存中。</p>
+<h2 id="PushBuilder"><a href="#PushBuilder" class="headerlink" title="PushBuilder"></a>PushBuilder</h2><p>Servlet 4.0 通过 PushBuilder 接口公开服务器推送。为了能够进行访问，您需要通过调用 newPushBuilder() 方法，从 HttpServletRequest 获取 PushBuilder 实例。清单 2 展示了如何获取 PushBuilder 实例。</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doGet</span><span class="token punctuation">(</span>HttpServletRequest request<span class="token punctuation">,</span> 
+                     HttpServletResponse response<span class="token punctuation">)</span> 
+                     <span class="token keyword">throws</span> ServletException<span class="token punctuation">,</span> IOException <span class="token punctuation">{</span>
+
+   PushBuilder pushBuilder <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">newPushBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>每次调用 newPushBuilder() 方法时，都将返回 PushBuilder 的新实例。如果服务器推送不可用，newPushBuilder() 将返回 null。在某些情况下，客户端可能会为请求事务拒绝服务器推送。如果客户端没有使用安全连接，服务器推送也不会起作用。因此，务必要在对 PushBuilder 实例调用方法之前，针对 null 返回值进行测试。</p>
+<p>顾名思义，PushBuilder 实现 Builder 模式。在这一实现过程中，通过链接赋值方法构建推送请求。这些赋值方法通过设置 HTTP 标头、方法类型（GET 是唯一的可接受值）、查询字符串、会话 ID 和资源路径（即，将要推出资源的路径），来配置 PushBuilder 实例。</p>
+<p>大多数来自原始 HttpServletRequest 实例的请求标头，只添加到 PushBuilder 实例中。由于正确运行服务器推送并不需要某些标头，因此不包括以下标头：</p>
+<ul>
+<li>条件标头</li>
+<li>Range 标头</li>
+<li>Expect 标头</li>
+<li>Authorization 标头</li>
+<li>Referrer 标头</li>
+</ul>
+<p>现在，让我们看看如何构造和引发服务器推送操作。</p>
+<h2 id="1-设置推送资源"><a href="#1-设置推送资源" class="headerlink" title="1.设置推送资源"></a>1.设置推送资源</h2><p>这一路径是在向客户端推送资源之前必须设置的唯一配置。设置路径需要调用 path() 方法。该方法只能被调用一次，因为它会改变 PushBuilder 对象的路径值。该路径可能会以正斜杠（“/”）开头，指示资源路径是绝对路径；否则，该资源会被认为是相对于关联请求的上下文路径。该路径可以包含一个查询字符串，该查询字符串将与 queryString() 方法设置的任何字符串合并。</p>
+<h2 id="2-推送资源"><a href="#2-推送资源" class="headerlink" title="2.推送资源"></a>2.推送资源</h2><p>接下来，您将调用 push() 方法， 将资源推送到客户端。push() 方法用于发起与客户端的推送“对话”。在后台，会向客户端发送一个 PUSH_PROMISE 帧，类似于发送资源的意图通知。客户端可以通过发回 RST_STREAM 来拒绝资源。这种机制允许客户端保留对接收到的资源的控制。因此，客户端不会因不需要的资源或已经在缓存中的资源而过载。</p>
+<p>如清单 3 所示，一旦获得了 PushBuilder 的实例，就可以多次重复使用。路径和条件标头都为 null，但是所有其他字段都原样保留。这些可以在另一个服务器推送中重复使用。</p>
+<pre class=" language-java"><code class="language-java">PushBuilder pushBuilder <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">newPushBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span>pushBuilder <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   pushBuilder<span class="token punctuation">.</span><span class="token function">path</span><span class="token punctuation">(</span><span class="token string">"images/hero-banner.jpg"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   pushBuilder<span class="token punctuation">.</span><span class="token function">path</span><span class="token punctuation">(</span><span class="token string">"css/menu.css"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   pushBuilder<span class="token punctuation">.</span><span class="token function">path</span><span class="token punctuation">(</span><span class="token string">"js/marquee.js"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>在清单 3 中，hero-banner.jpg 的路径是通过 path() 方法在 PushBuilder 实例上设置的，并通过调用 push() 推送到客户端。push() 方法是非阻塞的，且立即返回，以便后续可推送更多资源（本例中为 menu.css 和 marquee.js）。</p>
+<p>服务器推送实战</p>
+<h1 id="将服务器推送与-JSF-结合使用"><a href="#将服务器推送与-JSF-结合使用" class="headerlink" title="将服务器推送与 JSF 结合使用"></a>将服务器推送与 JSF 结合使用</h1><p>JavaServer Faces 已经将每个页面的资源需求标识为页面呈现生命周期的一部分，所以它非常适合用于服务器推送。就开发人员而言，比较好的一方面是，您不必为了激活此功能而煞费苦心。您可以免费升级到 JSF 2.3。</p>
+<p>清单 4 展示了JSF 和服务器推送的集成情况。</p>
+<pre class=" language-jsp"><code class="language-jsp"><h:head>
+   <h:outputStylesheet library="css" name="logo.css"/>
+   <h:outputScript library="js" name="logo.js"/>
+   <title>JSF 2.3 ServerPush Example</title>
+</h:head>
+<h:body>
+   <h:form>
+       <h:graphicImage library="images" name="logo.jpg"/>
+   </h:form>
+</h:body>
+</html></code></pre>
+<p>清单 4 中的 JSF 页面需要以下三种资源：</p>
+<ul>
+<li>名为 logo.css 的 CSS 文件。</li>
+<li>名为 logo.js 的 JavaScript 文件。</li>
+<li>名为 logo.jpg 的图像。</li>
+</ul>
+<p>当 JSF 引擎正在处理和呈现页面时，这些资源将被逐个推送到客户端。这发生在 JSF 的呈现响应阶段。然后，会为每个资源调用 ExternalContextImpl.encodeResourceURL() 方法，并向其传递资源的新 URL。从与 ExternalContext 相关联的 HttpServletRequest 实例获取新的 PushBuilder 对象。如果支持服务器推送，那么会在向客户端呈现页面之前将资源推送到客户端。</p>
+<p>JSF 2.3 中的服务器推送</p>
+<blockquote>
+<p>JSP 中的服务器推送</p>
+<p>由于 JavaServer Pages 是一项传统技术，服务器推送尚未集成到 JavaServer Pages 中。但您可以在 JSP 中利用服务器推送，通过使用 servlet 过滤器来缓存和推送资源。请查看 Jetty 9 的 PushCacheFilter，获取工作方式示例。</p>
+</blockquote>
+<h1 id="HttpServletMapping-接口"><a href="#HttpServletMapping-接口" class="headerlink" title="HttpServletMapping 接口"></a>HttpServletMapping 接口</h1><p>Servlet 4.0 的全新 <a href="https://javaee.github.io/javaee-spec/javadocs/javax/servlet/http/HttpServletMapping.html" target="_blank" rel="noopener">servlet 映射发现</a> API 使服务器能够对 URL（可调用 servlet）执行运行时检查。例如，对 file.ext, /path 和 /path/file.ext 的请求将通过 URL 模式 /path/* 和 *.ext 激活 servlet。</p>
+<p>HttpServletMapping 接口支持运行时发现 servlet 的映射 URL。您可以在 HttpServletRequest 实例上调用 getHttpServletMapping()，获取接口的实例。您可以使用以下方法获取有关 servlet 映射 URL 的信息：</p>
+<ul>
+<li>getMatchValue() 返回部分 URI 路径，该路径会导致请求匹配。</li>
+<li>getPattern() 返回 URL 模式的 String 表示形式。</li>
+<li>getServletName() 返回 servlet 名称的 String 表示形式。</li>
+<li>getMappingMatch() 返回匹配的类型，表示为 MappingMatch 枚举值，该枚举值将为以下值之一：CONTEXT_ROOT、DEFAULT、EXACT、EXTENSION 或 PATH。</li>
+</ul>
+<p>清单 5 展示了四种 API 方法的实际应用。</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">"/path/*"</span><span class="token punctuation">,</span> <span class="token string">"*.ext"</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ServletMapping</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doGet</span><span class="token punctuation">(</span>HttpServletRequest request<span class="token punctuation">,</span>
+                         HttpServletResponse response<span class="token punctuation">)</span> 
+                         <span class="token keyword">throws</span> IOException <span class="token punctuation">{</span>
+
+        HttpServletMapping mapping <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">getHttpServletMapping</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String mapping <span class="token operator">=</span> mapping<span class="token punctuation">.</span><span class="token function">getMappingMatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">name</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String value <span class="token operator">=</span> mapping<span class="token punctuation">.</span><span class="token function">getMatchValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String pattern <span class="token operator">=</span> mapping<span class="token punctuation">.</span><span class="token function">getPattern</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String servletName <span class="token operator">=</span> mapping<span class="token punctuation">.</span><span class="token function">getServletName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>servlet 映射 URL 的运行时发现</p>
+<h1 id="Servlet-4-0-的细微变化"><a href="#Servlet-4-0-的细微变化" class="headerlink" title="Servlet 4.0 的细微变化"></a>Servlet 4.0 的细微变化</h1><p>除了服务器推送和全新 HttpServletMapping 接口，Servlet 4.0 还包括少量值得注意的新增功能和变更。</p>
+<ol>
+<li>Trailer 响应标头支持发送方在分块消息的末尾包含额外字段。这用于提供在发送消息主体时可能会动态生成的元数据，例如，消息完整性检查、数字签名或后期处理状态。</li>
+<li>Servlet 4.0 添加了 GenericFilter 和 HttpFilter 抽象类，这些抽象类通过最低限度地实现生命周期方法 init() 和 destroy()，简化了编写过滤器。</li>
+<li>Servlet 4.0 还集成了全新的 HTTP Trailer，支持发送方在分块消息的末尾包含额外的字段。</li>
+<li>ServletContext 接口采用了一些新方法：<ul>
+<li>addJspFile() 可将带有给定 JSP 文件的 servlet 添加到 servlet 上下文中。</li>
+<li>getSessionTimeout() 和 setSessionTimeout() 可提供对会话超时的访问权限。</li>
+<li>getRequestCharacterEncoding() 和 setRequestCharacterEncoding() 可为当前的 servlet 上下文提供访问权限，并改变默认的请求字符编码。</li>
+</ul>
+</li>
+<li>HttpServletRequest 接口上的 isRequestedSessionIdFromUrl() 方法已被弃用。</li>
+<li>由于升级到 Java SE 8，默认方法已被添加到侦听器接口中。</li>
+</ol>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>Servlet 4.0 已经发布，主要用于整合全新 HTTP/2 协议及其众多性能增强功能。PushBuilder 接口对推送到客户端的资源提供细粒度控制，使交叉实现生动有趣。例如，Jetty 9 在 PushCacheFilter Web 过滤器中使用 PushBuilder API 实现了服务器推送功能。此过滤器在首次请求时缓存了资源。即使仍在服务器端处理请求，它也能够将后续请求推送到客户端。</p>
+<p>虽然 JSF 2.3 内置了服务器推送功能，但 JavaServer Pages 并没有此功能。JSF 与服务器推送的集成十分有用，开发人员因而可减少对性能问题的关注，而更加着力于设计动态网页。对于想要在 JSP 中实现相似功能的开发人员，就需要使用 Web 过滤器这样的定制解决方案，例如 Jetty 9 中的 PushCacheFilter Web 过滤器。</p>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/Java-EE/" rel="tag"># Java EE</a>
+              <a href="/tags/Servlet/" rel="tag"># Servlet</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/10/20/Java/Google%20Java%E7%BC%96%E7%A8%8B%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97/" rel="prev" title="Google Java编程风格指南">
+                  <i class="fa fa-chevron-left"></i> Google Java编程风格指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/10/20/Java/jdk8/steam/" rel="next" title="Stream 使用指南">
+                  Stream 使用指南 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">米薏</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">244k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:42</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><script defer src="/lib/three.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.8.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'dark',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
