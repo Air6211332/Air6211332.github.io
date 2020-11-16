@@ -29,13 +29,13 @@
 <meta property="og:site_name" content="米薏小天地">
 <meta property="og:description" content="分享下 Blogger Api 希望大家喜欢">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://ot0en8caw.bkt.clouddn.com/20180421124224.png">
+<meta property="og:image" content="http://mi.vincentxin.work/20180421124224.png">
 <meta property="article:published_time" content="2018-09-14T04:00:00.000Z">
-<meta property="article:modified_time" content="2020-10-20T09:05:35.001Z">
+<meta property="article:modified_time" content="2020-11-16T07:39:47.595Z">
 <meta property="article:author" content="米薏">
 <meta property="article:tag" content="api">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://ot0en8caw.bkt.clouddn.com/20180421124224.png">
+<meta name="twitter:image" content="http://mi.vincentxin.work/20180421124224.png">
 
 
 <link rel="canonical" href="https://air6211332.github.io/2018/09/14/%E6%94%B6%E9%9B%86/api/blogger%20Api/">
@@ -222,7 +222,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -272,6 +272,9 @@
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://vincentxin-scott.github.io/" title="https:&#x2F;&#x2F;vincentxin-scott.github.io&#x2F;" rel="noopener" target="_blank">Vincent Xin</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.pengchengxuan.top/" title="https:&#x2F;&#x2F;www.pengchengxuan.top&#x2F;" rel="noopener" target="_blank">彭成轩</a>
         </li>
     </ul>
   </div>
@@ -340,7 +343,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-10-20 17:05:35" itemprop="dateModified" datetime="2020-10-20T17:05:35+08:00">2020-10-20</time>
+        <time title="修改时间：2020-11-16 15:39:47" itemprop="dateModified" datetime="2020-11-16T15:39:47+08:00">2020-11-16</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -401,7 +404,7 @@
 <li><strong>Pages resource</strong>: Represents a static page; each pages resource is a child of a blogs resource.</li>
 <li><strong>Users resource</strong>: Represents a non-anonymous user. This is used to identify the Author of a page, post, or comment.</li>
 </ul>
-<p><img src="http://ot0en8caw.bkt.clouddn.com/20180421124224.png" alt="The blogs resource has two children resource types, pages and posts. A posts resource may have comments resource children."></p>
+<p><img src="http://mi.vincentxin.work/20180421124224.png" alt="The blogs resource has two children resource types, pages and posts. A posts resource may have comments resource children."></p>
 <p>Overview of the relationships between resources</p>
 <p>The Blogger API data model is based on groups of resources, called collections:</p>
 <p><strong>Blogs collection</strong></p>
@@ -636,7 +639,7 @@ https://www.googleapis.com/blogger/v3/blogs/blogId/pages/pageId</code></pre><p>T
 <pre><code>GET https://www.googleapis.com/blogger/v3/blogs/2399953?key=YOUR-API-KEY</code></pre><p>A user does not need to be authenticated to retrieve a public blog. The application does not need to include Authorization HTTP header for a public blog request; however, you do need to provide the API key.</p>
 <p>Blogger also has private blogs, which require authentication.</p>
 <p>Response<br>If the request succeeds, the server responds with an HTTP 200 OK status code and the blog data:</p>
-<pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"kind"</span><span class="token operator">:</span> <span class="token string">"blogger#blog"</span><span class="token punctuation">,</span>
   <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"2399953"</span><span class="token punctuation">,</span>
   <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Blogger Buzz"</span><span class="token punctuation">,</span>
@@ -658,11 +661,11 @@ https://www.googleapis.com/blogger/v3/blogs/blogId/pages/pageId</code></pre><p>T
     <span class="token property">"country"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
     <span class="token property">"variant"</span><span class="token operator">:</span> <span class="token string">""</span>
   <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="Retrieving-a-blog-by-its-URL"><a href="#Retrieving-a-blog-by-its-URL" class="headerlink" title="Retrieving a blog by its URL"></a>Retrieving a blog by its URL</h3><p>You can retrieve a blog using its URL by sending an HTTP GET request to the following URI with a url parameter:</p>
 <pre><code>https://www.googleapis.com/blogger/v3/blogs/byurl?url=blog-url</code></pre><p>Request</p>
 <pre><code>https://www.googleapis.com/blogger/v3/blogs/byurl?url=http://code.blogger.com/</code></pre><p>Response<br>If the request succeeds, the server responds with an HTTP 200 OK status code and the full representation of the identified blog:</p>
-<pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span>
  <span class="token property">"kind"</span><span class="token operator">:</span> <span class="token string">"blogger#blog"</span><span class="token punctuation">,</span>
  <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"3213900"</span><span class="token punctuation">,</span>
  <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Blogger Developers Network"</span><span class="token punctuation">,</span>
@@ -684,12 +687,12 @@ https://www.googleapis.com/blogger/v3/blogs/blogId/pages/pageId</code></pre><p>T
   <span class="token property">"country"</span><span class="token operator">:</span> <span class="token string">"US"</span><span class="token punctuation">,</span>
   <span class="token property">"variant"</span><span class="token operator">:</span> <span class="token string">""</span>
  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="Retrieving-a-user’s-blogs"><a href="#Retrieving-a-user’s-blogs" class="headerlink" title="Retrieving a user’s blogs"></a>Retrieving a user’s blogs</h3><p>You can retrieve a list of a user’s blogs by sending an HTTP GET request to the blogs collection URI:</p>
 <pre><code>https://www.googleapis.com/blogger/v3/users/userId/blogs</code></pre><p>Request</p>
 <pre><code>GET https://www.googleapis.com/blogger/v3/users/self/blogs</code></pre><p>Authorization: /* OAuth 2.0 token here */<br>Note: The user must be authenticated to list their own blogs, so you must provide the Authorization HTTP header with the GET request.</p>
 <p>Response<br>If the request succeeds, the server responds with an HTTP 200 OK status code and the full representation of the list of the user’s blogs:</p>
-<pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"kind"</span><span class="token operator">:</span> <span class="token string">"blogger#blogList"</span><span class="token punctuation">,</span>
   <span class="token property">"items"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
     <span class="token punctuation">{</span>
@@ -716,14 +719,14 @@ https://www.googleapis.com/blogger/v3/blogs/blogId/pages/pageId</code></pre><p>T
       <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
   <span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="Working-with-posts"><a href="#Working-with-posts" class="headerlink" title="Working with posts"></a>Working with posts</h2><h3 id="Retrieving-posts-from-a-blog"><a href="#Retrieving-posts-from-a-blog" class="headerlink" title="Retrieving posts from a blog"></a>Retrieving posts from a blog</h3><p>You can retrieve a list of posts from a given blog by sending a GET request to the posts collection URI. The URI for a posts collection has the following format:</p>
 <pre><code>https://www.googleapis.com/blogger/v3/blogs/blogId/posts</code></pre><p>Request</p>
 <p>Here is an example:</p>
 <pre><code>GET https://www.googleapis.com/blogger/v3/blogs/2399953/posts?key=YOUR-API-KEY</code></pre><p>A user does not need to be authenticated to retrieve a public blog. The application does not need to include Authorization HTTP header for a public blog request; however, you do need to provide the API key.</p>
 <p>Blogger also has private blogs, which require authentication.</p>
 <p>Response<br>If the request succeeds, the server responds with an HTTP 200 OK status code and the list of posts:</p>
-<pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"kind"</span><span class="token operator">:</span> <span class="token string">"blogger#postList"</span><span class="token punctuation">,</span>
   <span class="token property">"nextPageToken"</span><span class="token operator">:</span> <span class="token string">"CgkIChiAkceVjiYQ0b2SAQ"</span><span class="token punctuation">,</span>
   <span class="token property">"prevPageToken"</span><span class="token operator">:</span> <span class="token string">"CgkIChDBwrK3mCYQ0b2SAQ"</span><span class="token punctuation">,</span>
@@ -759,7 +762,7 @@ https://www.googleapis.com/blogger/v3/blogs/blogId/pages/pageId</code></pre><p>T
       elided for readability
     <span class="token punctuation">}</span>
   <span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="Retrieving-a-specific-post"><a href="#Retrieving-a-specific-post" class="headerlink" title="Retrieving a specific post"></a>Retrieving a specific post</h3><p>You can retrieve a specific post from a blog by sending a GET request to the posts resource URI. The URI for a posts resource has the following format:</p>
 <pre><code>https://www.googleapis.com/blogger/v3/blogs/blogId/posts/postId</code></pre><p>Request</p>
 <pre><code>GET https://www.googleapis.com/blogger/v3/blogs/2399953/posts/7706273476706534553?key=YOUR-API-KEY</code></pre><p>A user does not need to be authenticated to retrieve a public blog. The application does not need to include Authorization HTTP header for a public blog request; however, you do need to provide the API key.</p>
@@ -794,7 +797,7 @@ https://www.googleapis.com/blogger/v3/blogs/blogId/pages/pageId</code></pre><p>T
 <pre><code>GET https://www.googleapis.com/blogger/v3/blogs/3213900/posts/search?q=documentation&amp;key=YOUR-API-KEY</code></pre><p>A user does not need to be authenticated to retrieve a public blog. The application does not need to include Authorization HTTP header for a public blog request; however, you do need to provide the API key.</p>
 <p>Blogger also has private blogs, which require authentication.</p>
 <p>Response<br>If the request succeeds, the server responds with an HTTP 200 OK status code and the contents of the post:</p>
-<pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"kind"</span><span class="token operator">:</span> <span class="token string">"blogger#postList"</span><span class="token punctuation">,</span>
   <span class="token property">"nextPageToken"</span><span class="token operator">:</span> <span class="token string">"CgkIChiAj86CpB8QzJTEAQ"</span><span class="token punctuation">,</span>
   <span class="token property">"prevPageToken"</span><span class="token operator">:</span> <span class="token string">"CgkIChDBq5v24yYQzJTEAQ"</span><span class="token punctuation">,</span>
@@ -826,18 +829,18 @@ https://www.googleapis.com/blogger/v3/blogs/blogId/pages/pageId</code></pre><p>T
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
   ...
   <span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="Adding-a-post"><a href="#Adding-a-post" class="headerlink" title="Adding a post"></a>Adding a post</h3><p>You can add a post for a blog by sending a POST request to the post collection URI with a post JSON body:</p>
 <pre><code>https://www.googleapis.com/blogger/v3/blogs/blogId/posts/</code></pre><p>Request</p>
 <pre><code>POST https://www.googleapis.com/blogger/v3/blogs/8070105920543249955/posts/</code></pre><p>Authorization: /* OAuth 2.0 token here */<br>Content-Type: application/json</p>
-<pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"kind"</span><span class="token operator">:</span> <span class="token string">"blogger#post"</span><span class="token punctuation">,</span>
   <span class="token property">"blog"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
     <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"8070105920543249955"</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
   <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"A new post"</span><span class="token punctuation">,</span>
   <span class="token property">"content"</span><span class="token operator">:</span> <span class="token string">"With &lt;b>exciting&lt;/b> content..."</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>You must be authenticated to create a post.</p>
 <p>Response<br>If the request succeeds, the server responds with an HTTP 200 OK status code and the contents of the post:</p>
 <p>{<br> “kind”: “blogger#post”,<br> “id”: “6819100329896798058”,<br> “blog”: {<br>  “id”: “8070105920543249955”<br> },<br> “published”: “2012-05-20T20:08:00-07:00”,<br> “updated”: “2012-05-20T20:08:35-07:00”,<br> “url”: “<a href="http://brettmorgan-test2.blogspot.com/2012/05/new-post.html&quot;" target="_blank" rel="noopener">http://brettmorgan-test2.blogspot.com/2012/05/new-post.html"</a>,<br> “selfLink”: “<a href="https://www.googleapis.com/blogger/v3/blogs/8070105920543249955/posts/6819100329896798058&quot;" target="_blank" rel="noopener">https://www.googleapis.com/blogger/v3/blogs/8070105920543249955/posts/6819100329896798058"</a>,<br> “title”: “A new post”,<br> “content”: “With <b>exciting</b> content…”,<br> “author”: {<br>  “id”: “16258312240222542576”,<br>  “displayName”: “Brett Morgan”,<br>  “url”: “<a href="http://www.blogger.com/profile/16258312240222542576&quot;" target="_blank" rel="noopener">http://www.blogger.com/profile/16258312240222542576"</a>,<br>  “image”: {<br>   “url”: “<a href="https://resources.blogblog.com/img/b16-rounded.gif&quot;" target="_blank" rel="noopener">https://resources.blogblog.com/img/b16-rounded.gif"</a><br>  }<br> },<br> “replies”: {<br>  “totalItems”: “0”,<br>  “selfLink”: “<a href="https://www.googleapis.com/blogger/v3/blogs/8070105920543249955/posts/6819100329896798058/comments&quot;" target="_blank" rel="noopener">https://www.googleapis.com/blogger/v3/blogs/8070105920543249955/posts/6819100329896798058/comments"</a><br> }<br>}<br>Deleting a post<br>You can delete a post for a blog by sending a DELETE request to the post resource URI:</p>
@@ -1042,13 +1045,13 @@ https://www.googleapis.com/blogger/v3/blogs/blogId/pages/pageId</code></pre><p>T
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">244k</span>
+    <span title="站点总字数">246k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:42</span>
+    <span title="站点阅读时长">3:44</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动

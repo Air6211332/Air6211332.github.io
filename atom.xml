@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://air6211332.github.io/"/>
-  <updated>2020-11-13T08:21:33.175Z</updated>
+  <updated>2020-11-15T03:18:12.128Z</updated>
   <id>https://air6211332.github.io/</id>
   
   <author>
@@ -17,11 +17,28 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>10道面试题</title>
+    <link href="https://air6211332.github.io/2020/11/13/%E9%9D%A2%E8%AF%95%E9%A2%98/2020-10/"/>
+    <id>https://air6211332.github.io/2020/11/13/%E9%9D%A2%E8%AF%95%E9%A2%98/2020-10/</id>
+    <published>2020-11-12T16:00:00.000Z</published>
+    <updated>2020-11-15T03:18:12.128Z</updated>
+    
+    <summary type="html">
+    
+      今天刷到10道面试题，感觉挺好玩，就在这里分享下。来看看你能回答几道题呢？
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>在Docker环境中备份MySQL并发送邮件</title>
-    <link href="https://air6211332.github.io/2020/11/12/%E6%9D%82%E8%AE%B0/docker_bakup_mysql/"/>
-    <id>https://air6211332.github.io/2020/11/12/%E6%9D%82%E8%AE%B0/docker_bakup_mysql/</id>
-    <published>2020-11-12T02:05:54.974Z</published>
-    <updated>2020-11-13T08:21:33.175Z</updated>
+    <link href="https://air6211332.github.io/2020/11/11/%E6%9D%82%E8%AE%B0/docker_bakup_mysql/"/>
+    <id>https://air6211332.github.io/2020/11/11/%E6%9D%82%E8%AE%B0/docker_bakup_mysql/</id>
+    <published>2020-11-10T16:00:00.000Z</published>
+    <updated>2020-11-16T01:25:03.601Z</updated>
     
     <summary type="html">
     
@@ -425,31 +442,6 @@
   </entry>
   
   <entry>
-    <title>spring mvc valid</title>
-    <link href="https://air6211332.github.io/2018/12/10/Java/spring/spring%20mvc%20valid/"/>
-    <id>https://air6211332.github.io/2018/12/10/Java/spring/spring%20mvc%20valid/</id>
-    <published>2018-12-10T04:00:00.000Z</published>
-    <updated>2020-10-20T09:05:34.998Z</updated>
-    
-    <summary type="html">
-    
-      Spring MVC 校验
-    
-    </summary>
-    
-    
-      <category term="Java" scheme="https://air6211332.github.io/categories/Java/"/>
-    
-      <category term="Spring" scheme="https://air6211332.github.io/categories/Java/Spring/"/>
-    
-    
-      <category term="Java" scheme="https://air6211332.github.io/tags/Java/"/>
-    
-      <category term="Spring" scheme="https://air6211332.github.io/tags/Spring/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Spring Framework 5 中的新特性</title>
     <link href="https://air6211332.github.io/2018/12/10/Java/spring/Spring%20Framework%205%20%E4%B8%AD%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7/"/>
     <id>https://air6211332.github.io/2018/12/10/Java/spring/Spring%20Framework%205%20%E4%B8%AD%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7/</id>
@@ -475,29 +467,27 @@
   </entry>
   
   <entry>
-    <title>centos7.5 安装 thefuck -- 小米实战</title>
-    <link href="https://air6211332.github.io/2018/11/12/Linux/centos7.5%20%E5%AE%89%E8%A3%85thefuck/"/>
-    <id>https://air6211332.github.io/2018/11/12/Linux/centos7.5%20%E5%AE%89%E8%A3%85thefuck/</id>
-    <published>2018-11-12T04:00:00.000Z</published>
+    <title>spring mvc valid</title>
+    <link href="https://air6211332.github.io/2018/12/10/Java/spring/spring%20mvc%20valid/"/>
+    <id>https://air6211332.github.io/2018/12/10/Java/spring/spring%20mvc%20valid/</id>
+    <published>2018-12-10T04:00:00.000Z</published>
     <updated>2020-10-20T09:05:34.998Z</updated>
     
     <summary type="html">
     
-      centos7.5 安装 thefuck神器
+      Spring MVC 校验
     
     </summary>
     
     
-      <category term="Linux" scheme="https://air6211332.github.io/categories/Linux/"/>
+      <category term="Java" scheme="https://air6211332.github.io/categories/Java/"/>
     
-      <category term="centos" scheme="https://air6211332.github.io/categories/Linux/centos/"/>
+      <category term="Spring" scheme="https://air6211332.github.io/categories/Java/Spring/"/>
     
     
-      <category term="Linux" scheme="https://air6211332.github.io/tags/Linux/"/>
+      <category term="Java" scheme="https://air6211332.github.io/tags/Java/"/>
     
-      <category term="centos" scheme="https://air6211332.github.io/tags/centos/"/>
-    
-      <category term="thefuck" scheme="https://air6211332.github.io/tags/thefuck/"/>
+      <category term="Spring" scheme="https://air6211332.github.io/tags/Spring/"/>
     
   </entry>
   
