@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://air6211332.github.io/"/>
-  <updated>2020-11-15T03:18:12.128Z</updated>
+  <updated>2020-11-18T02:05:47.441Z</updated>
   <id>https://air6211332.github.io/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>时区同步 centos 8 中同步时区</title>
+    <link href="https://air6211332.github.io/2020/11/18/Linux/%E6%97%B6%E5%8C%BA%E5%90%8C%E6%AD%A5/"/>
+    <id>https://air6211332.github.io/2020/11/18/Linux/%E6%97%B6%E5%8C%BA%E5%90%8C%E6%AD%A5/</id>
+    <published>2020-11-18T01:52:46.324Z</published>
+    <updated>2020-11-18T02:05:47.441Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;概览&quot;&gt;&lt;a href=&quot;#概览&quot; class=&quot;headerlink&quot; title=&quot;概览&quot;&gt;&lt;/a&gt;概览&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;依次执行以下命令即可&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code class=&quot;shell&quot;&gt;yum install -y epel-release
+yum install -y chrony
+timedatectl set-timezone Asia/Shanghai
+chronyc -a makestep
+systemctl start chronyd.service
+systemctl enable chronyd.service &lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="随笔" scheme="https://air6211332.github.io/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="随笔" scheme="https://air6211332.github.io/tags/%E9%9A%8F%E7%AC%94/"/>
+    
+      <category term="liunx" scheme="https://air6211332.github.io/tags/liunx/"/>
+    
+  </entry>
   
   <entry>
     <title>10道面试题</title>
@@ -438,31 +469,6 @@
     
     
       <category term="win10" scheme="https://air6211332.github.io/tags/win10/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Spring Framework 5 中的新特性</title>
-    <link href="https://air6211332.github.io/2018/12/10/Java/spring/Spring%20Framework%205%20%E4%B8%AD%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7/"/>
-    <id>https://air6211332.github.io/2018/12/10/Java/spring/Spring%20Framework%205%20%E4%B8%AD%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7/</id>
-    <published>2018-12-10T04:00:00.000Z</published>
-    <updated>2020-10-20T09:05:34.997Z</updated>
-    
-    <summary type="html">
-    
-      Spring 5 如何利用 Java 8 的函数式语法和一种新的反应式编程模型
-    
-    </summary>
-    
-    
-      <category term="Java" scheme="https://air6211332.github.io/categories/Java/"/>
-    
-      <category term="Spring" scheme="https://air6211332.github.io/categories/Java/Spring/"/>
-    
-    
-      <category term="Java" scheme="https://air6211332.github.io/tags/Java/"/>
-    
-      <category term="Spring" scheme="https://air6211332.github.io/tags/Spring/"/>
     
   </entry>
   
